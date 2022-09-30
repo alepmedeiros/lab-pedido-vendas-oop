@@ -134,7 +134,7 @@ end;
 
 procedure TfrmPrincipal.btnRecuperarTodosOperadoresClick(Sender: TObject);
 begin
-  FConexao.DataSource.DataSet := FDAOOperador.RecuperaTodos(TDataSet(FConexao.FDMemTable));
+  FConexao.DataSource.DataSet := FDAOOperador.RecuperaTodos;
 end;
 
 procedure TfrmPrincipal.btnRemoverOperadorClick(Sender: TObject);

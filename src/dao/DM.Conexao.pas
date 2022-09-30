@@ -47,8 +47,8 @@ var
   DataModuleConexao: TDataModuleConexao;
 
 const
-  NomeBanco    = 'lab_pedido_loja.db';
-  CaminhoBanco = 'C:\Users\bruno\Music\lab-pedido-vendas-oop\db\' + NomeBanco;
+  NomeBanco    = '\lab_pedido_loja.db';
+  CaminhoBanco = 'C:\Users\Bruno Silva\Documents\Projetos\lab-pedido-vendas-oop\db' + NomeBanco;
 
 implementation
 

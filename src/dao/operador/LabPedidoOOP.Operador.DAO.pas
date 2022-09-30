@@ -23,7 +23,7 @@ type
 
     function RecuperaPorCodigo( aValue : integer ) : string;
     function VerificaSeExiste(aValue : integer ) : Boolean;
-    function RecuperaTodos(aValue : TDataSet) : TFDMemTable ;
+    function RecuperaTodos : TFDMemTable ;
   end;
 
 implementation
@@ -58,7 +58,7 @@ begin
   );
 end;
 
-function TOperadorDAO.RecuperaTodos(aValue : TDataSet) : TFDMemTable;
+function TOperadorDAO.RecuperaTodos : TFDMemTable;
 begin
   FConexao.FDConexao.ExecSQL(
     'SELECT * FROM operador o ORDER BY o.codigo',

@@ -15,7 +15,7 @@ type
 
     function RecuperaPorCodigo( aValue : integer ) : string;
     function VerificaSeExiste(aValue : integer ) : Boolean;
-    function RecuperaTodos(aValue : TDataSet) : TFDMemTable ;
+    function RecuperaTodos : TFDMemTable ;
   end;
 
 implementation

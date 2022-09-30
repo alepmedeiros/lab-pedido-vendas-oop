@@ -138,7 +138,7 @@ object frmPrincipal: TfrmPrincipal
       end
       object btnRecuperarTodosOperadores: TButton
         Left = 20
-        Top = 151
+        Top = 135
         Width = 129
         Height = 33
         Caption = 'Retorna Todos'
@@ -154,9 +154,9 @@ object frmPrincipal: TfrmPrincipal
       object dbgrdOperador: TDBGrid
         AlignWithMargins = True
         Left = 20
-        Top = 203
+        Top = 178
         Width = 766
-        Height = 272
+        Height = 297
         BorderStyle = bsNone
         DataSource = DataModuleConexao.DataSource
         Font.Charset = DEFAULT_CHARSET
