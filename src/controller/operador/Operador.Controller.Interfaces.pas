@@ -1,9 +1,9 @@
-unit LabPedidoOOP.Operador.Controller.Interfaces;
+unit Operador.Controller.Interfaces;
 
 interface
 
 uses
-  LabPedidoOOP.Model.Operador;
+  Model.Operador;
 
 type
   iOperadorController = interface

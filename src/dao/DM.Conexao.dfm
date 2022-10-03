@@ -7,9 +7,10 @@ object DataModuleConexao: TDataModuleConexao
     ConnectionName = 'SQLite'
     Params.Strings = (
       
-        'Database=C:\Users\bruno\Desktop\lab-pedido-vendas-oop\db\lab_ped' +
-        'ido_loja.db'
+        'Database=C:\Users\bruno\Documentos\Meus Projetos\lab-pedido-vend' +
+        'as-oop\_LabPedidoOOP_OLD\db\lab_pedido_loja.db'
       'LockingMode=Normal'
+      'User_Name=silvab'
       'DriverID=SQLite')
     Left = 200
     Top = 112

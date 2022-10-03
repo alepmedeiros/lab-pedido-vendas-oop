@@ -1,12 +1,12 @@
-unit LabPedidoOOP.Model.Cliente;
+unit Model.Cliente;
 
 interface
 
 uses
-  LabPedidoOOP.Model.Interfaces.Cliente;
+  Model.Interfaces.Cliente;
 
 type
-  TCliente = class(TInterfacedObject, iCliente)
+  TClienteModel = class(TInterfacedObject, iCliente)
   constructor Create;
   destructor Destroy; override;
   class function New: iCliente;
@@ -36,66 +36,66 @@ type
 
 implementation
 
-{ TCliente }
+{ TClienteModel }
 
 // Generics/Injeção de Dependência: (27:00) https://youtu.be/UkRXFoQGYi0
 
-constructor TCliente.Create;
+constructor TClienteModel.Create;
 begin
 
 end;
 
-destructor TCliente.Destroy;
+destructor TClienteModel.Destroy;
 begin
 
   inherited;
 end;
 
-class function TCliente.New: iCliente;
+class function TClienteModel.New: iCliente;
 begin
   Result := Self.Create;
 end;
 
-function TCliente.Codigo(aValue: integer): iCliente;
+function TClienteModel.Codigo(aValue: integer): iCliente;
 begin
   Result  := Self;
   FCodigo := aValue;
 end;
 
-function TCliente.Cidade(aValue: string): iCliente;
+function TClienteModel.Cidade(aValue: string): iCliente;
 begin
   Result  := Self;
   FCidade := aValue;
 end;
 
-function TCliente.Nome(aValue: string): iCliente;
+function TClienteModel.Nome(aValue: string): iCliente;
 begin
   Result := Self;
   FNome  := aValue;
 end;
 
-function TCliente.UF(aValue: string): iCliente;
+function TClienteModel.UF(aValue: string): iCliente;
 begin
   Result := Self;
   FUF    := aValue;
 end;
 
-function TCliente.Codigo: integer;
+function TClienteModel.Codigo: integer;
 begin
   Result := FCodigo;
 end;
 
-function TCliente.Cidade: string;
+function TClienteModel.Cidade: string;
 begin
   Result := FCidade;
 end;
 
-function TCliente.Nome: string;
+function TClienteModel.Nome: string;
 begin
   Result := FNome;
 end;
 
-function TCliente.UF: string;
+function TClienteModel.UF: string;
 begin
   Result := FUF;
 end;

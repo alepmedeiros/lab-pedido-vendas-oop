@@ -101,33 +101,32 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="src\view\LabPedidoOOP.View.Principal.pas">
+        <DCCReference Include="src\view\View.Principal.pas">
             <Form>frmPrincipal</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="src\controller\cliente\LabPedidoOOP.Cliente.Controller.pas"/>
-        <DCCReference Include="src\controller\cliente\LabPedidoOOP.Cliente.Controller.Interfaces.pas"/>
-        <DCCReference Include="src\model\cliente\LabPedidoOOP.Model.Cliente.pas"/>
-        <DCCReference Include="src\model\cliente\LabPedidoOOP.Model.Interfaces.Cliente.pas"/>
-        <DCCReference Include="src\dao\cliente\LabPedidoOOP.Cliente.DAO.Interfaces.pas"/>
-        <DCCReference Include="src\dao\cliente\LabPedidoOOP.Cliente.DAO.pas"/>
-        <DCCReference Include="src\model\operador\LabPedidoOOP.Model.Interfaces.Operador.pas"/>
-        <DCCReference Include="src\model\operador\LabPedidoOOP.Model.Operador.pas"/>
-        <DCCReference Include="src\model\pedido\LabPedidoOOP.Model.Interfaces.Pedido.pas"/>
-        <DCCReference Include="src\model\pedido\LabPedidoOOP.Model.Pedido.pas"/>
-        <DCCReference Include="src\model\pedido_item\LabPedidoOOP.Model.Interfaces.ItensPedido.pas"/>
-        <DCCReference Include="src\model\pedido_item\LabPedidoOOP.Model.ItensPedido.pas"/>
-        <DCCReference Include="src\model\produto\LabPedidoOOP.Model.Interfaces.Produto.pas"/>
-        <DCCReference Include="src\model\produto\LabPedidoOOP.Model.Produto.pas"/>
-        <DCCReference Include="src\controller\operador\LabPedidoOOP.Operador.Controller.Interfaces.pas"/>
+        <DCCReference Include="src\controller\cliente\Cliente.Controller.pas"/>
+        <DCCReference Include="src\controller\cliente\Cliente.Controller.Interfaces.pas"/>
+        <DCCReference Include="src\model\cliente\Model.Cliente.pas"/>
+        <DCCReference Include="src\model\cliente\Model.Interfaces.Cliente.pas"/>
+        <DCCReference Include="src\dao\cliente\Cliente.DAO.Interfaces.pas"/>
+        <DCCReference Include="src\dao\cliente\Cliente.DAO.pas"/>
+        <DCCReference Include="src\model\operador\Model.Interfaces.Operador.pas"/>
+        <DCCReference Include="src\model\operador\Model.Operador.pas"/>
+        <DCCReference Include="src\model\pedido\Model.Interfaces.Pedido.pas"/>
+        <DCCReference Include="src\model\pedido\Model.Pedido.pas"/>
+        <DCCReference Include="src\model\pedido_item\Model.Interfaces.ItensPedido.pas"/>
+        <DCCReference Include="src\model\pedido_item\Model.ItensPedido.pas"/>
+        <DCCReference Include="src\model\produto\Model.Interfaces.Produto.pas"/>
+        <DCCReference Include="src\model\produto\Model.Produto.pas"/>
+        <DCCReference Include="src\controller\operador\Operador.Controller.Interfaces.pas"/>
         <DCCReference Include="src\dao\DM.Conexao.pas">
             <Form>DataModuleConexao</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="src\dao\operador\LabPedidoOOP.Operador.DAO.pas"/>
-        <DCCReference Include="src\dao\operador\LabPedidoOOP.Operador.DAO.Interfaces.pas"/>
-        <DCCReference Include="src\controller\operador\LabPedidoOOP.Operador.Controller.pas"/>
+        <DCCReference Include="src\dao\operador\Operador.DAO.pas"/>
+        <DCCReference Include="src\dao\operador\Operador.DAO.Interfaces.pas"/>
+        <DCCReference Include="src\controller\operador\Operador.Controller.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

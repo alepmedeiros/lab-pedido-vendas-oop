@@ -1,12 +1,14 @@
-unit LabPedidoOOP.Operador.DAO;
+unit Operador.DAO;
 
 interface
 
 uses
   System.SysUtils,
-  LabPedidoOOP.Operador.DAO.Interfaces,
-  LabPedidoOOP.Model.Operador,
-  DM.Conexao, FireDAC.Comp.Client, Data.DB;
+  Operador.DAO.Interfaces,
+  Model.Operador,
+  DM.Conexao,
+  FireDAC.Comp.Client,
+  Data.DB;
 
 type
   TOperadorDAO = class(TInterfacedObject, iOperadorDAO)
@@ -19,7 +21,7 @@ type
   public
     procedure Salvar( aValue : TOperadorModel );
     procedure Remover ( aValue : integer);
-    procedure EditaOperador( aValue : TOperadorModel );
+    procedure Editar( aValue : TOperadorModel );
 
     function RecuperaPorCodigo( aValue : integer ) : string;
     function VerificaSeExiste(aValue : integer ) : Boolean;
@@ -39,13 +41,14 @@ end;
 destructor TOperadorDAO.Destroy;
 begin
   FConexao.Free;
-
+  FOperador.Free;
   inherited;
 end;
 
-procedure TOperadorDAO.EditaOperador(aValue: TOperadorModel);
+procedure TOperadorDAO.Editar(aValue: TOperadorModel);
 begin
-  FConexao.FDConexao.ExecSQL('UPDATE operador SET nome = :novoNome WHERE codigo = :codigoOperador',
+  FConexao.FDConexao.ExecSQL(
+    'UPDATE operador SET nome = :nome WHERE codigo = :codigo',
     [aValue.Nome, aValue.Codigo]
   );
 end;
@@ -53,7 +56,7 @@ end;
 function TOperadorDAO.RecuperaPorCodigo(aValue: integer): string;
 begin
   Result := FConexao.FDConexao.ExecSQLScalar(
-    'SELECT o.nome FROM operador o WHERE o.codigo = :codigoOperador',
+    'SELECT o.nome FROM operador o WHERE o.codigo = :codigo',
     [InttoStr(aValue)]
   );
 end;
@@ -71,7 +74,7 @@ end;
 procedure TOperadorDAO.Remover(aValue: integer);
 begin
   FConexao.FDConexao.ExecSQL(
-    'DELETE FROM operador WHERE codigo = :codigoOperador',
+    'DELETE FROM operador WHERE codigo = :codigo',
     [aValue]
   );
 end;
@@ -79,7 +82,7 @@ end;
 procedure TOperadorDAO.Salvar(aValue: TOperadorModel);
 begin
   FConexao.FDConexao.ExecSQL(
-    'INSERT INTO operador (nome) VALUES (:nomeOperador)',
+    'INSERT INTO operador (nome) VALUES (:nome)',
     [aValue.Nome]
   );
 end;
@@ -90,7 +93,7 @@ var
 begin
   Result := false;
   LRetorno := FConexao.FDConexao.ExecSQLScalar(
-    'SELECT * FROM operador o WHERE o.codigo = :codigoOperador',
+    'SELECT * FROM operador o WHERE o.codigo = :codigo',
     [InttoStr(aValue)]
   );
 

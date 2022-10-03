@@ -1,9 +1,9 @@
-unit LabPedidoOOP.Model.ItensPedido;
+unit Model.ItensPedido;
 
 interface
 
 uses
-  LabPedidoOOP.Model.Interfaces.ItensPedido;
+  Model.Interfaces.ItensPedido;
 
 type
   TItensPedido = class(TInterfacedObject, iItensPedido)

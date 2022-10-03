@@ -1,9 +1,9 @@
-unit LabPedidoOOP.Operador.DAO.Interfaces;
+unit Operador.DAO.Interfaces;
 
 interface
 
 uses
-  LabPedidoOOP.Model.Operador,
+  Model.Operador,
   FireDAC.Comp.Client,
   Data.DB;
 
@@ -11,7 +11,7 @@ type
   iOperadorDAO = interface
     procedure Salvar( aValue : TOperadorModel );
     procedure Remover ( aValue : integer);
-    procedure EditaOperador( aValue : TOperadorModel );
+    procedure Editar( aValue : TOperadorModel );
 
     function RecuperaPorCodigo( aValue : integer ) : string;
     function VerificaSeExiste(aValue : integer ) : Boolean;

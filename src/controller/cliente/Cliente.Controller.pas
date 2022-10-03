@@ -1,10 +1,10 @@
-unit LabPedidoOOP.Cliente.Controller;
+unit Cliente.Controller;
 
 interface
 
 uses
-  LabPedidoOOP.Cliente.Controller.Interfaces,
-  LabPedidoOOP.Model.Cliente;
+  Cliente.Controller.Interfaces,
+  Model.Cliente;
 
 type
   TClienteController = class( TInterfacedObject, iClienteController )

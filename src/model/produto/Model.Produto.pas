@@ -1,9 +1,9 @@
-unit LabPedidoOOP.Model.Produto;
+unit Model.Produto;
 
 interface
 
 uses
-  LabPedidoOOP.Model.Interfaces.Produto;
+  Model.Interfaces.Produto;
 
 type
   TProduto = class(TInterfacedObject, iProduto)

@@ -23,9 +23,11 @@ uses
   FireDAC.Stan.Param,
   FireDAC.DatS,
   FireDAC.DApt.Intf,
-  FireDAC.Comp.DataSet,
-  FireDAC.DApt, FireDAC.Comp.ScriptCommands, FireDAC.Stan.Util,
-  FireDAC.Comp.Script;
+  FireDAC.DApt,
+  FireDAC.Comp.ScriptCommands,
+  FireDAC.Stan.Util,
+  FireDAC.Comp.Script,
+  FireDAC.Comp.DataSet;
 
 type
   TDataModuleConexao = class(TDataModule)
@@ -48,7 +50,7 @@ var
 
 const
   NomeBanco    = '\lab_pedido_loja.db';
-  CaminhoBanco = 'C:\Users\Bruno Silva\Documents\Projetos\lab-pedido-vendas-oop\db' + NomeBanco;
+  CaminhoBanco = 'C:\Users\bruno\Documentos\Meus Projetos\lab-pedido-vendas-oop\db' + NomeBanco;
 
 implementation
 
@@ -58,18 +60,19 @@ implementation
 
 procedure TDataModuleConexao.ConfigurarConn;
 begin
-  with FDConexao do
-  begin
-    with Params do
+  if not FDConexao.Connected then
+    with FDConexao do
     begin
-      Clear;
-      Add('DriverID=SQLite');
-      Add('LockingMode=Normal');
-      Add('Synchronous=Normal');
-      Add('Database=' + CaminhoBanco);
+      with Params do
+      begin
+        Clear;
+        Add('DriverID=SQLite');
+        Add('LockingMode=Normal');
+        Add('Synchronous=Normal');
+        Add('Database=' + CaminhoBanco);
+      end;
+      Open;
     end;
-    Open;
-  end;
 end;
 
 procedure TDataModuleConexao.DataModuleCreate(Sender: TObject);

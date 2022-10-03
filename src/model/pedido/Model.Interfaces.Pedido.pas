@@ -1,4 +1,4 @@
-unit LabPedidoOOP.Model.Interfaces.Pedido;
+unit Model.Interfaces.Pedido;
 
 interface
 

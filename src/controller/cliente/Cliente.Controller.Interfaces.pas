@@ -1,9 +1,9 @@
-unit LabPedidoOOP.Cliente.Controller.Interfaces;
+unit Cliente.Controller.Interfaces;
 
 interface
 
 uses
-  LabPedidoOOP.Model.Cliente;
+  Model.Cliente;
 
 type
   iClienteController = interface

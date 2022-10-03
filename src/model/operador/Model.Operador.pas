@@ -1,9 +1,9 @@
-unit LabPedidoOOP.Model.Operador;
+unit Model.Operador;
 
 interface
 
 uses
-  LabPedidoOOP.Model.Interfaces.Operador;
+  Model.Interfaces.Operador;
 
 type
   TOperadorModel = class(TInterfacedObject, iOperador)

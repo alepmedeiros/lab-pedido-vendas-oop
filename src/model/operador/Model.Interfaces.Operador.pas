@@ -1,4 +1,4 @@
-unit LabPedidoOOP.Model.Interfaces.Operador;
+unit Model.Interfaces.Operador;
 
 interface
 

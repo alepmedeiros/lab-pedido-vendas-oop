@@ -1,11 +1,11 @@
-unit LabPedidoOOP.Operador.Controller;
+unit Operador.Controller;
 
 interface
 
 uses
-  LabpedidoOOP.Operador.Controller.Interfaces,
-  LabPedidoOOP.Operador.DAO.Interfaces,
-  LabpedidoOOP.Model.Operador;
+  Operador.Controller.Interfaces,
+  Operador.DAO.Interfaces,
+  Model.Operador;
 
 type
   TOperadorController = class(TInterfacedObject, iOperadorController)
