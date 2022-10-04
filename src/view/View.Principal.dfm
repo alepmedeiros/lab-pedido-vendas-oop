@@ -21,13 +21,12 @@ object frmPrincipal: TfrmPrincipal
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = Cliente
+    ActivePage = Clientes
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange
-    ExplicitHeight = 521
-    object Cliente: TTabSheet
-      Caption = 'Cliente'
+    object Clientes: TTabSheet
+      Caption = 'Clientes'
       ImageIndex = 1
       object lblUF: TLabel
         Left = 657
@@ -43,7 +42,7 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
       end
       object lblCidade: TLabel
-        Left = 319
+        Left = 456
         Top = 18
         Width = 51
         Height = 21
@@ -56,7 +55,7 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
       end
       object Label1: TLabel
-        Left = 20
+        Left = 172
         Top = 18
         Width = 46
         Height = 21
@@ -70,7 +69,7 @@ object frmPrincipal: TfrmPrincipal
       end
       object lblCodCliente: TLabel
         Left = 20
-        Top = 127
+        Top = 18
         Width = 53
         Height = 21
         Caption = 'C'#243'digo:'
@@ -95,9 +94,9 @@ object frmPrincipal: TfrmPrincipal
         TabOrder = 0
       end
       object edtCidadeCliente: TEdit
-        Left = 319
+        Left = 456
         Top = 45
-        Width = 306
+        Width = 185
         Height = 29
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -122,7 +121,7 @@ object frmPrincipal: TfrmPrincipal
         TabOrder = 2
       end
       object btnEdtCliente: TButton
-        Left = 496
+        Left = 512
         Top = 87
         Width = 129
         Height = 33
@@ -158,10 +157,11 @@ object frmPrincipal: TfrmPrincipal
         TitleFont.Name = 'Segoe UI'
         TitleFont.Style = [fsBold]
         StyleName = 'Windows'
+        OnDblClick = dbgrdClienteDblClick
       end
       object btnRecCliente: TButton
-        Left = 193
-        Top = 155
+        Left = 165
+        Top = 87
         Width = 129
         Height = 33
         Caption = 'Recuperar'
@@ -190,9 +190,9 @@ object frmPrincipal: TfrmPrincipal
         OnClick = btnCadClienteClick
       end
       object edtCliente: TEdit
-        Left = 20
+        Left = 165
         Top = 45
-        Width = 270
+        Width = 273
         Height = 29
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -203,8 +203,8 @@ object frmPrincipal: TfrmPrincipal
         TabOrder = 7
       end
       object btnRecTodosCliente: TButton
-        Left = 657
-        Top = 155
+        Left = 20
+        Top = 147
         Width = 129
         Height = 33
         Caption = 'Retorna Todos'
@@ -219,9 +219,9 @@ object frmPrincipal: TfrmPrincipal
       end
       object edtCodCliente: TEdit
         Left = 20
-        Top = 155
-        Width = 154
-        Height = 33
+        Top = 45
+        Width = 126
+        Height = 29
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -231,12 +231,27 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
         TabOrder = 9
       end
+      object btnLimparCampos: TButton
+        Left = 657
+        Top = 147
+        Width = 129
+        Height = 33
+        Caption = 'Limpar Campos'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 10
+        OnClick = btnLimparCamposClick
+      end
     end
     object TabSheet4: TTabSheet
       Caption = 'Operadores'
       ImageIndex = 3
       object lblNomeOperador: TLabel
-        Left = 20
+        Left = 165
         Top = 18
         Width = 46
         Height = 21
@@ -249,7 +264,7 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
       end
       object lblCodigoOperador: TLabel
-        Left = 312
+        Left = 20
         Top = 18
         Width = 53
         Height = 21
@@ -275,9 +290,9 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
       end
       object edtOperador: TEdit
-        Left = 20
+        Left = 165
         Top = 45
-        Width = 270
+        Width = 308
         Height = 29
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -303,7 +318,7 @@ object frmPrincipal: TfrmPrincipal
         OnClick = btnCadOperadorClick
       end
       object btnRecOperador: TButton
-        Left = 312
+        Left = 165
         Top = 87
         Width = 129
         Height = 33
@@ -331,9 +346,9 @@ object frmPrincipal: TfrmPrincipal
         TabOrder = 4
       end
       object edtCodigoOperador: TEdit
-        Left = 312
+        Left = 20
         Top = 45
-        Width = 157
+        Width = 129
         Height = 29
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -346,7 +361,7 @@ object frmPrincipal: TfrmPrincipal
       end
       object btnRecTodosOperadores: TButton
         Left = 20
-        Top = 135
+        Top = 147
         Width = 129
         Height = 33
         Caption = 'Retorna Todos'
@@ -362,9 +377,9 @@ object frmPrincipal: TfrmPrincipal
       object dbgrdOperador: TDBGrid
         AlignWithMargins = True
         Left = 20
-        Top = 178
+        Top = 198
         Width = 766
-        Height = 373
+        Height = 353
         BorderStyle = bsNone
         DataSource = DataModuleConexao.DataSource
         Font.Charset = DEFAULT_CHARSET
@@ -411,6 +426,173 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
         TabOrder = 6
         OnClick = btnDelOperadorClick
+      end
+    end
+    object Produtos: TTabSheet
+      Caption = 'Produtos'
+      ImageIndex = 2
+      object lblCodigoProduto: TLabel
+        Left = 20
+        Top = 18
+        Width = 53
+        Height = 21
+        Caption = 'C'#243'digo:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lblNomeProduto: TLabel
+        Left = 165
+        Top = 18
+        Width = 70
+        Height = 21
+        Caption = 'Descri'#231#227'o:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lblPrecoProduto: TLabel
+        Left = 584
+        Top = 18
+        Width = 72
+        Height = 21
+        Caption = 'Valor (R$):'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object edtCodigoProduto: TEdit
+        Left = 20
+        Top = 45
+        Width = 129
+        Height = 29
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        NumbersOnly = True
+        ParentFont = False
+        TabOrder = 0
+      end
+      object edtDescricaoProduto: TEdit
+        Left = 165
+        Top = 45
+        Width = 404
+        Height = 29
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+      object edtValorProduto: TCurrencyEdit
+        Left = 584
+        Top = 45
+        Width = 201
+        Height = 29
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+      end
+      object dbgrdProdutos: TDBGrid
+        AlignWithMargins = True
+        Left = 20
+        Top = 210
+        Width = 774
+        Height = 345
+        BorderStyle = bsNone
+        DataSource = DataModuleConexao.DataSource
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        ParentFont = False
+        TabOrder = 3
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Segoe UI'
+        TitleFont.Style = [fsBold]
+        StyleName = 'Windows'
+        OnDblClick = dbgrdProdutosDblClick
+      end
+      object btnCadProduto: TButton
+        Left = 20
+        Top = 87
+        Width = 129
+        Height = 33
+        Caption = 'Cadastrar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        OnClick = btnCadProdutoClick
+      end
+      object btnRecTodosProdutos: TButton
+        Left = 20
+        Top = 147
+        Width = 129
+        Height = 33
+        Caption = 'Retorna Todos'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 5
+        OnClick = btnRecTodosProdutosClick
+      end
+      object btnEdtProduto: TButton
+        Left = 440
+        Top = 87
+        Width = 129
+        Height = 33
+        Caption = 'Editar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 6
+        OnClick = btnEdtProdutoClick
+      end
+      object btnDelProduto: TButton
+        Left = 656
+        Top = 87
+        Width = 129
+        Height = 33
+        Caption = 'Remover'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 7
+        OnClick = btnDelProdutoClick
       end
     end
   end

@@ -17,17 +17,25 @@ uses
   Vcl.NumberBox,
   Vcl.Grids,
   Vcl.DBGrids,
+  Vcl.ExtDlgs,
+  Vcl.Mask,
   Model.Interfaces.Produto,
   Model.Interfaces.Operador,
   Model.Interfaces.Pedido,
   Model.Interfaces.ItensPedido,
-  Operador.Controller,
-  DM.Conexao,
-  Operador.DAO,
-  Vcl.ExtDlgs,
-  Data.DB,
   Model.Interfaces.Cliente,
-  Cliente.DAO;
+  Model.Produto,
+  Model.Operador,
+  Model.Pedido,
+  Model.ItensPedido,
+  Model.Cliente,
+  Operador.DAO,
+  Cliente.DAO,
+  Produto.DAO,
+  DM.Conexao,
+  Data.DB,
+  RxToolEdit,
+  RxCurrEdit;
 
 type
   TfrmPrincipal = class(TForm)
@@ -45,7 +53,7 @@ type
     dbgrdOperador: TDBGrid;
     btnEdtOperador: TButton;
     btnDelOperador: TButton;
-    Cliente: TTabSheet;
+    Clientes: TTabSheet;
     Label1: TLabel;
     lblCidade: TLabel;
     lblUF: TLabel;
@@ -60,6 +68,19 @@ type
     btnRecTodosCliente: TButton;
     edtCodCliente: TEdit;
     lblCodCliente: TLabel;
+    btnLimparCampos: TButton;
+    Produtos: TTabSheet;
+    lblCodigoProduto: TLabel;
+    edtCodigoProduto: TEdit;
+    lblNomeProduto: TLabel;
+    edtDescricaoProduto: TEdit;
+    lblPrecoProduto: TLabel;
+    edtValorProduto: TCurrencyEdit;
+    dbgrdProdutos: TDBGrid;
+    btnCadProduto: TButton;
+    btnRecTodosProdutos: TButton;
+    btnEdtProduto: TButton;
+    btnDelProduto: TButton;
 
     procedure FormCreate(Sender: TObject);
     procedure btnCadOperadorClick(Sender: TObject);
@@ -73,16 +94,25 @@ type
     procedure PageControlPrincipalChange(Sender: TObject);
     procedure btnRecClienteClick(Sender: TObject);
     procedure btnEdtClienteClick(Sender: TObject);
+    procedure dbgrdClienteDblClick(Sender: TObject);
+    procedure btnLimparCamposClick(Sender: TObject);
+    procedure btnRecTodosProdutosClick(Sender: TObject);
+    procedure btnCadProdutoClick(Sender: TObject);
+    procedure btnEdtProdutoClick(Sender: TObject);
+    procedure dbgrdProdutosDblClick(Sender: TObject);
+    procedure btnDelProdutoClick(Sender: TObject);
 
   private
     { Private declarations }
     FOperador    : iOperador;
     FCliente     : iCliente;
+    FProduto     : iProduto;
 
     FConexao     : TDataModuleConexao;
 
     FDAOOperador : TOperadorDAO;
     FDAOCliente  : TClienteDAO;
+    FDAOProduto  : TProdutoDAO;
 
   public
     { Public declarations }
@@ -92,9 +122,6 @@ var
   frmPrincipal: TfrmPrincipal;
 
 implementation
-
-uses
-  Model.Operador, Model.Cliente;
 
 {$R *.dfm}
 
@@ -132,7 +159,7 @@ begin
         .Nome(edtOperador.Text);
 
       FDAOOperador.Salvar(TOperadorModel(FOperador));
-      
+
       btnRecTodosOperadoresClick(self);
     end
     else
@@ -143,20 +170,47 @@ begin
   end;
 end;
 
+procedure TfrmPrincipal.btnCadProdutoClick(Sender: TObject);
+begin
+  try
+    if edtDescricaoProduto.Text <> '' then
+    begin
+      FProduto
+        .Descricao(edtDescricaoProduto.Text)
+        .PrecoProduto(StrToCurr(edtValorProduto.Text));
+
+      FDAOProduto.Salvar(TProdutoModel(FProduto));
+
+      btnRecTodosProdutosClick(self);
+    end
+    else
+      ShowMessage('Campo nome não poder ser vazio.');
+  finally
+    edtDescricaoProduto.Clear;
+    edtDescricaoProduto.SetFocus;
+  end;
+end;
+
 procedure TfrmPrincipal.btnRecClienteClick(Sender: TObject);
+var
+  LCodCliente : Integer;
 begin
   if edtCodCliente.Text <> '' then
   begin
+    LCodCliente := StrToInt(edtCodCliente.Text);
     try
       if FDAOCliente.VerificaSeExiste(StrToInt(edtCodCliente.Text)) then
       begin
-        edtCliente.Text       := FDAOCliente.RecuperaPorCodigo(StrToInt(edtCodCliente.Text), 'nome');
-        edtCidadeCliente.Text := FDAOCliente.RecuperaPorCodigo(StrToInt(edtCodCliente.Text), 'cidade');
-        edtUfCliente.Text     := FDAOCliente.RecuperaPorCodigo(StrToInt(edtCodCliente.Text), 'uf');
+        edtCliente.Text       := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'nome');
+        edtCidadeCliente.Text := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'cidade');
+        edtUfCliente.Text     := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'uf');
       end
       else
       begin
         ShowMessage('Cliente não existe');
+        edtCliente.Clear;
+        edtCidadeCliente.Clear;
+        edtUfCliente.Clear;
         edtCodCliente.Clear;
       end
     finally
@@ -196,6 +250,35 @@ begin
   dbgrdOperador.Columns[1].Width := 400; // nome
 end;
 
+procedure TfrmPrincipal.btnRecTodosProdutosClick(Sender: TObject);
+begin
+  FConexao.DataSource.DataSet := FDAOProduto.RecuperaTodos;
+  dbgrdProdutos.Columns[0].Width := 100; // codigo
+  dbgrdProdutos.Columns[1].Width := 400; // descricao
+  dbgrdProdutos.Columns[2].Width := 130; // preco
+end;
+
+procedure TfrmPrincipal.dbgrdClienteDblClick(Sender: TObject);
+var
+  LCodCliente : Integer;
+begin
+  LCodCliente := dbgrdCliente.Fields[0].AsInteger;
+  edtCodCliente.Text    := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'codigo');
+  edtCliente.Text       := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'nome');
+  edtCidadeCliente.Text := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'cidade');
+  edtUfCliente.Text     := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'uf');
+end;
+
+procedure TfrmPrincipal.dbgrdProdutosDblClick(Sender: TObject);
+var
+  LCodProduto : Integer;
+begin
+  LCodProduto := dbgrdProdutos.Fields[0].AsInteger;
+  edtCodigoProduto.Text    := FDAOProduto.RecuperaPorCodigo(LCodProduto, 'codigo');
+  edtDescricaoProduto.Text := FDAOProduto.RecuperaPorCodigo(LCodProduto, 'descricao');
+  edtValorProduto.Text     := FDAOProduto.RecuperaPorCodigo(LCodProduto, 'preco_venda');
+end;
+
 procedure TfrmPrincipal.btnRecTodosClienteClick(Sender: TObject);
 begin
   FConexao.DataSource.DataSet := FDAOCliente.RecuperaTodos;
@@ -221,6 +304,24 @@ begin
   edtCodigoOperador.Clear;
   edtNomeOperadorRetornado.Clear;
   btnRecTodosOperadoresClick(self);
+end;
+
+procedure TfrmPrincipal.btnDelProdutoClick(Sender: TObject);
+begin
+  If Application.MessageBox('Deseja realmente excluir?', 'Atenção', 52) = mrYes then
+  begin
+    if FDAOProduto.VerificaSeExiste(StrToInt(edtCodigoProduto.Text)) then
+    begin
+      FDAOProduto.Remover(StrToInt(edtCodigoProduto.Text));
+    end
+    else
+      ShowMessage('Produto não existe/cadastrado.');
+  end;
+
+  edtCodigoProduto.Clear;
+  edtDescricaoProduto.Clear;
+  edtValorProduto.Clear;
+  btnRecTodosProdutosClick(self);
 end;
 
 procedure TfrmPrincipal.btnEdtClienteClick(Sender: TObject);
@@ -257,15 +358,42 @@ begin
   btnRecTodosOperadoresClick(self);
 end;
 
+procedure TfrmPrincipal.btnEdtProdutoClick(Sender: TObject);
+begin
+  FProduto
+    .Codigo(StrToInt(edtCodigoProduto.Text))
+    .Descricao(edtDescricaoProduto.Text)
+    .PrecoProduto(edtValorProduto.Value);
+
+  if FDAOProduto.VerificaSeExiste(FProduto.Codigo) then
+    FDAOProduto.Editar(TProdutoModel(FProduto));
+
+  edtCodigoProduto.Clear;
+  edtDescricaoProduto.Clear;
+  edtCodigoProduto.Clear;
+
+  btnRecTodosProdutosClick(self);
+end;
+
+procedure TfrmPrincipal.btnLimparCamposClick(Sender: TObject);
+begin
+   edtCodCliente.Clear;
+   edtCliente.Clear;
+   edtCidadeCliente.Clear;
+   edtUfCliente.Clear;
+end;
+
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
   FOperador    := TOperadorModel.Create;
   FCliente     := TClienteModel.Create;
+  FProduto     := TProdutoModel.Create;
 
   FConexao     := TDataModuleConexao.New;
 
   FDAOOperador := TOperadorDAO.Create;
   FDAOCliente  := TClienteDAO.Create;
+  FDAOProduto  := TProdutoDAO.Create;
 end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);

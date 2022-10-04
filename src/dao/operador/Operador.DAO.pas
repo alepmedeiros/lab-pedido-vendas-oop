@@ -42,6 +42,7 @@ destructor TOperadorDAO.Destroy;
 begin
   FConexao.Free;
   FOperador.Free;
+
   inherited;
 end;
 

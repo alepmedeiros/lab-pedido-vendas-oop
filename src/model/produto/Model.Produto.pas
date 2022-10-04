@@ -6,7 +6,7 @@ uses
   Model.Interfaces.Produto;
 
 type
-  TProduto = class(TInterfacedObject, iProduto)
+  TProdutoModel = class(TInterfacedObject, iProduto)
   constructor Create;
   destructor Destroy; override;
   class function New: iProduto;
@@ -32,52 +32,52 @@ type
 
 implementation
 
-{ TProduto }
+{ TProdutoModel }
 
-constructor TProduto.Create;
+constructor TProdutoModel.Create;
 begin
 
 end;
 
-destructor TProduto.Destroy;
+destructor TProdutoModel.Destroy;
 begin
 
   inherited;
 end;
 
-class function TProduto.New: iProduto;
+class function TProdutoModel.New: iProduto;
 begin
   Result := Self.Create;
 end;
 
-function TProduto.Codigo: integer;
+function TProdutoModel.Codigo: integer;
 begin
   Result := FCodigo;
 end;
 
-function TProduto.Codigo(aValue: integer): iProduto;
+function TProdutoModel.Codigo(aValue: integer): iProduto;
 begin
   Result := Self;
   FCodigo := aValue;
 end;
 
-function TProduto.Descricao(aValue: string): iProduto;
+function TProdutoModel.Descricao(aValue: string): iProduto;
 begin
   Result := Self;
   FDescricao := aValue;
 end;
 
-function TProduto.Descricao: string;
+function TProdutoModel.Descricao: string;
 begin
   Result := FDescricao;
 end;
 
-function TProduto.PrecoProduto: currency;
+function TProdutoModel.PrecoProduto: currency;
 begin
   Result := FPrecoProduto;
 end;
 
-function TProduto.PrecoProduto(aValue: currency): iProduto;
+function TProdutoModel.PrecoProduto(aValue: currency): iProduto;
 begin
   Result := Self;
   FPrecoProduto := aValue;

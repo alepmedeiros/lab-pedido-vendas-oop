@@ -46,31 +46,20 @@ CREATE TABLE pedido_item (
 );
 
 -- Table: produto
--- DROP TABLE IF EXISTS produto;
+DROP TABLE IF EXISTS produto;
 
 CREATE TABLE produto (
     codigo INTEGER PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT NOT NULL,
-    descricao TEXT NOT NULL,
+    descricao VARCHAR(300) NOT NULL,
     preco_venda DECIMAL (18, 2) NOT NULL
 );
 
-INSERT INTO produto ( descricao,  preco_venda )
-VALUES ( 'Computador Lenovo 3i', 4300 );
-
-INSERT INTO produto ( descricao, preco_venda)
-VALUES ( 'Mouse Gamer Fortrek', 40 );
-
-INSERT INTO produto ( descricao, preco_venda )
-VALUES ( 'Mesa Gamer 1Mx2m', 390 );
-
-INSERT INTO produto ( descricao, preco_venda )
-VALUES ( 'Xiaomi Redmi Note 9S 4Gb 128Gb', 1599.99 );
-
-INSERT INTO produto ( descricao, preco_venda )
-VALUES ( 'Teclado Redragon Draconic k530', 350 );
-
-INSERT INTO produto ( descricao, preco_venda )
-VALUES ( 'Alexa 3Gen', 189.9 );
+INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Computador Lenovo 3i', 4300 );
+INSERT INTO produto ( descricao, preco_venda) VALUES ( 'Mouse Gamer Fortrek', 40 );
+INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Mesa Gamer 1Mx2m', 390 );
+INSERT INTO produto ( descricao, preco_venda )VALUES ( 'Xiaomi Redmi Note 9S 4Gb 128Gb', 1599.99 );
+INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Teclado Redragon Draconic k530', 350 );
+INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Alexa 3Gen', 189.9 );
 
 SELECT * FROM operador o ;
 SELECT * FROM cliente c ;
@@ -78,4 +67,4 @@ SELECT * FROM produto p ;
 SELECT * FROM pedido p ;
 SELECT * FROM pedido_item pi ;
 
-UPDATE cliente SET nome = :nome, cidade = :cidade, uf = :uf WHERE codigo = :codigo ;
+INSERT INTO produto (descricao, preco_venda) VALUES (:descricao, :precovenda);

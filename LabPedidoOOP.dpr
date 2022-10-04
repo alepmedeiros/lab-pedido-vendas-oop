@@ -21,7 +21,9 @@ uses
   DM.Conexao in 'src\dao\DM.Conexao.pas' {DataModuleConexao: TDataModule},
   Operador.DAO in 'src\dao\operador\Operador.DAO.pas',
   Operador.DAO.Interfaces in 'src\dao\operador\Operador.DAO.Interfaces.pas',
-  Operador.Controller in 'src\controller\operador\Operador.Controller.pas';
+  Operador.Controller in 'src\controller\operador\Operador.Controller.pas',
+  Produto.DAO.Interfaces in 'src\dao\produto\Produto.DAO.Interfaces.pas',
+  Produto.DAO in 'src\dao\produto\Produto.DAO.pas';
 
 {$R *.res}
 
