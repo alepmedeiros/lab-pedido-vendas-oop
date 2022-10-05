@@ -4,8 +4,7 @@ interface
 
 uses
   Model.Operador,
-  FireDAC.Comp.Client,
-  Data.DB;
+  FireDAC.Comp.Client;
 
 type
   iOperadorDAO = interface
@@ -13,7 +12,7 @@ type
     procedure Remover ( aValue : integer);
     procedure Editar( aValue : TOperadorModel );
 
-    function RecuperaPorCodigo( aValue : integer ) : string;
+    function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
     function VerificaSeExiste(aValue : integer ) : Boolean;
     function RecuperaTodos : TFDMemTable ;
   end;

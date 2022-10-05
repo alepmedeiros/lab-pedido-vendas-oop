@@ -21,7 +21,7 @@ object frmPrincipal: TfrmPrincipal
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = Clientes
+    ActivePage = TabSheet4
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange
@@ -221,7 +221,7 @@ object frmPrincipal: TfrmPrincipal
         Left = 20
         Top = 45
         Width = 126
-        Height = 29
+        Height = 26
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -276,23 +276,10 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         ParentFont = False
       end
-      object lblNomeOperadorRetornado: TLabel
-        Left = 488
-        Top = 18
-        Width = 133
-        Height = 21
-        Caption = 'Nome Recuperado:'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -16
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-      end
       object edtOperador: TEdit
         Left = 165
         Top = 45
-        Width = 308
+        Width = 621
         Height = 29
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -332,19 +319,6 @@ object frmPrincipal: TfrmPrincipal
         TabOrder = 3
         OnClick = btnRecOperadorClick
       end
-      object edtNomeOperadorRetornado: TEdit
-        Left = 488
-        Top = 45
-        Width = 298
-        Height = 29
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -16
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 4
-      end
       object edtCodigoOperador: TEdit
         Left = 20
         Top = 45
@@ -371,7 +345,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 7
+        TabOrder = 6
         OnClick = btnRecTodosOperadoresClick
       end
       object dbgrdOperador: TDBGrid
@@ -389,16 +363,17 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
         ParentFont = False
-        TabOrder = 8
+        TabOrder = 7
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -12
         TitleFont.Name = 'Segoe UI'
         TitleFont.Style = [fsBold]
         StyleName = 'Windows'
+        OnDblClick = dbgrdOperadorDblClick
       end
       object btnEdtOperador: TButton
-        Left = 488
+        Left = 512
         Top = 87
         Width = 129
         Height = 33
@@ -409,7 +384,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 4
         OnClick = btnEdtOperadorClick
       end
       object btnDelOperador: TButton
@@ -424,7 +399,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 5
         OnClick = btnDelOperadorClick
       end
     end

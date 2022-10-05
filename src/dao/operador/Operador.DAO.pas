@@ -23,7 +23,7 @@ type
     procedure Remover ( aValue : integer);
     procedure Editar( aValue : TOperadorModel );
 
-    function RecuperaPorCodigo( aValue : integer ) : string;
+    function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
     function VerificaSeExiste(aValue : integer ) : Boolean;
     function RecuperaTodos : TFDMemTable ;
   end;
@@ -54,10 +54,10 @@ begin
   );
 end;
 
-function TOperadorDAO.RecuperaPorCodigo(aValue: integer): string;
+function TOperadorDAO.RecuperaPorCodigo(aValue: integer; aColuna: string): string;
 begin
   Result := FConexao.FDConexao.ExecSQLScalar(
-    'SELECT o.nome FROM operador o WHERE o.codigo = :codigo',
+    'SELECT ' + aColuna + ' FROM operador o WHERE o.codigo = :codigo',
     [InttoStr(aValue)]
   );
 end;

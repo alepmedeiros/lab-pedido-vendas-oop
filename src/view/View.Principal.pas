@@ -29,13 +29,13 @@ uses
   Model.Pedido,
   Model.ItensPedido,
   Model.Cliente,
-  Operador.DAO,
+  Operador.Controller,
   Cliente.DAO,
   Produto.DAO,
   DM.Conexao,
   Data.DB,
   RxToolEdit,
-  RxCurrEdit;
+  RxCurrEdit, Operador.Controller.Interfaces;
 
 type
   TfrmPrincipal = class(TForm)
@@ -46,8 +46,6 @@ type
     btnCadOperador: TButton;
     lblCodigoOperador: TLabel;
     btnRecOperador: TButton;
-    edtNomeOperadorRetornado: TEdit;
-    lblNomeOperadorRetornado: TLabel;
     edtCodigoOperador: TEdit;
     btnRecTodosOperadores: TButton;
     dbgrdOperador: TDBGrid;
@@ -101,6 +99,7 @@ type
     procedure btnEdtProdutoClick(Sender: TObject);
     procedure dbgrdProdutosDblClick(Sender: TObject);
     procedure btnDelProdutoClick(Sender: TObject);
+    procedure dbgrdOperadorDblClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -110,9 +109,10 @@ type
 
     FConexao     : TDataModuleConexao;
 
-    FDAOOperador : TOperadorDAO;
     FDAOCliente  : TClienteDAO;
     FDAOProduto  : TProdutoDAO;
+
+    FOperadorController : TOperadorController;
 
   public
     { Public declarations }
@@ -158,7 +158,7 @@ begin
       FOperador
         .Nome(edtOperador.Text);
 
-      FDAOOperador.Salvar(TOperadorModel(FOperador));
+      FOperadorController.Salvar(TOperadorModel(FOperador));
 
       btnRecTodosOperadoresClick(self);
     end
@@ -227,25 +227,19 @@ begin
   if edtCodigoOperador.Text <> '' then
   begin
     try
-      if FDAOOperador.VerificaSeExiste(StrToInt(edtCodigoOperador.Text)) then
-        edtNomeOperadorRetornado.Text := FDAOOperador.RecuperaPorCodigo(StrToInt(edtCodigoOperador.Text))
-      else
-      begin
-        ShowMessage('Operador não existe');
-        edtCodigoOperador.Clear;
-      end
+      edtOperador.Text := FOperadorController.RecuperaPorCodigo(StrToInt(edtCodigoOperador.Text), 'nome')
     finally
       edtCodigoOperador.SetFocus;
       edtCodigoOperador.SelectAll;
     end;
   end
   else
-    ShowMessage('Código não pode ser vazio.');
+    ShowMessage('Código não pode ser vazio.'); // verificar depois validações no controller
 end;
 
 procedure TfrmPrincipal.btnRecTodosOperadoresClick(Sender: TObject);
 begin
-  FConexao.DataSource.DataSet := FDAOOperador.RecuperaTodos;
+  FConexao.DataSource.DataSet := FOperadorController.RecuperaTodos;
   dbgrdOperador.Columns[0].Width := 100; // codigo
   dbgrdOperador.Columns[1].Width := 400; // nome
 end;
@@ -267,6 +261,15 @@ begin
   edtCliente.Text       := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'nome');
   edtCidadeCliente.Text := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'cidade');
   edtUfCliente.Text     := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'uf');
+end;
+
+procedure TfrmPrincipal.dbgrdOperadorDblClick(Sender: TObject);
+var
+  LCodOperador : Integer;
+begin
+  LCodOperador := dbgrdProdutos.Fields[0].AsInteger;
+  edtCodigoOperador.Text := FOperadorController.RecuperaPorCodigo(LCodOperador, 'codigo');
+  edtOperador.Text       := FOperadorController.RecuperaPorCodigo(LCodOperador, 'nome');
 end;
 
 procedure TfrmPrincipal.dbgrdProdutosDblClick(Sender: TObject);
@@ -291,18 +294,10 @@ end;
 procedure TfrmPrincipal.btnDelOperadorClick(Sender: TObject);
 begin
   If Application.MessageBox('Deseja realmente excluir?', 'Atenção', 52) = mrYes then
-  begin
-    if FDAOOperador.VerificaSeExiste(StrToInt(edtCodigoOperador.Text)) then
-    begin
-      FDAOOperador.Remover(StrToInt(edtCodigoOperador.Text));
-      btnRecTodosOperadoresClick(self);
-    end
-    else
-      ShowMessage('Operador não cadastrado.');
-  end;
+      FOperadorController.Remover(StrToInt(edtCodigoOperador.Text));
 
   edtCodigoOperador.Clear;
-  edtNomeOperadorRetornado.Clear;
+  edtOperador.Clear;
   btnRecTodosOperadoresClick(self);
 end;
 
@@ -347,13 +342,12 @@ procedure TfrmPrincipal.btnEdtOperadorClick(Sender: TObject);
 begin
   FOperador
     .Codigo(StrToInt(edtCodigoOperador.Text))
-    .Nome(edtNomeOperadorRetornado.Text);
+    .Nome(edtOperador.Text);
 
-  if FDAOOperador.VerificaSeExiste(FOperador.Codigo) then
-    FDAOOperador.Editar(TOperadorModel(FOperador));
+  FOperadorController.Editar(TOperadorModel(FOperador));
 
   edtCodigoOperador.Clear;
-  edtNomeOperadorRetornado.Clear;
+  edtOperador.Clear;
 
   btnRecTodosOperadoresClick(self);
 end;
@@ -391,9 +385,10 @@ begin
 
   FConexao     := TDataModuleConexao.New;
 
-  FDAOOperador := TOperadorDAO.Create;
   FDAOCliente  := TClienteDAO.Create;
   FDAOProduto  := TProdutoDAO.Create;
+
+  FOperadorController := TOperadorController.Create;
 end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
