@@ -23,7 +23,9 @@ uses
   Operador.DAO.Interfaces in 'src\dao\operador\Operador.DAO.Interfaces.pas',
   Operador.Controller in 'src\controller\operador\Operador.Controller.pas',
   Produto.DAO.Interfaces in 'src\dao\produto\Produto.DAO.Interfaces.pas',
-  Produto.DAO in 'src\dao\produto\Produto.DAO.pas';
+  Produto.DAO in 'src\dao\produto\Produto.DAO.pas',
+  Produto.Controller.Interfaces in 'src\controller\produto\Produto.Controller.Interfaces.pas',
+  Produto.Controller in 'src\controller\produto\Produto.Controller.pas';
 
 {$R *.res}
 

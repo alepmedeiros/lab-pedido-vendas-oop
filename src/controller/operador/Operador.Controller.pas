@@ -43,6 +43,7 @@ end;
 destructor TOperadorController.Destroy;
 begin
   FDAOOperador.Free;
+
   inherited;
 end;
 

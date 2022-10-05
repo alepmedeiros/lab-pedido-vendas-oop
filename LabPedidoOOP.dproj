@@ -129,6 +129,8 @@
         <DCCReference Include="src\controller\operador\Operador.Controller.pas"/>
         <DCCReference Include="src\dao\produto\Produto.DAO.Interfaces.pas"/>
         <DCCReference Include="src\dao\produto\Produto.DAO.pas"/>
+        <DCCReference Include="src\controller\produto\Produto.Controller.Interfaces.pas"/>
+        <DCCReference Include="src\controller\produto\Produto.Controller.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
