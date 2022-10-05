@@ -21,7 +21,7 @@ object frmPrincipal: TfrmPrincipal
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = TabSheet4
+    ActivePage = Clientes
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange
@@ -119,6 +119,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         ParentFont = False
         TabOrder = 2
+        OnClick = btnDelClienteClick
       end
       object btnEdtCliente: TButton
         Left = 512
@@ -217,20 +218,6 @@ object frmPrincipal: TfrmPrincipal
         TabOrder = 8
         OnClick = btnRecTodosClienteClick
       end
-      object edtCodCliente: TEdit
-        Left = 20
-        Top = 45
-        Width = 126
-        Height = 26
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -16
-        Font.Name = #39
-        Font.Style = []
-        NumbersOnly = True
-        ParentFont = False
-        TabOrder = 9
-      end
       object btnLimparCampos: TButton
         Left = 657
         Top = 147
@@ -243,8 +230,22 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 10
+        TabOrder = 9
         OnClick = btnLimparCamposClick
+      end
+      object edtCodCliente: TEdit
+        Left = 20
+        Top = 45
+        Width = 129
+        Height = 29
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        NumbersOnly = True
+        ParentFont = False
+        TabOrder = 10
       end
     end
     object TabSheet4: TTabSheet

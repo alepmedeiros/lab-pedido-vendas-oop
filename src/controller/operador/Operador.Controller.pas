@@ -8,8 +8,7 @@ uses
   DM.Conexao,
   FireDAC.Comp.Client,
   Data.DB,
-  Operador.DAO,
-  vcl.Dialogs;
+  Operador.DAO;
 
 type
   TOperadorController = class(TInterfacedObject, iOperadorController)
@@ -61,8 +60,7 @@ begin
   if VerificaSeExiste(aValue) then
     Result := FDAOOperador.RecuperaPorCodigo(aValue, aColuna)
   else
-    raise Exception.Create('Operador não existe.')
-
+    raise Exception.Create('Operador não existe.');
 end;
 
 function TOperadorController.RecuperaTodos: TFDMemTable;

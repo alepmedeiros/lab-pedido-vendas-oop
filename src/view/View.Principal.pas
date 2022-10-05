@@ -30,12 +30,13 @@ uses
   Model.ItensPedido,
   Model.Cliente,
   Operador.Controller,
+  Cliente.Controller,
   Cliente.DAO,
   Produto.DAO,
   DM.Conexao,
   Data.DB,
   RxToolEdit,
-  RxCurrEdit, Operador.Controller.Interfaces;
+  RxCurrEdit;
 
 type
   TfrmPrincipal = class(TForm)
@@ -64,7 +65,6 @@ type
     btnEdtCliente: TButton;
     btnDelCliente: TButton;
     btnRecTodosCliente: TButton;
-    edtCodCliente: TEdit;
     lblCodCliente: TLabel;
     btnLimparCampos: TButton;
     Produtos: TTabSheet;
@@ -79,6 +79,7 @@ type
     btnRecTodosProdutos: TButton;
     btnEdtProduto: TButton;
     btnDelProduto: TButton;
+    edtCodCliente: TEdit;
 
     procedure FormCreate(Sender: TObject);
     procedure btnCadOperadorClick(Sender: TObject);
@@ -100,6 +101,7 @@ type
     procedure dbgrdProdutosDblClick(Sender: TObject);
     procedure btnDelProdutoClick(Sender: TObject);
     procedure dbgrdOperadorDblClick(Sender: TObject);
+    procedure btnDelClienteClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -109,10 +111,10 @@ type
 
     FConexao     : TDataModuleConexao;
 
-    FDAOCliente  : TClienteDAO;
     FDAOProduto  : TProdutoDAO;
 
     FOperadorController : TOperadorController;
+    FClienteController  : TClienteController;
 
   public
     { Public declarations }
@@ -138,12 +140,16 @@ begin
         .Cidade(edtCidadeCliente.Text)
         .UF(edtUfCliente.Text);
 
-      FDAOCliente.Salvar(TClienteModel(FCliente));
+      FClienteController.Salvar(TClienteModel(FCliente));
     end
     else
       ShowMessage('Campos não podem estar vazios.');
   finally
+    edtCodCliente.Clear;
     edtCliente.Clear;
+    edtCidadeCliente.Clear;
+    edtUfCliente.Clear;
+
     edtCliente.SetFocus;
 
     btnRecTodosClienteClick(self);
@@ -199,11 +205,11 @@ begin
   begin
     LCodCliente := StrToInt(edtCodCliente.Text);
     try
-      if FDAOCliente.VerificaSeExiste(StrToInt(edtCodCliente.Text)) then
+      if FClienteController.VerificaSeExiste(StrToInt(edtCodCliente.Text)) then
       begin
-        edtCliente.Text       := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'nome');
-        edtCidadeCliente.Text := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'cidade');
-        edtUfCliente.Text     := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'uf');
+        edtCliente.Text       := FClienteController.RecuperaPorCodigo(LCodCliente, 'nome');
+        edtCidadeCliente.Text := FClienteController.RecuperaPorCodigo(LCodCliente, 'cidade');
+        edtUfCliente.Text     := FClienteController.RecuperaPorCodigo(LCodCliente, 'uf');
       end
       else
       begin
@@ -257,10 +263,10 @@ var
   LCodCliente : Integer;
 begin
   LCodCliente := dbgrdCliente.Fields[0].AsInteger;
-  edtCodCliente.Text    := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'codigo');
-  edtCliente.Text       := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'nome');
-  edtCidadeCliente.Text := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'cidade');
-  edtUfCliente.Text     := FDAOCliente.RecuperaPorCodigo(LCodCliente, 'uf');
+  edtCodCliente.Text    := FClienteController.RecuperaPorCodigo(LCodCliente, 'codigo');
+  edtCliente.Text       := FClienteController.RecuperaPorCodigo(LCodCliente, 'nome');
+  edtCidadeCliente.Text := FClienteController.RecuperaPorCodigo(LCodCliente, 'cidade');
+  edtUfCliente.Text     := FClienteController.RecuperaPorCodigo(LCodCliente, 'uf');
 end;
 
 procedure TfrmPrincipal.dbgrdOperadorDblClick(Sender: TObject);
@@ -284,11 +290,24 @@ end;
 
 procedure TfrmPrincipal.btnRecTodosClienteClick(Sender: TObject);
 begin
-  FConexao.DataSource.DataSet := FDAOCliente.RecuperaTodos;
+  FConexao.DataSource.DataSet := FClienteController.RecuperaTodos;
   dbgrdCliente.Columns[0].Width := 100; // codigo
-  dbgrdCliente.Columns[1].Width := 400; // nome
-  dbgrdCliente.Columns[2].Width := 120; // cidade
+  dbgrdCliente.Columns[1].Width := 370; // nome
+  dbgrdCliente.Columns[2].Width := 150; // cidade
   dbgrdCliente.Columns[3].Width := 110; // uf
+end;
+
+procedure TfrmPrincipal.btnDelClienteClick(Sender: TObject);
+begin
+  If Application.MessageBox('Deseja realmente excluir?', 'Atenção', 52) = mrYes then
+    FClienteController.Remover(StrToInt(edtCodCliente.Text));
+
+  edtCodCliente.Clear;
+  edtCliente.Clear;
+  edtCidadeCliente.Clear;
+  edtUfCliente.Clear;
+
+  btnRecTodosClienteClick(self);
 end;
 
 procedure TfrmPrincipal.btnDelOperadorClick(Sender: TObject);
@@ -327,8 +346,7 @@ begin
     .Cidade(edtCidadeCliente.Text)
     .UF(edtUfCliente.Text);
 
-  if FDAOCliente.VerificaSeExiste(FCliente.Codigo) then
-    FDAOCliente.Editar(TClienteModel(FCliente));
+  FClienteController.Editar(TClienteModel(FCliente));
 
   edtCliente.Clear;
   edtCodCliente.Clear;
@@ -385,10 +403,10 @@ begin
 
   FConexao     := TDataModuleConexao.New;
 
-  FDAOCliente  := TClienteDAO.Create;
   FDAOProduto  := TProdutoDAO.Create;
 
   FOperadorController := TOperadorController.Create;
+  FClienteController := TClienteController.Create;
 end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);

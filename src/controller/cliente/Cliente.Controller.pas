@@ -4,60 +4,88 @@ interface
 
 uses
   Cliente.Controller.Interfaces,
-  Model.Cliente;
+  Cliente.DAO,
+  Model.Cliente,
+  DM.Conexao,
+  Data.DB,
+  FireDAC.Comp.Client;
 
 type
   TClienteController = class( TInterfacedObject, iClienteController )
   constructor Create;
   destructor Destroy; override;
-  class function New : iClienteController;
 
   private
-    { private declarations }
+    FDAOCliente : TClienteDAO;
 
   public
-    { private declarations }
+    procedure Salvar( aValue : TClienteModel );
+    procedure Remover ( aValue : integer);
+    procedure Editar( aValue : TClienteModel );
 
-    procedure DeleteAllClientes;
-    procedure ListAllClientes;
-    function FindByID(Assigned : Integer) : Boolean;
+    function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
+    function VerificaSeExiste(aValue : integer ) : Boolean;
+    function RecuperaTodos : TFDMemTable ;
 
   end;
 
 implementation
 
+uses
+  System.SysUtils;
+
 { TClienteController }
 
 constructor TClienteController.Create;
 begin
-
-end;
-
-procedure TClienteController.DeleteAllClientes;
-begin
-
+  FDAOCliente := TClienteDAO.Create;
 end;
 
 destructor TClienteController.Destroy;
 begin
+  FDAOCliente.Free;
 
   inherited;
 end;
 
-function TClienteController.FindByID(Assigned: Integer): Boolean;
+procedure TClienteController.Editar(aValue: TClienteModel);
 begin
-
+  if VerificaSeExiste(aValue.Codigo) then
+    FDAOCliente.Editar(aValue)
+  else
+    raise Exception.Create('Cliente não existe.');
 end;
 
-procedure TClienteController.ListAllClientes;
+function TClienteController.RecuperaPorCodigo(aValue: integer;
+  aColuna: string): string;
 begin
-
+  if VerificaSeExiste(aValue) then
+    Result := FDAOCliente.RecuperaPorCodigo(aValue, aColuna)
+  else
+    raise Exception.Create('Cliente não existe.');
 end;
 
-class function TClienteController.New: iClienteController;
+function TClienteController.RecuperaTodos: TFDMemTable;
 begin
-
+  Result := FDAOCliente.RecuperaTodos;
 end;
 
+procedure TClienteController.Remover(aValue: integer);
+begin
+  if VerificaSeExiste(aValue) then
+    FDAOCliente.Remover(aValue)
+  else
+    raise Exception.Create('Cliente não existe.');
+end;
+
+procedure TClienteController.Salvar(aValue: TClienteModel);
+begin
+  FDAOCliente.Salvar(aValue);
+end;
+
+function TClienteController.VerificaSeExiste(aValue: integer): Boolean;
+begin
+  Result := FDAOCliente.VerificaSeExiste(aValue);
+end;
 
 end.

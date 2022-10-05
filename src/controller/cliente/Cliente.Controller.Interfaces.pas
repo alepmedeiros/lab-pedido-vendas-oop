@@ -3,14 +3,18 @@ unit Cliente.Controller.Interfaces;
 interface
 
 uses
-  Model.Cliente;
+  Model.Cliente,
+  FireDAC.Comp.Client;
 
 type
   iClienteController = interface
+    procedure Salvar( aValue : TClienteModel );
+    procedure Remover ( aValue : integer);
+    procedure Editar( aValue : TClienteModel );
 
-    procedure DeleteAllClientes;
-    procedure ListAllClientes;
-    function FindByID(Assigned : Integer) : Boolean;
+    function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
+    function VerificaSeExiste(aValue : integer ) : Boolean;
+    function RecuperaTodos : TFDMemTable ;
   end;
 
 implementation
