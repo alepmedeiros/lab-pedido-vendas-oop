@@ -92,7 +92,7 @@ type
     dbgrdPedido: TDBGrid;
     btnConfirmarPedido: TButton;
     lblCarrinho: TLabel;
-    Button1: TButton;
+    btnCancelarPedido: TButton;
 
     procedure FormCreate(Sender: TObject);
     procedure btnCadOperadorClick(Sender: TObject);
@@ -417,6 +417,9 @@ begin
     ShowMessage('Não conectado!');
 
   PageControlPrincipal.ActivePageIndex := 0;
+
+  if edtCodCliente.CanFocus then
+    edtCodCliente.SetFocus;
 end;
 
 procedure TfrmPrincipal.PageControlPrincipalChange(Sender: TObject);
