@@ -3,7 +3,7 @@ object frmPrincipal: TfrmPrincipal
   Top = 0
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Principal'
+  Caption = 'Lab. Venda OOP.'
   ClientHeight = 594
   ClientWidth = 815
   Color = clBtnFace
@@ -21,7 +21,7 @@ object frmPrincipal: TfrmPrincipal
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = Produtos
+    ActivePage = Clientes
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange
@@ -139,9 +139,9 @@ object frmPrincipal: TfrmPrincipal
       object dbgrdCliente: TDBGrid
         AlignWithMargins = True
         Left = 20
-        Top = 202
+        Top = 194
         Width = 766
-        Height = 345
+        Height = 360
         BorderStyle = bsNone
         DataSource = DataModuleConexao.DataSource
         Font.Charset = DEFAULT_CHARSET
@@ -248,7 +248,7 @@ object frmPrincipal: TfrmPrincipal
         TabOrder = 10
       end
     end
-    object TabSheet4: TTabSheet
+    object Operadores: TTabSheet
       Caption = 'Operadores'
       ImageIndex = 3
       object lblNomeOperador: TLabel
@@ -352,9 +352,9 @@ object frmPrincipal: TfrmPrincipal
       object dbgrdOperador: TDBGrid
         AlignWithMargins = True
         Left = 20
-        Top = 198
+        Top = 193
         Width = 766
-        Height = 353
+        Height = 360
         BorderStyle = bsNone
         DataSource = DataModuleConexao.DataSource
         Font.Charset = DEFAULT_CHARSET
@@ -489,9 +489,9 @@ object frmPrincipal: TfrmPrincipal
       object dbgrdProdutos: TDBGrid
         AlignWithMargins = True
         Left = 20
-        Top = 210
-        Width = 774
-        Height = 345
+        Top = 193
+        Width = 765
+        Height = 359
         BorderStyle = bsNone
         DataSource = DataModuleConexao.DataSource
         Font.Charset = DEFAULT_CHARSET
@@ -569,6 +569,182 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
         TabOrder = 7
         OnClick = btnDelProdutoClick
+      end
+    end
+    object Pedidos: TTabSheet
+      Caption = 'Pedidos'
+      ImageIndex = 3
+      object lblCodProdPesq: TLabel
+        Left = 20
+        Top = 18
+        Width = 53
+        Height = 21
+        Caption = 'C'#243'digo:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lblDescProdPesq: TLabel
+        Left = 165
+        Top = 18
+        Width = 70
+        Height = 21
+        Caption = 'Descri'#231#227'o:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lblPrecoProdPesq: TLabel
+        Left = 584
+        Top = 18
+        Width = 72
+        Height = 21
+        Caption = 'Valor (R$):'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lblCarrinho: TLabel
+        Left = 20
+        Top = 135
+        Width = 64
+        Height = 21
+        Caption = 'Carrinho:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object edtCodProdutoPesq: TEdit
+        Left = 20
+        Top = 45
+        Width = 129
+        Height = 29
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        NumbersOnly = True
+        ParentFont = False
+        TabOrder = 0
+      end
+      object edtDescProdutoPesq: TEdit
+        Left = 165
+        Top = 45
+        Width = 404
+        Height = 29
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+      object edtValorProdutoPesq: TCurrencyEdit
+        Left = 584
+        Top = 45
+        Width = 201
+        Height = 29
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+      end
+      object btnRecuProdPesq: TButton
+        Left = 20
+        Top = 87
+        Width = 129
+        Height = 33
+        Caption = 'Cadastrar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+      end
+      object btnAddProdPesq: TButton
+        Left = 165
+        Top = 87
+        Width = 129
+        Height = 33
+        Caption = 'Add. ao Pedido'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+      end
+      object dbgrdPedido: TDBGrid
+        AlignWithMargins = True
+        Left = 20
+        Top = 168
+        Width = 765
+        Height = 338
+        BorderStyle = bsNone
+        DataSource = DataModuleConexao.DataSource
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        ParentFont = False
+        TabOrder = 5
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Segoe UI'
+        TitleFont.Style = [fsBold]
+        StyleName = 'Windows'
+        OnDblClick = dbgrdProdutosDblClick
+      end
+      object btnConfirmarPedido: TButton
+        Left = 656
+        Top = 520
+        Width = 129
+        Height = 33
+        Caption = 'Confirmar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 6
+      end
+      object Button1: TButton
+        Left = 20
+        Top = 520
+        Width = 129
+        Height = 33
+        Caption = 'Confirmar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 7
       end
     end
   end

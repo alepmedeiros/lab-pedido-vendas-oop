@@ -42,7 +42,6 @@ uses
 type
   TfrmPrincipal = class(TForm)
     PageControlPrincipal: TPageControl;
-    TabSheet4: TTabSheet;
     edtOperador: TEdit;
     lblNomeOperador: TLabel;
     btnCadOperador: TButton;
@@ -81,6 +80,19 @@ type
     btnEdtProduto: TButton;
     btnDelProduto: TButton;
     edtCodCliente: TEdit;
+    Pedidos: TTabSheet;
+    lblCodProdPesq: TLabel;
+    edtCodProdutoPesq: TEdit;
+    lblDescProdPesq: TLabel;
+    edtDescProdutoPesq: TEdit;
+    lblPrecoProdPesq: TLabel;
+    edtValorProdutoPesq: TCurrencyEdit;
+    btnRecuProdPesq: TButton;
+    btnAddProdPesq: TButton;
+    dbgrdPedido: TDBGrid;
+    btnConfirmarPedido: TButton;
+    lblCarrinho: TLabel;
+    Button1: TButton;
 
     procedure FormCreate(Sender: TObject);
     procedure btnCadOperadorClick(Sender: TObject);
