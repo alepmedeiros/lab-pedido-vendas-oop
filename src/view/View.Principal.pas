@@ -303,8 +303,8 @@ procedure TfrmPrincipal.btnRecTodosClienteClick(Sender: TObject);
 begin
   FConexao.DataSource.DataSet := FClienteController.RecuperaTodos;
   dbgrdCliente.Columns[0].Width := 100; // codigo
-  dbgrdCliente.Columns[1].Width := 370; // nome
-  dbgrdCliente.Columns[2].Width := 150; // cidade
+  dbgrdCliente.Columns[1].Width := 300; // nome
+  dbgrdCliente.Columns[2].Width := 220; // cidade
   dbgrdCliente.Columns[3].Width := 110; // uf
 end;
 
@@ -400,9 +400,9 @@ end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
-  FOperador    := TOperadorModel.Create;
-  FCliente     := TClienteModel.Create;
-  FProduto     := TProdutoModel.Create;
+  FOperador    := TOperadorModel.New;
+  FCliente     := TClienteModel.New;
+  FProduto     := TProdutoModel.New;
 
   FConexao     := TDataModuleConexao.New;
 

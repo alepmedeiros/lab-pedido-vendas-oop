@@ -55,9 +55,9 @@ CREATE TABLE produto (
 );
 
 INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Computador Lenovo 3i', 4300 );
-INSERT INTO produto ( descricao, preco_venda) VALUES ( 'Mouse Gamer Fortrek', 40 );
+INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Mouse Gamer Fortrek', 40 );
 INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Mesa Gamer 1Mx2m', 390 );
-INSERT INTO produto ( descricao, preco_venda )VALUES ( 'Xiaomi Redmi Note 9S 4Gb 128Gb', 1599.99 );
+INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Xiaomi Redmi Note 9S 4Gb 128Gb', 1599.99 );
 INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Teclado Redragon Draconic k530', 350 );
 INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Alexa 3Gen', 189.9 );
 
