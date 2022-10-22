@@ -23,6 +23,9 @@ type
     function ValorTotal (aValue : Currency) : iItensPedido; overload;
     function ValorTotal : Currency; overload;
 
+    function StatusPedido (aValue : String) : iItensPedido; overload;
+    function StatusPedido : string; overload;
+
   end;
 
 implementation

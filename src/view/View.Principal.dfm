@@ -21,7 +21,7 @@ object frmPrincipal: TfrmPrincipal
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = Clientes
+    ActivePage = Pedidos
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange
@@ -572,7 +572,7 @@ object frmPrincipal: TfrmPrincipal
       end
     end
     object Pedidos: TTabSheet
-      Caption = 'Pedidos'
+      Caption = 'Novo Pedido'
       ImageIndex = 3
       object lblCodProdPesq: TLabel
         Left = 20
@@ -626,6 +626,19 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         ParentFont = False
       end
+      object lblClientePedido: TLabel
+        Left = 364
+        Top = 90
+        Width = 51
+        Height = 21
+        Caption = 'Cliente:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
       object edtCodProdutoPesq: TEdit
         Left = 20
         Top = 45
@@ -645,6 +658,7 @@ object frmPrincipal: TfrmPrincipal
         Top = 45
         Width = 404
         Height = 29
+        Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -658,6 +672,7 @@ object frmPrincipal: TfrmPrincipal
         Top = 45
         Width = 201
         Height = 29
+        Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -671,7 +686,7 @@ object frmPrincipal: TfrmPrincipal
         Top = 87
         Width = 129
         Height = 33
-        Caption = 'Recuperar'
+        Caption = 'Recuperar Prod.'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -13
@@ -679,6 +694,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         ParentFont = False
         TabOrder = 3
+        OnClick = btnRecuProdPesqClick
       end
       object btnAddProdPesq: TButton
         Left = 165
@@ -693,6 +709,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         ParentFont = False
         TabOrder = 4
+        OnClick = btnAddProdPesqClick
       end
       object dbgrdPedido: TDBGrid
         AlignWithMargins = True
@@ -731,6 +748,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         ParentFont = False
         TabOrder = 6
+        OnClick = btnConfirmarPedidoClick
       end
       object btnCancelarPedido: TButton
         Left = 20
@@ -745,7 +763,56 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         ParentFont = False
         TabOrder = 5
+        OnClick = btnCancelarPedidoClick
       end
+      object btnIniciarPedido: TButton
+        Left = 248
+        Top = 520
+        Width = 313
+        Height = 33
+        Caption = 'Novo Pedido'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 8
+        OnClick = btnIniciarPedidoClick
+      end
+      object edtClientePedido: TEdit
+        Left = 496
+        Top = 87
+        Width = 289
+        Height = 29
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 9
+      end
+      object edtCodClientePedido: TEdit
+        Left = 423
+        Top = 87
+        Width = 65
+        Height = 29
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        NumbersOnly = True
+        ParentFont = False
+        TabOrder = 10
+      end
+    end
+    object GerenciarPedidos: TTabSheet
+      Caption = 'Gerenciar Pedidos'
+      ImageIndex = 4
     end
   end
 end

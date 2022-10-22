@@ -50,7 +50,7 @@ var
 
 const
   NomeBanco    = '\lab_pedido_loja.db';
-  CaminhoBanco = 'C:\Users\bruno\Documentos\Meus Projetos\lab-pedido-vendas-oop\db' + NomeBanco;
+  CaminhoBanco = 'Z:\Bruno\Documentos\Meus Projetos\lab-pedido-vendas-oop\db' + NomeBanco;
 
 implementation
 

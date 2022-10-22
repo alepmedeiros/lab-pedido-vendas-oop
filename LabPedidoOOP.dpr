@@ -25,7 +25,11 @@ uses
   Produto.DAO.Interfaces in 'src\dao\produto\Produto.DAO.Interfaces.pas',
   Produto.DAO in 'src\dao\produto\Produto.DAO.pas',
   Produto.Controller.Interfaces in 'src\controller\produto\Produto.Controller.Interfaces.pas',
-  Produto.Controller in 'src\controller\produto\Produto.Controller.pas';
+  Produto.Controller in 'src\controller\produto\Produto.Controller.pas',
+  Pedido.DAO.Interfaces in 'src\dao\pedido\Pedido.DAO.Interfaces.pas',
+  Pedido.DAO in 'src\dao\pedido\Pedido.DAO.pas',
+  Pedido.Controller.Interfaces in 'src\controller\pedido\Pedido.Controller.Interfaces.pas',
+  Pedido.Controller in 'src\controller\pedido\Pedido.Controller.pas';
 
 {$R *.res}
 

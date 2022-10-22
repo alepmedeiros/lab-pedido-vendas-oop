@@ -18,6 +18,7 @@ type
       FQuantidade       : integer;
       FValorUnitario    : Currency;
       FValorTotal       : Currency;
+      FStatusPedido     : string;
 
     public
       function NumeroItemPedido (aValue : integer) : iItensPedido; overload;
@@ -37,6 +38,9 @@ type
 
       function ValorTotal (aValue : Currency) : iItensPedido; overload;
       function ValorTotal : Currency; overload;
+
+      function StatusPedido (aValue : String) : iItensPedido; overload;
+      function StatusPedido : string; overload;
   end;
 
 implementation
@@ -95,6 +99,17 @@ end;
 function TItensPedido.Quantidade: integer;
 begin
   Result := FQuantidade;
+end;
+
+function TItensPedido.StatusPedido: string;
+begin
+  Result := FStatusPedido;
+end;
+
+function TItensPedido.StatusPedido(aValue: String): iItensPedido;
+begin
+  Result := Self;
+  FStatusPedido := aValue;
 end;
 
 function TItensPedido.Quantidade(aValue: integer): iItensPedido;

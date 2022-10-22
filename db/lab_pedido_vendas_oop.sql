@@ -33,6 +33,11 @@ CREATE TABLE pedido (
     valor_total DECIMAL (18, 2) NOT NULL
 );
 
+ALTER TABLE pedido ADD COLUMN status char DEFAULT 'A' ;
+ALTER TABLE pedido DROP COLUMN codigo_operador ;
+
+SELECT * FROM pedido p ;
+
 -- Table: pedido_item
 -- DROP TABLE IF EXISTS pedido_item;
 
@@ -45,8 +50,26 @@ CREATE TABLE pedido_item (
     valor_total DECIMAL (18, 2) NOT NULL
 );
 
+-- Add status column in pedido_item
+ALTER TABLE pedido_item ADD COLUMN status_pedido char DEFAULT 'A' ;
+
+-- Insert in pedido_item
+INSERT INTO pedido_item (codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total)
+VALUES (1,1,1,4.3,4.3);
+
+SELECT * FROM pedido_item pi ;
+
+-- Update status after cofirm pedido
+/*
+ * A: ANDAMENTO.
+ * E: EFETUADO.
+ * C: CANCELADO.
+ * 
+ * */
+UPDATE pedido_item SET status_pedido = 'E' WHERE status_pedido = 'A' ;
+
 -- Table: produto
-DROP TABLE IF EXISTS produto;
+-- DROP TABLE IF EXISTS produto;
 
 CREATE TABLE produto (
     codigo INTEGER PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT NOT NULL,
@@ -68,3 +91,8 @@ SELECT * FROM pedido p ;
 SELECT * FROM pedido_item pi ;
 
 INSERT INTO produto (descricao, preco_venda) VALUES (:descricao, :precovenda);
+
+-- insert de pedido
+
+INSERT INTO pedido (codigo_cliente, data_emissao, valor_total) VALUES (1, '2022-10-22', 200);
+DELETE FROM pedido WHERE codigo_cliente = :codigo AND status = 'A';
