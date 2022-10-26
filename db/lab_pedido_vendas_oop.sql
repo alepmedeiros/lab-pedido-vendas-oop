@@ -92,7 +92,42 @@ SELECT * FROM pedido_item pi ;
 
 INSERT INTO produto (descricao, preco_venda) VALUES (:descricao, :precovenda);
 
--- insert de pedido
-
+-- insert/remove de pedido
 INSERT INTO pedido (codigo_cliente, data_emissao, valor_total) VALUES (1, '2022-10-22', 200);
 DELETE FROM pedido WHERE codigo_cliente = :codigo AND status = 'A';
+
+
+-- ==========================================
+-- ==========================================
+
+SELECT * FROM pedido_item pi ORDER BY pi.codigo ;
+SELECT * FROM pedido p ;
+
+-- insert/remove item pedido
+INSERT INTO pedido_item
+(codigo, codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
+VALUES(6, 1, 1, 1, 4.3, 4.3, 'A');
+INSERT INTO pedido_item
+(codigo, codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
+VALUES(7, 1, 2, 4, 40, 4.3, 'A');
+INSERT INTO pedido_item
+(codigo, codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
+VALUES(8, 1, 3, 1, 390, 4.3, 'A');
+INSERT INTO pedido_item
+(codigo, codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
+VALUES(9, 1, 5, 5, 350, 4.3, 'A');
+
+-- select da tabela de pedido
+SELECT
+  p.codigo    AS codigo_pedido,
+  p.descricao AS produto,
+  pi.quantidade,
+  pi.valor_unitario,
+  ( pi.quantidade * pi.valor_unitario ) AS total
+FROM pedido_item pi
+LEFT JOIN produto p ON (pi.codigo_produto = p.codigo) ;
+
+
+
+SELECT * FROM pedido_item pi ORDER BY pi.codigo ;
+

@@ -726,7 +726,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
         ParentFont = False
-        TabOrder = 7
+        TabOrder = 8
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -12
@@ -747,7 +747,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 7
         OnClick = btnConfirmarPedidoClick
       end
       object btnCancelarPedido: TButton
@@ -777,7 +777,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 8
+        TabOrder = 6
         OnClick = btnIniciarPedidoClick
       end
       object edtClientePedido: TEdit
@@ -808,6 +808,21 @@ object frmPrincipal: TfrmPrincipal
         NumbersOnly = True
         ParentFont = False
         TabOrder = 10
+      end
+      object btnRecuperaItensPedido: TButton
+        Left = 95
+        Top = 136
+        Width = 90
+        Height = 21
+        Caption = 'Recuperar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 11
+        OnClick = btnRecuperaItensPedidoClick
       end
     end
     object GerenciarPedidos: TTabSheet

@@ -23,19 +23,18 @@ uses
   Model.Interfaces.Produto,
   Model.Interfaces.Operador,
   Model.Interfaces.Pedido,
-  Model.Interfaces.ItensPedido,
+  Model.Interfaces.PedidoItem,
   Model.Interfaces.Cliente,
   Model.Produto,
   Model.Operador,
   Model.Pedido,
-  Model.ItensPedido,
+  Model.PedidoItem,
   Model.Cliente,
   Operador.Controller,
   Cliente.Controller,
   Produto.Controller,
   Pedido.Controller,
-  Cliente.DAO,
-  Produto.DAO,
+  PedidoItem.Controller,
   DM.Conexao,
   Data.DB,
   RxToolEdit,
@@ -100,6 +99,7 @@ type
     edtClientePedido: TEdit;
     lblClientePedido: TLabel;
     edtCodClientePedido: TEdit;
+    btnRecuperaItensPedido: TButton;
 
     procedure FormCreate(Sender: TObject);
     procedure btnCadOperadorClick(Sender: TObject);
@@ -127,19 +127,22 @@ type
     procedure btnCancelarPedidoClick(Sender: TObject);
     procedure btnConfirmarPedidoClick(Sender: TObject);
     procedure btnIniciarPedidoClick(Sender: TObject);
+    procedure btnRecuperaItensPedidoClick(Sender: TObject);
 
   private
-    FOperador : iOperador;
-    FCliente  : iCliente;
-    FProduto  : iProduto;
-    FPedido   : iPedido;
+    FOperador   : iOperador;
+    FCliente    : iCliente;
+    FProduto    : iProduto;
+    FPedido     : iPedido;
+    FPedidoItem : iPedidoItem;
 
     FConexao: TDataModuleConexao;
 
-    FOperadorController : TOperadorController;
-    FClienteController  : TClienteController;
-    FProdutoController  : TProdutoController;
-    FPedidoController   : TPedidoController;
+    FOperadorController   : TOperadorController;
+    FClienteController    : TClienteController;
+    FProdutoController    : TProdutoController;
+    FPedidoController     : TPedidoController;
+    FPedidoItemController : TPedidoItemController;
 
   public
   end;
@@ -150,6 +153,23 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TfrmPrincipal.FormCreate(Sender: TObject);
+begin
+  FOperador   := TOperadorModel.New;
+  FCliente    := TClienteModel.New;
+  FProduto    := TProdutoModel.New;
+  FPedido     := TPedidoModel.New;
+  FPedidoItem := TPedidoItem.New;
+
+  FConexao := TDataModuleConexao.New;
+
+  FOperadorController   := TOperadorController.Create;
+  FClienteController    := TClienteController.Create;
+  FProdutoController    := TProdutoController.Create;
+  FPedidoController     := TPedidoController.Create;
+  FPedidoItemController := TPedidoItemController.Create;
+end;
 
 procedure TfrmPrincipal.btnCadClienteClick(Sender: TObject);
 begin
@@ -397,21 +417,6 @@ begin
   edtUfCliente.Clear;
 end;
 
-procedure TfrmPrincipal.FormCreate(Sender: TObject);
-begin
-  FOperador := TOperadorModel.New;
-  FCliente := TClienteModel.New;
-  FProduto := TProdutoModel.New;
-  FPedido := TPedidoModel.New;
-
-  FConexao := TDataModuleConexao.New;
-
-  FOperadorController := TOperadorController.Create;
-  FClienteController := TClienteController.Create;
-  FProdutoController := TProdutoController.Create;
-  FPedidoController := TPedidoController.Create;
-end;
-
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
   if not FConexao.FDConexao.Connected = true then
@@ -482,6 +487,16 @@ begin
   end;
 end;
 
+procedure TfrmPrincipal.btnRecuperaItensPedidoClick(Sender: TObject);
+begin
+  FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaTodos;
+  dbgrdPedido.Columns[0].Width := 100; // codigo_pedido
+  dbgrdPedido.Columns[1].Width := 300; // produto
+  dbgrdPedido.Columns[2].Width := 100; // quantidade
+  dbgrdPedido.Columns[3].Width := 100; // valor_unitario
+  dbgrdPedido.Columns[4].Width := 100; // total
+end;
+
 procedure TfrmPrincipal.btnRecuProdPesqClick(Sender: TObject);
 begin
   // recuperar produto controller -> recuperar produtro DAO.
@@ -534,6 +549,7 @@ procedure TfrmPrincipal.btnAddProdPesqClick(Sender: TObject);
 begin
   { adicionar pedido controller -> adicinar pedido com satus 'A' [Andamento]. }
   try
+    { adicionar  }
 
   finally
     edtCodProdutoPesq.Clear;

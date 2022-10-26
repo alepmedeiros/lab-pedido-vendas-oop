@@ -13,8 +13,8 @@ uses
   Model.Operador in 'src\model\operador\Model.Operador.pas',
   Model.Interfaces.Pedido in 'src\model\pedido\Model.Interfaces.Pedido.pas',
   Model.Pedido in 'src\model\pedido\Model.Pedido.pas',
-  Model.Interfaces.ItensPedido in 'src\model\pedido_item\Model.Interfaces.ItensPedido.pas',
-  Model.ItensPedido in 'src\model\pedido_item\Model.ItensPedido.pas',
+  Model.Interfaces.PedidoItem in 'src\model\pedido_item\Model.Interfaces.PedidoItem.pas',
+  Model.PedidoItem in 'src\model\pedido_item\Model.PedidoItem.pas',
   Model.Interfaces.Produto in 'src\model\produto\Model.Interfaces.Produto.pas',
   Model.Produto in 'src\model\produto\Model.Produto.pas',
   Operador.Controller.Interfaces in 'src\controller\operador\Operador.Controller.Interfaces.pas',
@@ -29,7 +29,11 @@ uses
   Pedido.DAO.Interfaces in 'src\dao\pedido\Pedido.DAO.Interfaces.pas',
   Pedido.DAO in 'src\dao\pedido\Pedido.DAO.pas',
   Pedido.Controller.Interfaces in 'src\controller\pedido\Pedido.Controller.Interfaces.pas',
-  Pedido.Controller in 'src\controller\pedido\Pedido.Controller.pas';
+  Pedido.Controller in 'src\controller\pedido\Pedido.Controller.pas',
+  PedidoItem.DAO.Interfaces in 'src\dao\pedido_item\PedidoItem.DAO.Interfaces.pas',
+  PedidoItem.DAO in 'src\dao\pedido_item\PedidoItem.DAO.pas',
+  PedidoItem.Controller.Interfaces in 'src\controller\pedido_item\PedidoItem.Controller.Interfaces.pas',
+  PedidoItem.Controller in 'src\controller\pedido_item\PedidoItem.Controller.pas';
 
 {$R *.res}
 

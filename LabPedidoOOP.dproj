@@ -115,8 +115,8 @@
         <DCCReference Include="src\model\operador\Model.Operador.pas"/>
         <DCCReference Include="src\model\pedido\Model.Interfaces.Pedido.pas"/>
         <DCCReference Include="src\model\pedido\Model.Pedido.pas"/>
-        <DCCReference Include="src\model\pedido_item\Model.Interfaces.ItensPedido.pas"/>
-        <DCCReference Include="src\model\pedido_item\Model.ItensPedido.pas"/>
+        <DCCReference Include="src\model\pedido_item\Model.Interfaces.PedidoItem.pas"/>
+        <DCCReference Include="src\model\pedido_item\Model.PedidoItem.pas"/>
         <DCCReference Include="src\model\produto\Model.Interfaces.Produto.pas"/>
         <DCCReference Include="src\model\produto\Model.Produto.pas"/>
         <DCCReference Include="src\controller\operador\Operador.Controller.Interfaces.pas"/>
@@ -135,6 +135,10 @@
         <DCCReference Include="src\dao\pedido\Pedido.DAO.pas"/>
         <DCCReference Include="src\controller\pedido\Pedido.Controller.Interfaces.pas"/>
         <DCCReference Include="src\controller\pedido\Pedido.Controller.pas"/>
+        <DCCReference Include="src\dao\pedido_item\PedidoItem.DAO.Interfaces.pas"/>
+        <DCCReference Include="src\dao\pedido_item\PedidoItem.DAO.pas"/>
+        <DCCReference Include="src\controller\pedido_item\PedidoItem.Controller.Interfaces.pas"/>
+        <DCCReference Include="src\controller\pedido_item\PedidoItem.Controller.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
