@@ -127,7 +127,61 @@ SELECT
 FROM pedido_item pi
 LEFT JOIN produto p ON (pi.codigo_produto = p.codigo) ;
 
+SELECT * FROM pedido_item pi ORDER BY pi.codigo ;
 
+INSERT INTO pedido_item
+(codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
+VALUES(1, 1, 1, 4.3, 4.3, 'A');
+INSERT INTO pedido_item
+(codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
+VALUES(1, 2, 1, 40, 4.3, 'A');
+INSERT INTO pedido_item
+(codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
+VALUES(1, 3, 1, 390, 4.3, 'A');
+INSERT INTO pedido_item
+(codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
+VALUES(1, 5, 1, 350, 4.3, 'A');
+
+-- Novo select para itens de produto que considera as entradas individuais dos produtos no carrinho
 
 SELECT * FROM pedido_item pi ORDER BY pi.codigo ;
+
+SELECT
+  p.codigo               AS codigo_produto,
+  p.descricao            AS descricao,
+  sum(pi.quantidade)     AS quantidade,
+  pi.valor_unitario      AS valor,
+  sum(pi.valor_unitario) AS total
+FROM
+  pedido_item pi
+LEFT JOIN
+  produto p ON (pi.codigo_produto = p.codigo)
+GROUP BY
+  pi.codigo_produto ;
+
+-- insert de pedido item para o projeto
+INSERT INTO pedido_item 
+( codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total )
+VALUES
+( :codigo_pedido, :codigo_produto, :quantidade, :valor_unitario, :valor_total );
+
+-- TESTES DE PEDIDO ITEM
+
+SELECT
+  SUM(total) AS total_pedido
+FROM
+  (
+    SELECT
+      p.codigo               AS codigo_produto,
+      p.descricao            AS descricao,
+      sum(pi.quantidade)     AS quantidade,
+      pi.valor_unitario      AS valor,
+      sum(pi.valor_unitario) AS total
+    FROM
+      pedido_item pi
+    LEFT JOIN
+      produto p ON (pi.codigo_produto = p.codigo)
+    GROUP BY
+      pi.codigo_produto
+  ) ;
 

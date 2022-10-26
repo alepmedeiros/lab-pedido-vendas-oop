@@ -8,6 +8,8 @@ uses
 
 type
   iPedidoIemDAO = interface
+    procedure AdicionarItem( aValue : TPedidoItemModel );
+
     function RecuperaTodos : TFDMemTable ;
   end;
 

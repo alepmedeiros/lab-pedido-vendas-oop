@@ -160,7 +160,7 @@ begin
   FCliente    := TClienteModel.New;
   FProduto    := TProdutoModel.New;
   FPedido     := TPedidoModel.New;
-  FPedidoItem := TPedidoItem.New;
+  FPedidoItem := TPedidoItemModel.New;
 
   FConexao := TDataModuleConexao.New;
 
@@ -301,30 +301,30 @@ procedure TfrmPrincipal.dbgrdClienteDblClick(Sender: TObject);
 var
   LCodCliente: Integer;
 begin
-  LCodCliente := dbgrdCliente.Fields[0].AsInteger;
-  edtCodCliente.Text := FClienteController.RecuperaPorCodigo(LCodCliente, 'codigo');
-  edtCliente.Text := FClienteController.RecuperaPorCodigo(LCodCliente, 'nome');
+  LCodCliente           := dbgrdCliente.Fields[0].AsInteger;
+  edtCodCliente.Text    := FClienteController.RecuperaPorCodigo(LCodCliente, 'codigo');
+  edtCliente.Text       := FClienteController.RecuperaPorCodigo(LCodCliente, 'nome');
   edtCidadeCliente.Text := FClienteController.RecuperaPorCodigo(LCodCliente, 'cidade');
-  edtUfCliente.Text := FClienteController.RecuperaPorCodigo(LCodCliente, 'uf');
+  edtUfCliente.Text     := FClienteController.RecuperaPorCodigo(LCodCliente, 'uf');
 end;
 
 procedure TfrmPrincipal.dbgrdOperadorDblClick(Sender: TObject);
 var
   LCodOperador: Integer;
 begin
-  LCodOperador := dbgrdProdutos.Fields[0].AsInteger;
+  LCodOperador           := dbgrdProdutos.Fields[0].AsInteger;
   edtCodigoOperador.Text := FOperadorController.RecuperaPorCodigo(LCodOperador, 'codigo');
-  edtOperador.Text := FOperadorController.RecuperaPorCodigo(LCodOperador, 'nome');
+  edtOperador.Text       := FOperadorController.RecuperaPorCodigo(LCodOperador, 'nome');
 end;
 
 procedure TfrmPrincipal.dbgrdProdutosDblClick(Sender: TObject);
 var
   LCodProduto: Integer;
 begin
-  LCodProduto := dbgrdProdutos.Fields[0].AsInteger;
-  edtCodigoProduto.Text := FProdutoController.RecuperaPorCodigo(LCodProduto, 'codigo');
+  LCodProduto              := dbgrdProdutos.Fields[0].AsInteger;
+  edtCodigoProduto.Text    := FProdutoController.RecuperaPorCodigo(LCodProduto, 'codigo');
   edtDescricaoProduto.Text := FProdutoController.RecuperaPorCodigo(LCodProduto, 'descricao');
-  edtValorProduto.Text := FProdutoController.RecuperaPorCodigo(LCodProduto, 'preco_venda');
+  edtValorProduto.Text     := FProdutoController.RecuperaPorCodigo(LCodProduto, 'preco_venda');
 end;
 
 procedure TfrmPrincipal.btnRecTodosClienteClick(Sender: TObject);
@@ -456,8 +456,6 @@ var
   end;
 
 begin
-  // iniciar um novo pedido.
-
   InputQuery('Cliente', 'Cód. Cliente', lCodCliente);
 
   if lCodCliente <> '' then
@@ -468,9 +466,10 @@ begin
 
     { montar e inserir o pedido na tabela correspondente (pedido) }
     FPedido
+      // adicionar o número do pedido retornado do banco ao pedido que acabou de ser criado
       .CodigoCliente(StrToInt(edtCodClientePedido.Text))
       .DataEmissao(now)
-      .ValorTotal(0.0);
+      .ValorTotal(0.0); { ao finalizar o pedido, fazer rotina para que o total do pedido do pedido seja a soma do itens do pedido item }
     { total zerado pois o pedido acabou de ser criado }
     { status 'A' pois está em andamento }
 
@@ -549,7 +548,11 @@ procedure TfrmPrincipal.btnAddProdPesqClick(Sender: TObject);
 begin
   { adicionar pedido controller -> adicinar pedido com satus 'A' [Andamento]. }
   try
-    { adicionar  }
+    { adicionar o pedido recuperado à tabela de pedido item com os dados do cliente }
+
+    ShowMessage('');
+    //FPedidoItem
+     // .NumeroPedido()
 
   finally
     edtCodProdutoPesq.Clear;

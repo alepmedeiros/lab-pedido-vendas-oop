@@ -19,6 +19,7 @@ type
     FDAOPedidoItem : TPedidoItemDAO;
 
   public
+    procedure AdicionarItem( aValue : TPedidoItemModel );
     function RecuperaTodos : TFDMemTable ;
 
   end;
@@ -42,6 +43,11 @@ end;
 function TPedidoItemController.RecuperaTodos: TFDMemTable;
 begin
   Result := FDAOPedidoItem.RecuperaTodos;
+end;
+
+procedure TPedidoItemController.AdicionarItem(aValue: TPedidoItemModel);
+begin
+  FDAOPedidoItem.AdicionarItem(aValue);
 end;
 
 end.

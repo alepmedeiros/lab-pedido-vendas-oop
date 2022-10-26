@@ -10,6 +10,7 @@ uses
 
 type
   iPedidoItemController = interface
+    procedure AdicionarItem( aValue : TPedidoItemModel );
     function RecuperaTodos : TFDMemTable ;
   end;
 

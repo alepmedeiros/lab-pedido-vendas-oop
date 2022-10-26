@@ -6,7 +6,7 @@ uses
   Model.Interfaces.PedidoItem;
 
 type
-  TPedidoItem = class(TInterfacedObject, iPedidoItem)
+  TPedidoItemModel = class(TInterfacedObject, iPedidoItem)
     constructor Create;
     destructor Destroy; override;
     class function New : iPedidoItem;
@@ -47,95 +47,95 @@ implementation
 
 { TItensPedido }
 
-constructor TPedidoItem.Create;
+constructor TPedidoItemModel.Create;
 begin
 
 end;
 
-destructor TPedidoItem.Destroy;
+destructor TPedidoItemModel.Destroy;
 begin
 
   inherited;
 end;
 
-class function TPedidoItem.New: iPedidoItem;
+class function TPedidoItemModel.New: iPedidoItem;
 begin
   Result := Self.Create;
 end;
 
-function TPedidoItem.CodigoProduto(aValue: integer): iPedidoItem;
+function TPedidoItemModel.CodigoProduto(aValue: integer): iPedidoItem;
 begin
   Result := Self;
   FCodigoProduto := aValue;
 end;
 
-function TPedidoItem.CodigoProduto: integer;
+function TPedidoItemModel.CodigoProduto: integer;
 begin
   Result := FCodigoProduto;
 end;
 
-function TPedidoItem.NumeroItemPedido: integer;
+function TPedidoItemModel.NumeroItemPedido: integer;
 begin
   Result := FNumeroItemPedido;
 end;
 
-function TPedidoItem.NumeroItemPedido(aValue: integer): iPedidoItem;
+function TPedidoItemModel.NumeroItemPedido(aValue: integer): iPedidoItem;
 begin
   Result := Self;
   FNumeroItemPedido := aValue;
 end;
 
-function TPedidoItem.NumeroPedido: integer;
+function TPedidoItemModel.NumeroPedido: integer;
 begin
   Result := FNUmeroPedido;
 end;
 
-function TPedidoItem.NumeroPedido(aValue: integer): iPedidoItem;
+function TPedidoItemModel.NumeroPedido(aValue: integer): iPedidoItem;
 begin
   Result := Self;
   FNUmeroPedido := aValue;
 end;
 
-function TPedidoItem.Quantidade: integer;
+function TPedidoItemModel.Quantidade: integer;
 begin
   Result := FQuantidade;
 end;
 
-function TPedidoItem.StatusPedido: string;
+function TPedidoItemModel.StatusPedido: string;
 begin
   Result := FStatusPedido;
 end;
 
-function TPedidoItem.StatusPedido(aValue: String): iPedidoItem;
+function TPedidoItemModel.StatusPedido(aValue: String): iPedidoItem;
 begin
   Result := Self;
   FStatusPedido := aValue;
 end;
 
-function TPedidoItem.Quantidade(aValue: integer): iPedidoItem;
+function TPedidoItemModel.Quantidade(aValue: integer): iPedidoItem;
 begin
   Result := Self;
   FQuantidade := aValue;
 end;
 
-function TPedidoItem.ValorTotal(aValue: Currency): iPedidoItem;
+function TPedidoItemModel.ValorTotal(aValue: Currency): iPedidoItem;
 begin
   Result := Self;
   FValorTotal := aValue;
 end;
 
-function TPedidoItem.ValorTotal: Currency;
+function TPedidoItemModel.ValorTotal: Currency;
 begin
   Result := FValorTotal;
 end;
 
-function TPedidoItem.ValorUnitario(aValue: Currency): iPedidoItem;
+function TPedidoItemModel.ValorUnitario(aValue: Currency): iPedidoItem;
 begin
   Result := Self;
   FValorUnitario := aValue;
 end;
 
-function TPedidoItem.ValorUnitario: Currency;
+function TPedidoItemModel.ValorUnitario: Currency;
 begin
   Result := FValorUnitario;
 end;
