@@ -19,8 +19,6 @@ object FormProduct: TFormProduct
     Height = 145
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 539
-    ExplicitHeight = 433
     object lblCodigo: TLabel
       Left = 2
       Top = 0
@@ -97,6 +95,7 @@ object FormProduct: TFormProduct
       Height = 39
       Caption = 'Editar'
       TabOrder = 4
+      OnClick = btnEditarClick
     end
     object btnExcluir: TButton
       Left = 164
@@ -105,6 +104,16 @@ object FormProduct: TFormProduct
       Height = 39
       Caption = 'Excluir'
       TabOrder = 5
+      OnClick = btnExcluirClick
+    end
+    object btnRecuperar: TButton
+      Left = 246
+      Top = 58
+      Width = 80
+      Height = 39
+      Caption = 'Recuperar'
+      TabOrder = 6
+      OnClick = btnRecuperarClick
     end
   end
 end

@@ -44,7 +44,9 @@ end;
 
 procedure TForm1.btnProductsClick(Sender: TObject);
 begin
+  Form1.Visible := false;
   FormProduct.ShowModal;
+
 end;
 
 constructor TForm1.Create;

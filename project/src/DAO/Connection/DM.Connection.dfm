@@ -26,4 +26,9 @@ object DataModuleConnection: TDataModuleConnection
     Left = 46
     Top = 132
   end
+  object FDquery2: TFDQuery
+    Connection = FDMConnection
+    Left = 192
+    Top = 184
+  end
 end

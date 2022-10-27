@@ -16,11 +16,14 @@ type
     function id (aValue : integer) : IProductInterface; overload;
     function id (aValue : String) : IProductInterface; overload;
     function id  : Integer; overload;
+
     function Description (Avalue : String) : IProductInterface; overload;
     function Description : string; overload;
+
     function SellPrice (Avalue : Float64) : IProductInterface; overload;
     function SellPrice (Avalue : string) : IProductInterface; overload;
     function SellPrice : Float64; overload;
+
     class function New : IProductInterface;
   end;
 

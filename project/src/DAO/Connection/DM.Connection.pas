@@ -42,6 +42,7 @@ type
     FDMConnection: TFDConnection;
     FDMTable: TFDMemTable;
     FDataSource: TDataSource;
+    FDquery2: TFDQuery;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
   private
@@ -71,6 +72,7 @@ begin
         Add('Database=' + BDPath);
       end;
       Open;
+
     end;
 end;
 procedure TDataModuleConnection.DataModuleCreate(Sender: TObject);
@@ -80,6 +82,7 @@ begin
 end;
 procedure TDataModuleConnection.DataModuleDestroy(Sender: TObject);
 begin
+  //FDMConnection.CloneConnection;
   FDMConnection.Free;
 end;
 class function TDataModuleConnection.New: TDataModuleConnection;

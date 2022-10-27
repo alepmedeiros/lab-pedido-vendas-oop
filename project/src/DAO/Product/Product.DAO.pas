@@ -5,7 +5,8 @@ interface
 uses
   FireDAC.Comp.Client,
   DM.Connection,
-  Model.Product;
+  Model.Product,
+  System.Generics.Collections;
 
 type
  TProductDAO = class
@@ -15,6 +16,7 @@ type
    private
    FConnection : TDataModuleConnection;
    FProduct : TProduct;
+   //FProductList : TObjectlist<TProduct>;
 
    public
    procedure Add    (aValue : TProduct);
@@ -28,7 +30,7 @@ type
 implementation
 
 uses
-  Data.DB;
+  Data.DB, Vcl.Dialogs, System.SysUtils;
 
 { TProductDAO }
 
@@ -39,6 +41,8 @@ begin
     'INSERT INTO produto (descricao, preco_de_venda) VALUES ( :nome, :preco  )',
     [aValue.Description, aValue.SellPrice],[ftString,ftFloat]
   );
+
+  FConnection.FDMConnection.Close;
 end;
 
 constructor TProductDAO.Create;
@@ -53,6 +57,8 @@ begin
     'DELETE FROM produto WHERE codigo =:id',
     [aValue]
   );
+
+  FConnection.FDMConnection.Close;
 end;
 
 destructor TProductDAO.Destroy;
@@ -71,11 +77,34 @@ begin
 end;
 
 function TProductDAO.RetrieveById(aValue: integer): TProduct;
+var
+  Lstring : String;
+
 begin
-  FConnection.FDMConnection.ExecSQL(
-    'SELECT * FROM produto WHERE codigo = :codigo',
-    [aValue]
+  LString :=
+    FConnection.FDMConnection.ExecSQLScalar(
+    'SELECT codigo FROM produto WHERE codigo = :codigo',[aValue]
+    );
+
+  FProduct.id(LString);
+
+  LString :=
+    FConnection.FDMConnection.ExecSQLScalar(
+    'SELECT descricao FROM produto WHERE codigo = :codigo',[aValue]
   );
+
+  FProduct.Description(Lstring);
+
+  LString :=
+    FConnection.FDMConnection.ExecSQLScalar(
+    'SELECT preco_de_venda FROM produto WHERE codigo = :codigo',[aValue]
+  );
+
+  FProduct.SellPrice(Lstring);
+
+ // FConnection.FDMConnection.Close;
+
+  Result := FProduct;
 end;
 
 procedure TProductDAO.Update(aValue: TProduct);
@@ -84,6 +113,8 @@ begin
     'UPDATE produto SET descricao = :descricao, preco_de_venda = :preco WHERE codigo = :codigo',
     [aValue.Description, aValue.SellPrice, aValue.id],[ftString,ftFloat,ftInteger]
   );
+
+  FConnection.FDMConnection.Close;
 end;
 
 end.
