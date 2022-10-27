@@ -8,7 +8,8 @@ uses
   Model.Pedido,
   DM.Conexao,
   FireDAC.Comp.Client,
-  Data.DB;
+  Data.DB,
+  Variants ;
 
 type
   TPedidoDAO = class (TInterfacedObject, iPedidoDAO)
@@ -20,6 +21,8 @@ type
       FPedido  : TPedidoModel;
 
     public
+      function NovoCodigoPedido : Variant;
+
       procedure salvar( aValue: TPedidoModel);
       procedure Remover( aValue : integer);
   end;
@@ -42,6 +45,16 @@ begin
   inherited;
 end;
 
+function TPedidoDAO.NovoCodigoPedido: Variant;
+begin
+  Result := FConexao.FDConexao.ExecSQLScalar(
+    'SELECT max(codigo)+1 AS novo_codigo_pedido FROM pedido p '
+  );
+
+  if Result = Null then
+    Result := 1;
+end;
+
 procedure TPedidoDAO.Remover(aValue: integer);
 begin
   FConexao.FDConexao.ExecSQL(
@@ -53,9 +66,10 @@ end;
 procedure TPedidoDAO.salvar(aValue: TPedidoModel);
 begin
   FConexao.FDConexao.ExecSQL(
-    'INSERT INTO pedido (codigo_cliente, data_emissao, valor_total) VALUES (:codigo_cliente, :data_emissao, :valor_total)',
-    [aValue.CodigoCliente, aValue.DataEmissao, aValue.ValorTotal], { valores do objeto }
-    [ftInteger, ftDate, ftCurrency]                                { definição de tipo dos valores para cada coluna }
+    'INSERT INTO pedido (codigo, codigo_cliente, data_emissao, valor_total)' +
+    'VALUES (:codigo, :codigo_cliente, :data_emissao, :valor_total)',
+    [aValue.NumeroPedido, aValue.CodigoCliente, aValue.DataEmissao, aValue.ValorTotal],
+    [ftInteger, ftInteger, ftDate, ftCurrency]
   );
 end;
 

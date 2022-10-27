@@ -1,4 +1,4 @@
-unit Pedido.Controller;
+ï»¿unit Pedido.Controller;
 
 interface
 
@@ -19,6 +19,8 @@ type
     FDAOPedido : TPedidoDAO;
 
   public
+    function NovoCodigoPedido : Variant;
+
     procedure Salvar( aValue: TPedidoModel );
     procedure Remover( aValue: integer );
   end;
@@ -42,13 +44,19 @@ begin
   inherited;
 end;
 
+function TPedidoController.NovoCodigoPedido: Variant;
+begin
+  Result := FDAOPedido.NovoCodigoPedido;
+end;
+
 procedure TPedidoController.Remover(aValue: integer);
 begin
-  { Paliativo pra testar a fucionalidade }
-  if aValue > -1 then
+  try
     FDAOPedido.Remover(aValue)
-  else
-    raise Exception.Create('Operador não existe.');
+  except
+    on E: Exception do
+      raise Exception.Create(E.Message);
+  end;
 end;
 
 procedure TPedidoController.Salvar(aValue: TPedidoModel);

@@ -156,6 +156,8 @@ FROM
   pedido_item pi
 LEFT JOIN
   produto p ON (pi.codigo_produto = p.codigo)
+WHERE 
+  pi.codigo_pedido = 1
 GROUP BY
   pi.codigo_produto ;
 
@@ -185,3 +187,65 @@ FROM
       pi.codigo_produto
   ) ;
 
+-- RECUPERANDO CODIGO DO PEDIDO
+-- pedido default
+INSERT INTO pedido ( codigo, codigo_cliente, data_emissao, valor_total, status ) VALUES ( 0, , '', 0, 'D' );
+INSERT INTO pedido
+(codigo, codigo_cliente, data_emissao, valor_total, status)
+VALUES(0, 0, '1999-01-01', 0, 'D');
+
+
+SELECT * FROM pedido p ;
+
+SELECT max(codigo)+1 AS novo_codigo_pedido FROM pedido p ;
+
+DELETE FROM pedido WHERE codigo_cliente = :codigo AND status = 'A';
+
+SELECT * FROM pedido_item pi ;
+
+DELETE FROM pedido_item  WHERE codigo_pedido = :codigo_pedido AND status_pedido = 'A' ;
+
+-- TESTE DE PEDIDO EFETUADO
+
+-- PEDIDO CRIADO
+SELECT * FROM pedido p ;
+
+-- PEDIDO RECUPERADO
+SELECT
+  p.codigo               AS codigo_produto,
+  p.descricao            AS descricao,
+  sum(pi.quantidade)     AS quantidade,
+  pi.valor_unitario      AS valor,
+  sum(pi.valor_unitario) AS total
+FROM
+  pedido_item pi
+LEFT JOIN
+  produto p ON (pi.codigo_produto = p.codigo)
+WHERE 
+  pi.codigo_pedido = 1
+GROUP BY
+  pi.codigo_produto ;
+
+-- TOTAL DO PEDIDO
+SELECT
+  SUM(total) AS total_pedido
+FROM
+  (
+    SELECT
+      p.codigo               AS codigo_produto,
+      p.descricao            AS descricao,
+      sum(pi.quantidade)     AS quantidade,
+      pi.valor_unitario      AS valor,
+      sum(pi.valor_unitario) AS total
+    FROM
+      pedido_item pi
+    LEFT JOIN
+      produto p ON (pi.codigo_produto = p.codigo)
+    WHERE 
+      pi.codigo_pedido = 1
+    GROUP BY
+      pi.codigo_produto
+  ) ;
+
+SELECT * FROM pedido p ;
+SELECT * FROM pedido_item pi ;

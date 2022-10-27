@@ -11,7 +11,10 @@ uses
 type
   iPedidoItemController = interface
     procedure AdicionarItem( aValue : TPedidoItemModel );
+    procedure RemoverPedidos( aValue: integer );
+
     function RecuperaTodos : TFDMemTable ;
+    function RecuperaItemPedidoPorCodigo( aValue : integer ) : TFDMemTable;
   end;
 
 end.

@@ -246,9 +246,9 @@ begin
     try
       if FClienteController.VerificaSeExiste(StrToInt(edtCodCliente.Text)) then
       begin
-        edtCliente.Text := FClienteController.RecuperaPorCodigo(LCodCliente, 'nome');
+        edtCliente.Text       := FClienteController.RecuperaPorCodigo(LCodCliente, 'nome');
         edtCidadeCliente.Text := FClienteController.RecuperaPorCodigo(LCodCliente, 'cidade');
-        edtUfCliente.Text := FClienteController.RecuperaPorCodigo(LCodCliente, 'uf');
+        edtUfCliente.Text     := FClienteController.RecuperaPorCodigo(LCodCliente, 'uf');
       end
       else
       begin
@@ -435,9 +435,9 @@ begin
   if PageControlPrincipal.TabIndex = 3 then
   begin
     btnConfirmarPedido.Enabled := False;
-    //btnCancelarPedido.Enabled := False;
-    btnRecuProdPesq.Enabled := False;
-    btnAddProdPesq.Enabled := False;
+    btnRecuProdPesq.Enabled    := False;
+    btnAddProdPesq.Enabled     := False;
+    edtCodProdutoPesq.Enabled  := False;
   end;
 
 end;
@@ -460,13 +460,12 @@ begin
 
   if lCodCliente <> '' then
   begin
-    { preencher os edits na interface }
     edtCodClientePedido.Text := FClienteController.RecuperaPorCodigo(StrToInt(lCodCliente), 'codigo');
     edtClientePedido.Text    := FClienteController.RecuperaPorCodigo(StrToInt(lCodCliente), 'nome');
 
     { montar e inserir o pedido na tabela correspondente (pedido) }
     FPedido
-      // adicionar o número do pedido retornado do banco ao pedido que acabou de ser criado
+      .NumeroPedido(FPedidoController.NovoCodigoPedido)
       .CodigoCliente(StrToInt(edtCodClientePedido.Text))
       .DataEmissao(now)
       .ValorTotal(0.0); { ao finalizar o pedido, fazer rotina para que o total do pedido do pedido seja a soma do itens do pedido item }
@@ -475,9 +474,10 @@ begin
 
     FPedidoController.Salvar(TPedidoModel(FPedido));
 
-    { habilitar os botões de ação do pedido }
+    { habilitar os botões/edits de ação do pedido }
     habilitarBotoes;
-    btnIniciarPedido.Enabled := False;
+    edtCodProdutoPesq.Enabled := True;
+    btnIniciarPedido.Enabled  := False;
   end
   else
   begin
@@ -498,11 +498,10 @@ end;
 
 procedure TfrmPrincipal.btnRecuProdPesqClick(Sender: TObject);
 begin
-  // recuperar produto controller -> recuperar produtro DAO.
   if Trim(edtCodProdutoPesq.Text) <> '' then
   begin
     try
-      edtDescProdutoPesq.Text := FProdutoController.RecuperaPorCodigo(StrToInt(edtCodProdutoPesq.Text),  'descricao');
+      edtDescProdutoPesq.Text  := FProdutoController.RecuperaPorCodigo(StrToInt(edtCodProdutoPesq.Text), 'descricao');
       edtValorProdutoPesq.Text := FProdutoController.RecuperaPorCodigo(StrToInt(edtCodProdutoPesq.Text), 'preco_venda');
     finally
       edtCodProdutoPesq.SetFocus;
@@ -518,22 +517,22 @@ end;
 
 procedure TfrmPrincipal.btnCancelarPedidoClick(Sender: TObject);
 begin
-  if Application.MessageBox('Deseja cancelar o pedido? Todos os dados serão apagados', 'Atenção', 52) = mrYes then
+  if Application.MessageBox('Deseja cancelar o pedido?', 'Atenção', 52) = mrYes then
   begin
-    { apagadar todos os pedidos que tem status 'A' e codigo do cliente usado }
+    { lógica para remover os itens dos pedidos antes do pedido }
+    FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
     FPedidoController.Remover(FPedido.CodigoCliente);
+    FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
   end;
 
   { rotina para desabilitar ações ao cancelar o pedido }
   btnConfirmarPedido.Enabled := False;
-  //btnCancelarPedido.Enabled  := False;
   btnRecuProdPesq.Enabled    := False;
   btnAddProdPesq.Enabled     := False;
   btnIniciarPedido.Enabled   := True;
 
   edtCodClientePedido.Clear;
   edtClientePedido.Clear;
-
   edtCodProdutoPesq.Clear;
   edtDescProdutoPesq.Clear;
   edtValorProdutoPesq.Clear;
@@ -541,18 +540,33 @@ end;
 
 procedure TfrmPrincipal.btnConfirmarPedidoClick(Sender: TObject);
 begin
-  { Adicionar o pedido na tabela de pedido e na tabela de pedido item, trocar o status para 'E'. }
+  { Recuperar o total do pedido e adicinoar no pedido }
+  { Trocar o status do pedido e dos itens do pedido para 'E'. }
 end;
 
 procedure TfrmPrincipal.btnAddProdPesqClick(Sender: TObject);
 begin
-  { adicionar pedido controller -> adicinar pedido com satus 'A' [Andamento]. }
   try
     { adicionar o pedido recuperado à tabela de pedido item com os dados do cliente }
 
-    ShowMessage('');
-    //FPedidoItem
-     // .NumeroPedido()
+    FPedidoItem
+      .NumeroPedido(FPedido.NumeroPedido)
+      .NumeroItemPedido(StrToInt(edtCodProdutoPesq.Text))
+      .Quantidade(1) { vai ser mudado para poder dizer quantas unidades irão ser }
+      .ValorUnitario(StrToCurr(edtValorProdutoPesq.Text))
+      .ValorTotal(StrToCurr(edtValorProdutoPesq.Text) * 1);
+
+    FPedidoItemController.AdicionarItem(TPedidoItemModel(FPedidoItem));
+
+    { Atualiza o DBGrid com os dado dos itens do pedido corrente }
+
+    FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
+    dbgrdPedido.Columns[0].Width := 100; // codigo_pedido
+    dbgrdPedido.Columns[1].Width := 300; // produto
+    dbgrdPedido.Columns[2].Width := 100; // quantidade
+    dbgrdPedido.Columns[3].Width := 100; // valor_unitario
+    dbgrdPedido.Columns[4].Width := 100; // total
+
 
   finally
     edtCodProdutoPesq.Clear;
@@ -561,16 +575,6 @@ begin
     edtValorProdutoPesq.Clear;
   end;
 end;
-
-{
-  Um novo pedido é iniciado/adicionado ao banco com status 'A' so clicar em Novo Pedido.
-  Uma tela com os clientes cadastrados será aberta, para que se escolha o cliente do pedido.
-  O botão de retornar irá recuperar o produdo do banco de dados para os campos de descrição e valor.
-  Ao clicar em adicinoar ao pedido, o produto será adicionado na tabela item pedido, com o status 'A'
-    de pedido em ANDAMENTO.
-  Ao clicar em confirmar, o pedido criado receberá status 'E' de EFETUADO.
-  Ao clicar em cancelar, os dados das tabelas de pedido e pedido_item com status 'A' serão apagados.
-}
 
 end.
 

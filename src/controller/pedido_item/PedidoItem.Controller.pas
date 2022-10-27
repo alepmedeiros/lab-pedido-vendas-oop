@@ -20,8 +20,10 @@ type
 
   public
     procedure AdicionarItem( aValue : TPedidoItemModel );
-    function RecuperaTodos : TFDMemTable ;
+    procedure RemoverPedidos( aValue: integer );
 
+    function RecuperaTodos : TFDMemTable ;
+    function RecuperaItemPedidoPorCodigo( aValue : integer ) : TFDMemTable;
   end;
 
 implementation
@@ -40,9 +42,20 @@ begin
   inherited;
 end;
 
+function TPedidoItemController.RecuperaItemPedidoPorCodigo(
+  aValue: integer): TFDMemTable;
+begin
+  Result := FDAOPedidoItem.RecuperaItemPedidoPorCodigo(aValue);
+end;
+
 function TPedidoItemController.RecuperaTodos: TFDMemTable;
 begin
   Result := FDAOPedidoItem.RecuperaTodos;
+end;
+
+procedure TPedidoItemController.RemoverPedidos(aValue: integer);
+begin
+  FDAOPedidoItem.RemoverPedidos(aValue);
 end;
 
 procedure TPedidoItemController.AdicionarItem(aValue: TPedidoItemModel);

@@ -9,6 +9,8 @@ uses
 
 type
   iPedidoDAO = interface
+    function NovoCodigoPedido : Variant;
+
     procedure salvar( aValue: TPedidoModel);
     procedure Remover( aValue : integer);
   end;
