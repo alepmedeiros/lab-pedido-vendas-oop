@@ -22,6 +22,7 @@ type
 
     public
       function NovoCodigoPedido : Variant;
+      function RetornaTotalPedido( aNumPedido : integer) : Currency;
 
       procedure salvar( aValue: TPedidoModel);
       procedure Remover( aValue : integer);
@@ -48,7 +49,12 @@ end;
 function TPedidoDAO.NovoCodigoPedido: Variant;
 begin
   Result := FConexao.FDConexao.ExecSQLScalar(
-    'SELECT max(codigo)+1 AS novo_codigo_pedido FROM pedido p '
+    'SELECT                       ' +
+    '  COALESCE (                 ' +
+    '    max(codigo) + 1,         ' +
+    '    1) AS novo_codigo_pedido ' +
+    'FROM                         ' +
+    '  pedido p                   '
   );
 
   if Result = Null then
@@ -60,6 +66,31 @@ begin
   FConexao.FDConexao.ExecSQL(
     'DELETE FROM pedido WHERE codigo_cliente = :codigo AND status = ''A''',
     [aValue]
+  );
+end;
+
+function TPedidoDAO.RetornaTotalPedido(aNumPedido : integer): Currency;
+begin
+  Result := FConexao.FDConexao.ExecSQLScalar(
+    'SELECT                                                     ' +
+    '  COALESCE(                                                ' +
+    '    SUM(total), 0                                          ' +
+    '  ) AS total_pedido                                        ' +
+    'FROM                                                       ' +
+    '  (                                                        ' +
+    '    SELECT                                                 ' +
+    '      p.codigo               AS codigo_produto,            ' +
+    '      p.descricao            AS descricao,                 ' +
+    '      sum(pi.quantidade)     AS quantidade,                ' +
+    '      pi.valor_unitario      AS valor,                     ' +
+    '      sum(pi.valor_unitario) AS total                      ' +
+    '    FROM pedido_item pi                                    ' +
+    '    LEFT JOIN produto p ON (pi.codigo_produto = p.codigo)  ' +
+    '    WHERE pi.codigo_pedido = :codigo_pedido                ' +
+    '    GROUP BY pi.codigo_produto                             ' +
+    ')                                                          ',
+    [ aNumPedido ],
+    [ ftCurrency ]
   );
 end;
 

@@ -542,6 +542,8 @@ procedure TfrmPrincipal.btnConfirmarPedidoClick(Sender: TObject);
 begin
   { Recuperar o total do pedido e adicinoar no pedido }
   { Trocar o status do pedido e dos itens do pedido para 'E'. }
+
+  ShowMessage('Valor do pedido: ' + CurrToStr(FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido)));
 end;
 
 procedure TfrmPrincipal.btnAddProdPesqClick(Sender: TObject);
@@ -566,7 +568,6 @@ begin
     dbgrdPedido.Columns[2].Width := 100; // quantidade
     dbgrdPedido.Columns[3].Width := 100; // valor_unitario
     dbgrdPedido.Columns[4].Width := 100; // total
-
 
   finally
     edtCodProdutoPesq.Clear;

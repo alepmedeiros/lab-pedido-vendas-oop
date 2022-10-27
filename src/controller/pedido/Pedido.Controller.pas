@@ -20,6 +20,7 @@ type
 
   public
     function NovoCodigoPedido : Variant;
+    function RetornaTotalPedido(aNumPedido: integer): Currency;
 
     procedure Salvar( aValue: TPedidoModel );
     procedure Remover( aValue: integer );
@@ -57,6 +58,11 @@ begin
     on E: Exception do
       raise Exception.Create(E.Message);
   end;
+end;
+
+function TPedidoController.RetornaTotalPedido(aNumPedido: integer): Currency;
+begin
+  Result := FDAOPedido.RetornaTotalPedido(aNumPedido);
 end;
 
 procedure TPedidoController.Salvar(aValue: TPedidoModel);

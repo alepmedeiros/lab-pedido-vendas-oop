@@ -222,13 +222,15 @@ FROM
 LEFT JOIN
   produto p ON (pi.codigo_produto = p.codigo)
 WHERE 
-  pi.codigo_pedido = 1
+  pi.codigo_pedido = :codigo_pedido AND p.codigo = :coodigo_cliente
 GROUP BY
   pi.codigo_produto ;
 
 -- TOTAL DO PEDIDO
 SELECT
-  SUM(total) AS total_pedido
+  COALESCE(
+    SUM(total), 0
+  ) AS total_pedido
 FROM
   (
     SELECT
@@ -237,15 +239,21 @@ FROM
       sum(pi.quantidade)     AS quantidade,
       pi.valor_unitario      AS valor,
       sum(pi.valor_unitario) AS total
-    FROM
-      pedido_item pi
-    LEFT JOIN
-      produto p ON (pi.codigo_produto = p.codigo)
-    WHERE 
-      pi.codigo_pedido = 1
-    GROUP BY
-      pi.codigo_produto
+    FROM pedido_item pi
+    LEFT JOIN produto p ON (pi.codigo_produto = p.codigo)
+    WHERE pi.codigo_pedido = :codigo_pedido
+    GROUP BY pi.codigo_produto
   ) ;
 
 SELECT * FROM pedido p ;
 SELECT * FROM pedido_item pi ;
+
+-- PEDIDO COALESCE
+
+SELECT
+  COALESCE (
+    max(codigo) + 1,
+    1) AS novo_codigo_pedido
+FROM
+  pedido p ;
+  

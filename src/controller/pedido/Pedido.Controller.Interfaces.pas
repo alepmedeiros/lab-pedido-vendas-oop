@@ -9,6 +9,7 @@ uses
 type
   iPedidoController = interface
     function NovoCodigoPedido : Variant;
+    function RetornaTotalPedido(aNumPedido: integer): Currency;
 
     procedure Salvar( aValue: TPedidoModel );
     procedure Remover( aValue: integer );

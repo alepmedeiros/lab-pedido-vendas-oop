@@ -10,6 +10,7 @@ uses
 type
   iPedidoDAO = interface
     function NovoCodigoPedido : Variant;
+    function RetornaTotalPedido( aNumPedido : integer) : Currency;
 
     procedure salvar( aValue: TPedidoModel);
     procedure Remover( aValue : integer);
