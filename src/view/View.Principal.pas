@@ -30,11 +30,11 @@ uses
   Model.Pedido,
   Model.PedidoItem,
   Model.Cliente,
-  Operador.Controller,
-  Cliente.Controller,
   Produto.Controller,
+  Operador.Controller,
   Pedido.Controller,
   PedidoItem.Controller,
+  Cliente.Controller,
   DM.Conexao,
   Data.DB,
   RxToolEdit,
@@ -99,7 +99,8 @@ type
     edtClientePedido: TEdit;
     lblClientePedido: TLabel;
     edtCodClientePedido: TEdit;
-    btnRecuperaItensPedido: TButton;
+    edtTotalPedido: TCurrencyEdit;
+    lblTotalPedido: TLabel;
 
     procedure FormCreate(Sender: TObject);
     procedure btnCadOperadorClick(Sender: TObject);
@@ -127,7 +128,6 @@ type
     procedure btnCancelarPedidoClick(Sender: TObject);
     procedure btnConfirmarPedidoClick(Sender: TObject);
     procedure btnIniciarPedidoClick(Sender: TObject);
-    procedure btnRecuperaItensPedidoClick(Sender: TObject);
 
   private
     FOperador   : iOperador;
@@ -143,6 +143,8 @@ type
     FProdutoController    : TProdutoController;
     FPedidoController     : TPedidoController;
     FPedidoItemController : TPedidoItemController;
+
+    procedure desabilitarAcoes;
 
   public
   end;
@@ -432,12 +434,15 @@ procedure TfrmPrincipal.PageControlPrincipalChange(Sender: TObject);
 begin
   FConexao.DataSource.DataSet.Close; { limpa o dataset ao mudar de aba. }
 
+  { criar lógica para recuperar os dados do dataset de acordo com a page }
+
   if PageControlPrincipal.TabIndex = 3 then
   begin
     btnConfirmarPedido.Enabled := False;
     btnRecuProdPesq.Enabled    := False;
     btnAddProdPesq.Enabled     := False;
     edtCodProdutoPesq.Enabled  := False;
+    btnCancelarPedido.Enabled  := False;
   end;
 
 end;
@@ -468,11 +473,10 @@ begin
       .NumeroPedido(FPedidoController.NovoCodigoPedido)
       .CodigoCliente(StrToInt(edtCodClientePedido.Text))
       .DataEmissao(now)
-      .ValorTotal(0.0); { ao finalizar o pedido, fazer rotina para que o total do pedido do pedido seja a soma do itens do pedido item }
-    { total zerado pois o pedido acabou de ser criado }
-    { status 'A' pois está em andamento }
+      .ValorTotal(0.0);
 
-    FPedidoController.Salvar(TPedidoModel(FPedido));
+    FPedidoController
+      .Salvar(TPedidoModel(FPedido));
 
     { habilitar os botões/edits de ação do pedido }
     habilitarBotoes;
@@ -484,16 +488,6 @@ begin
     ShowMessage('Pedido não pode ser efetuado sem um cliente válido.');
     btnCancelarPedidoClick(self);
   end;
-end;
-
-procedure TfrmPrincipal.btnRecuperaItensPedidoClick(Sender: TObject);
-begin
-  FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaTodos;
-  dbgrdPedido.Columns[0].Width := 100; // codigo_pedido
-  dbgrdPedido.Columns[1].Width := 300; // produto
-  dbgrdPedido.Columns[2].Width := 100; // quantidade
-  dbgrdPedido.Columns[3].Width := 100; // valor_unitario
-  dbgrdPedido.Columns[4].Width := 100; // total
 end;
 
 procedure TfrmPrincipal.btnRecuProdPesqClick(Sender: TObject);
@@ -515,20 +509,13 @@ begin
   end
 end;
 
-procedure TfrmPrincipal.btnCancelarPedidoClick(Sender: TObject);
+procedure TfrmPrincipal.desabilitarAcoes;
 begin
-  if Application.MessageBox('Deseja cancelar o pedido?', 'Atenção', 52) = mrYes then
-  begin
-    { lógica para remover os itens dos pedidos antes do pedido }
-    FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
-    FPedidoController.Remover(FPedido.CodigoCliente);
-    FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
-  end;
-
   { rotina para desabilitar ações ao cancelar o pedido }
   btnConfirmarPedido.Enabled := False;
   btnRecuProdPesq.Enabled    := False;
   btnAddProdPesq.Enabled     := False;
+  btnCancelarPedido.Enabled  := False;
   btnIniciarPedido.Enabled   := True;
 
   edtCodClientePedido.Clear;
@@ -536,14 +523,33 @@ begin
   edtCodProdutoPesq.Clear;
   edtDescProdutoPesq.Clear;
   edtValorProdutoPesq.Clear;
+  edtTotalPedido.Clear;
+end;
+
+procedure TfrmPrincipal.btnCancelarPedidoClick(Sender: TObject);
+begin
+  if Application.MessageBox('Deseja cancelar o pedido?', 'Atenção', 52) = mrYes then
+  begin
+    { lógica para remover os itens dos pedidos antes do pedido }
+    FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
+    FPedidoController.Remover(FPedido.CodigoCliente);
+    FConexao.DataSource.DataSet.Close;
+  end;
+
+  desabilitarAcoes;
 end;
 
 procedure TfrmPrincipal.btnConfirmarPedidoClick(Sender: TObject);
 begin
-  { Recuperar o total do pedido e adicinoar no pedido }
-  { Trocar o status do pedido e dos itens do pedido para 'E'. }
+  if Application.MessageBox('Deseja confirmar o pedido?', 'Atenção', 52) = mrYes then
+  begin
+    { lógica para remover os itens dos pedidos antes do pedido }
+    FPedidoItemController.ConfirmaPedidoItem(FPedido.NumeroPedido);
+    FPedidoController.ConfirmaPedido(FPedido.NumeroPedido);
+    FConexao.DataSource.DataSet.Close;
+  end;
 
-  ShowMessage('Valor do pedido: ' + CurrToStr(FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido)));
+  desabilitarAcoes;
 end;
 
 procedure TfrmPrincipal.btnAddProdPesqClick(Sender: TObject);
@@ -558,11 +564,20 @@ begin
       .ValorUnitario(StrToCurr(edtValorProdutoPesq.Text))
       .ValorTotal(StrToCurr(edtValorProdutoPesq.Text) * 1);
 
-    FPedidoItemController.AdicionarItem(TPedidoItemModel(FPedidoItem));
+    FPedidoItemController
+      .AdicionarItem(TPedidoItemModel(FPedidoItem));
+
+    FPedidoController.AtualizarTotalPedido(
+      FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido),
+      FPedido.NumeroPedido
+    );
+
+    edtTotalPedido.Value := FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido);
 
     { Atualiza o DBGrid com os dado dos itens do pedido corrente }
 
     FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
+
     dbgrdPedido.Columns[0].Width := 100; // codigo_pedido
     dbgrdPedido.Columns[1].Width := 300; // produto
     dbgrdPedido.Columns[2].Width := 100; // quantidade

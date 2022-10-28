@@ -21,6 +21,7 @@ type
   public
     procedure AdicionarItem( aValue : TPedidoItemModel );
     procedure RemoverPedidos( aValue: integer );
+    procedure ConfirmaPedidoItem(NumeroPedido: Integer);
 
     function RecuperaTodos : TFDMemTable;
     function RecuperaItemPedidoPorCodigo( aValue : integer ) : TFDMemTable;
@@ -45,6 +46,14 @@ begin
     [ftInteger, ftInteger, ftInteger, ftCurrency, ftCurrency]
   )
   
+end;
+
+procedure TPedidoItemDAO.ConfirmaPedidoItem(NumeroPedido: Integer);
+begin
+  FConexao.FDConexao.ExecSQL(
+    'UPDATE pedido_item SET status_pedido = ''C'' WHERE codigo_pedido = :codigo_pedido ;',
+    [NumeroPedido]
+  );
 end;
 
 constructor TPedidoItemDAO.Create;

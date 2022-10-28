@@ -256,4 +256,14 @@ SELECT
     1) AS novo_codigo_pedido
 FROM
   pedido p ;
+
+-- ATUALIZA TOTAL PEDIDO
+
+UPDATE pedido SET valor_total = :valor_total_pedido WHERE codigo = :codido_pedido ;
+
+-- FINALIZANDO UM PEDIDO
+-- trocando status do pedido para 'C' de CONCLUÍDO
+
+UPDATE pedido_item SET status_pedido = 'C' WHERE codigo_pedido = :codigo_pedido ;
+UPDATE pedido SET status = 'C' WHERE codigo = :codigo_pedido ;
   

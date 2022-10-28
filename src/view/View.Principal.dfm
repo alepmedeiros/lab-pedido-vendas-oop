@@ -615,7 +615,7 @@ object frmPrincipal: TfrmPrincipal
       end
       object lblCarrinho: TLabel
         Left = 20
-        Top = 135
+        Top = 142
         Width = 64
         Height = 21
         Caption = 'Carrinho:'
@@ -632,6 +632,19 @@ object frmPrincipal: TfrmPrincipal
         Width = 51
         Height = 21
         Caption = 'Cliente:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lblTotalPedido: TLabel
+        Left = 468
+        Top = 142
+        Width = 108
+        Height = 21
+        Caption = 'Total do Pedido:'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -714,9 +727,9 @@ object frmPrincipal: TfrmPrincipal
       object dbgrdPedido: TDBGrid
         AlignWithMargins = True
         Left = 20
-        Top = 168
+        Top = 192
         Width = 765
-        Height = 338
+        Height = 314
         BorderStyle = bsNone
         DataSource = DataModuleConexao.DataSource
         Font.Charset = DEFAULT_CHARSET
@@ -809,20 +822,19 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
         TabOrder = 10
       end
-      object btnRecuperaItensPedido: TButton
-        Left = 95
-        Top = 136
-        Width = 90
-        Height = 21
-        Caption = 'Recuperar'
+      object edtTotalPedido: TCurrencyEdit
+        Left = 584
+        Top = 139
+        Width = 201
+        Height = 29
+        Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -16
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
         TabOrder = 11
-        OnClick = btnRecuperaItensPedidoClick
       end
     end
     object GerenciarPedidos: TTabSheet

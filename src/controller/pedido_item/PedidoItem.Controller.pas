@@ -21,6 +21,7 @@ type
   public
     procedure AdicionarItem( aValue : TPedidoItemModel );
     procedure RemoverPedidos( aValue: integer );
+    procedure ConfirmaPedidoItem(NumeroPedido: Integer);
 
     function RecuperaTodos : TFDMemTable ;
     function RecuperaItemPedidoPorCodigo( aValue : integer ) : TFDMemTable;
@@ -29,6 +30,11 @@ type
 implementation
 
 { TPedidoItemController }
+
+procedure TPedidoItemController.ConfirmaPedidoItem(NumeroPedido: Integer);
+begin
+  FDAOPedidoItem.ConfirmaPedidoItem(NumeroPedido);
+end;
 
 constructor TPedidoItemController.Create;
 begin

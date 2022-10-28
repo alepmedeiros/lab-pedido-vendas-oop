@@ -13,6 +13,8 @@ type
 
     procedure Salvar( aValue: TPedidoModel );
     procedure Remover( aValue: integer );
+    procedure AtualizarTotalPedido(valorTotalPedido: Currency; NumeroPedido: integer);
+    procedure ConfirmaPedido(NumeroPedido: Integer);
   end;
 
 implementation

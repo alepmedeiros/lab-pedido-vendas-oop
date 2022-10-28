@@ -24,13 +24,32 @@ type
       function NovoCodigoPedido : Variant;
       function RetornaTotalPedido( aNumPedido : integer) : Currency;
 
-      procedure salvar( aValue: TPedidoModel);
+      procedure salvar( aValue : TPedidoModel);
       procedure Remover( aValue : integer);
+      procedure AtualizarTotalPedido( valorTotalPedido: Currency; NumeroPedido: integer );
+      procedure ConfirmaPedido( NumeroPedido : Integer );
   end;
 
 implementation
 
 { TPedidoDAO }
+
+procedure TPedidoDAO.AtualizarTotalPedido(valorTotalPedido: Currency; NumeroPedido: integer);
+begin
+  FConexao.FDConexao.ExecSQL(
+    'UPDATE pedido SET valor_total = :valor_total_pedido WHERE codigo = :codido_pedido',
+    [valorTotalPedido, NumeroPedido],
+    [ftCurrency, ftInteger]
+  );
+end;
+
+procedure TPedidoDAO.ConfirmaPedido(NumeroPedido: Integer);
+begin
+  FConexao.FDConexao.ExecSQL(
+    'UPDATE pedido SET status = ''C'' WHERE codigo = :codigo_pedido',
+    [NumeroPedido]
+  );
+end;
 
 constructor TPedidoDAO.Create;
 begin

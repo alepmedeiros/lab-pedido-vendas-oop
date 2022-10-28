@@ -24,6 +24,8 @@ type
 
     procedure Salvar( aValue: TPedidoModel );
     procedure Remover( aValue: integer );
+    procedure AtualizarTotalPedido(valorTotalPedido: Currency; NumeroPedido: integer);
+    procedure ConfirmaPedido(NumeroPedido: Integer);
   end;
 
 implementation
@@ -32,6 +34,17 @@ uses
   System.SysUtils;
 
 { TPedidoController }
+
+procedure TPedidoController.AtualizarTotalPedido(valorTotalPedido: Currency;
+  NumeroPedido: integer);
+begin
+  FDAOPedido.AtualizarTotalPedido(valorTotalPedido, NumeroPedido);
+end;
+
+procedure TPedidoController.ConfirmaPedido(NumeroPedido: Integer);
+begin
+  FDAOPedido.ConfirmaPedido(NumeroPedido);
+end;
 
 constructor TPedidoController.Create;
 begin
