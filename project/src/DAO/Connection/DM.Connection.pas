@@ -34,7 +34,7 @@ uses
   FireDAC.Comp.ScriptCommands,
   FireDAC.Stan.Util,
   FireDAC.Comp.Script,
-  FireDAC.Comp.DataSet;
+  FireDAC.Comp.DataSet, Datasnap.DBClient;
 
 
 type
@@ -53,8 +53,8 @@ type
 var
   DataModuleConnection: TDataModuleConnection;
 const
-  DBName    = '\OOP';
-  BDPath = 'C:\cursosDev\lab-alex\lab-pedido-vendas-oop\project\DB' + DBName;
+  DBName    = '\OOP.db';
+  BDPath = 'C:\CursosDelphi\lab-pedido-vendas-oop\project\DB' + DBName;
 implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}

@@ -22,7 +22,8 @@ uses
   Vcl.DBGrids,
   Model.Product.Interfaces,
   Product.DAO,
-  Model.Product;
+  Model.Product,
+  DM.Connection;
 
 type
   TFormProduct = class(TForm)
@@ -37,11 +38,16 @@ type
     btnEditar: TButton;
     btnExcluir: TButton;
     btnRecuperar: TButton;
+    dbgrdProdutos: TDBGrid;
+    btnEncontrarTodos: TButton;
     procedure btnAdicionarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnExcluirClick(Sender: TObject);
     procedure btnRecuperarClick(Sender: TObject);
     procedure btnEditarClick(Sender: TObject);
+    procedure btnEncontrarTodosClick(Sender: TObject);
+    procedure dbgrdProdutosDblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     Fproduct : IProductInterface;
@@ -55,44 +61,67 @@ var
 
 implementation
 
+uses
+  View.Main;
+
 {$R *.dfm}
 
 procedure TFormProduct.btnAdicionarClick(Sender: TObject);
 begin
-//
+  edtCodigo.Clear;
+
   if (edtDescricao.Text <>'') AND (edtPrecoVenda.Value > 0) then
   begin
+  try
     Fproduct
       .Description(edtDescricao.Text)
       .SellPrice(edtPrecoVenda.Value);
 
     FProductDAO.Add(TProduct(Fproduct));
+    ShowMessage('Produto incluido com sucesso!');
+  except
+    on E : Exception do
+    ShowMessage('erro');
+
+  end;
   end
   else
-  ShowMessage('Erro');
+    ShowMessage('Preencha os campos descrição e preço venda para Adicionar o produto');
 end;
 
 procedure TFormProduct.btnEditarClick(Sender: TObject);
 begin
 if (edtCodigo.Text <> '') and (edtDescricao.Text <> '') and (edtPrecoVenda.Value >0) then
   begin
+  try
     Fproduct
       .id(edtCodigo.Text)
       .Description(edtDescricao.Text)
       .SellPrice(edtPrecoVenda.Value);
 
     FProductDAO.Update(TProduct(Fproduct));
+  except
+    on E : Exception do
+    ShowMessage('Erro!!!');
+  end;
   end
   else
-    ShowMessage('Informe o produto para editar; ');
+    ShowMessage('Informe o produto para editar ');
+end;
 
+procedure TFormProduct.btnEncontrarTodosClick(Sender: TObject);
+begin
+  FProductDAO.RetrieveAll();
+  dbgrdProdutos.Columns[0].Width := 50; 
+  dbgrdProdutos.Columns[1].Width := 350;
+  dbgrdProdutos.Columns[2].Width := 100;
 end;
 
 procedure TFormProduct.btnExcluirClick(Sender: TObject);
 begin
   if edtCodigo.Text <> '' then
   begin
-    if Application.MessageBox('deseja realmente excluir o produto?', 'Excluir Produto', MB_OKCANCEL + MB_ICONQUESTION) = IDOK then
+    if Application.MessageBox(PwideChar('deseja realmente excluir o produto?'+sLineBreak +'==='+ edtDescricao.Text +'==='), 'Excluir Produto', MB_OKCANCEL + MB_ICONQUESTION) = IDOK then
     begin
       try
         FProductDAO.Delete(StrToInt(edtCodigo.Text));
@@ -109,12 +138,37 @@ procedure TFormProduct.btnRecuperarClick(Sender: TObject);
 begin
   if edtCodigo.Text <> '' then
   begin
+  try
    Fproduct := FProductDAO.RetrieveById(StrToInt(edtCodigo.Text));
 
    edtCodigo.Text := IntToStr( Fproduct.id);
    edtPrecoVenda.Value := Fproduct.SellPrice;
    edtDescricao.Text := (Fproduct.Description);
+  except
+    on E : Exception do
+    ShowMessage('erro');
   end;
+
+  end
+  else
+    ShowMessage('Informe o código do produto para resgatar o mesmo.');
+end;
+
+procedure TFormProduct.dbgrdProdutosDblClick(Sender: TObject);
+begin
+  // pegar o selecionado e jogar pra cima
+  edtCodigo.Text := dbgrdProdutos.Fields[0].asString;
+  edtDescricao.Text := dbgrdProdutos.Fields[1].asString;
+  edtPrecoVenda.Value := dbgrdProdutos.Fields[2].asFloat;
+end;
+
+procedure TFormProduct.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Form1.Visible := true;
+//  Form1.ShowModal;
+
+  //inherited;
 end;
 
 procedure TFormProduct.FormCreate(Sender: TObject);

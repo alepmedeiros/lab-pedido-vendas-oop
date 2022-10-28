@@ -2,23 +2,28 @@ object FormProduct: TFormProduct
   Left = 0
   Top = 0
   Caption = 'CRUD-Produto'
-  ClientHeight = 145
-  ClientWidth = 618
+  ClientHeight = 417
+  ClientWidth = 541
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Position = poOwnerFormCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   TextHeight = 15
   object pnlBG: TPanel
     Left = 0
     Top = 0
-    Width = 618
-    Height = 145
+    Width = 541
+    Height = 417
     Align = alClient
+    Color = clGradientInactiveCaption
+    ParentBackground = False
     TabOrder = 0
+    ExplicitWidth = 545
     object lblCodigo: TLabel
       Left = 2
       Top = 0
@@ -114,6 +119,30 @@ object FormProduct: TFormProduct
       Caption = 'Recuperar'
       TabOrder = 6
       OnClick = btnRecuperarClick
+    end
+    object dbgrdProdutos: TDBGrid
+      Left = 0
+      Top = 103
+      Width = 537
+      Height = 314
+      DataSource = DataModuleConnection.FDataSource
+      Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      TabOrder = 7
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -12
+      TitleFont.Name = 'Segoe UI'
+      TitleFont.Style = []
+      OnDblClick = dbgrdProdutosDblClick
+    end
+    object btnEncontrarTodos: TButton
+      Left = 332
+      Top = 58
+      Width = 69
+      Height = 39
+      Caption = 'Todos'
+      TabOrder = 8
+      OnClick = btnEncontrarTodosClick
     end
   end
 end

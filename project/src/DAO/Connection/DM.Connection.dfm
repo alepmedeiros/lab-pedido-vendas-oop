@@ -1,15 +1,12 @@
 object DataModuleConnection: TDataModuleConnection
-  Height = 328
-  Width = 281
-  PixelsPerInch = 120
+  Height = 262
+  Width = 225
   object FDMConnection: TFDConnection
     Params.Strings = (
-      
-        'Database=C:\cursosDev\lab-alex\lab-pedido-vendas-oop\project\DB\' +
-        'OOP.db'
+      'Database=C:\CursosDelphi\lab-pedido-vendas-oop\project\DB\OOP.db'
       'DriverID=SQLite')
-    Left = 50
-    Top = 38
+    Left = 40
+    Top = 30
   end
   object FDMTable: TFDMemTable
     FetchOptions.AssignedValues = [evMode]
@@ -19,16 +16,16 @@ object DataModuleConnection: TDataModuleConnection
     UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
-    Left = 160
-    Top = 41
+    Left = 128
+    Top = 33
   end
   object FDataSource: TDataSource
-    Left = 46
-    Top = 132
+    Left = 37
+    Top = 106
   end
   object FDquery2: TFDQuery
     Connection = FDMConnection
-    Left = 192
-    Top = 184
+    Left = 154
+    Top = 147
   end
 end

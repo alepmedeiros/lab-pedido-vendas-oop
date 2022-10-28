@@ -68,12 +68,13 @@ begin
 end;
 
 function TProductDAO.RetrieveAll : TFDMemTable;
+var
+Lstring : String;
 begin
-//    FConnection.FDMConnection.ExecSQL(
-//    'SELECT * FROM produto',
-//    TDataSet( FConnection.FDMTable)
-//  );
-//  Result := FConnection.FDMTable;
+  Lstring := 'SELECT * FROM produto';
+  
+  FConnection.FDMConnection.ExecSQL(Lstring,Tdataset(FConnection.FDMTable));
+  Fconnection.FDataSource.DataSet := FConnection.FDMTable;
 end;
 
 function TProductDAO.RetrieveById(aValue: integer): TProduct;
@@ -81,30 +82,36 @@ var
   Lstring : String;
 
 begin
-  LString :=
-    FConnection.FDMConnection.ExecSQLScalar(
-    'SELECT codigo FROM produto WHERE codigo = :codigo',[aValue]
-    );
-
-  FProduct.id(LString);
-
-  LString :=
-    FConnection.FDMConnection.ExecSQLScalar(
-    'SELECT descricao FROM produto WHERE codigo = :codigo',[aValue]
-  );
-
-  FProduct.Description(Lstring);
-
-  LString :=
-    FConnection.FDMConnection.ExecSQLScalar(
-    'SELECT preco_de_venda FROM produto WHERE codigo = :codigo',[aValue]
-  );
-
-  FProduct.SellPrice(Lstring);
-
- // FConnection.FDMConnection.Close;
+  Lstring := 'SELECT * FROM produto WHERE codigo =  '+ IntToStr(avalue);
+  
+  FConnection.FDMConnection.ExecSQL(Lstring,Tdataset(FConnection.FDMTable));
+  Fconnection.FDataSource.DataSet := FConnection.FDMTable;
 
   Result := FProduct;
+//  LString :=
+//    FConnection.FDMConnection.ExecSQLScalar(
+//    'SELECT codigo FROM produto WHERE codigo = :codigo',[aValue]
+//    );
+//
+//  FProduct.id(LString);
+//
+//  LString :=
+//    FConnection.FDMConnection.ExecSQLScalar(
+//    'SELECT descricao FROM produto WHERE codigo = :codigo',[aValue]
+//  );
+//
+//  FProduct.Description(Lstring);
+//
+//  LString :=
+//    FConnection.FDMConnection.ExecSQLScalar(
+//    'SELECT preco_de_venda FROM produto WHERE codigo = :codigo',[aValue]
+//  );
+//
+//  FProduct.SellPrice(Lstring);
+//
+// // FConnection.FDMConnection.Close;
+//
+//  Result := FProduct;
 end;
 
 procedure TProductDAO.Update(aValue: TProduct);
