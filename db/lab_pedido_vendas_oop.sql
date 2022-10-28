@@ -131,16 +131,16 @@ SELECT * FROM pedido_item pi ORDER BY pi.codigo ;
 
 INSERT INTO pedido_item
 (codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
-VALUES(1, 1, 1, 4.3, 4.3, 'A');
+VALUES(99, 1, 1, 4.3, 4.3, 'A');
 INSERT INTO pedido_item
 (codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
-VALUES(1, 2, 1, 40, 4.3, 'A');
+VALUES(99, 2, 1, 40, 4.3, 'A');
 INSERT INTO pedido_item
 (codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
-VALUES(1, 3, 1, 390, 4.3, 'A');
+VALUES(99, 3, 1, 390, 4.3, 'A');
 INSERT INTO pedido_item
 (codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
-VALUES(1, 5, 1, 350, 4.3, 'A');
+VALUES(99, 5, 1, 350, 4.3, 'A');
 
 -- Novo select para itens de produto que considera as entradas individuais dos produtos no carrinho
 
@@ -212,6 +212,7 @@ SELECT * FROM pedido p ;
 
 -- PEDIDO RECUPERADO
 SELECT
+  pi.codigo              AS cod,
   p.codigo               AS codigo_produto,
   p.descricao            AS descricao,
   sum(pi.quantidade)     AS quantidade,
@@ -266,4 +267,14 @@ UPDATE pedido SET valor_total = :valor_total_pedido WHERE codigo = :codido_pedid
 
 UPDATE pedido_item SET status_pedido = 'C' WHERE codigo_pedido = :codigo_pedido ;
 UPDATE pedido SET status = 'C' WHERE codigo = :codigo_pedido ;
+
+SELECT * FROM pedido p WHERE p.status = 'A' ;
+SELECT * FROM pedido_item pi WHERE pi.status_pedido = 'A';
+
+-- TESTE REMOVER ITEM DO PEDIDO
+
+SELECT * FROM pedido_item pi ;
+
+DELETE FROM pedido_item WHERE codigo_pedido = :codigo_pedido AND codigo_produto = :codigo_produto ;
+SELECT * FROM pedido_item pi ;
   

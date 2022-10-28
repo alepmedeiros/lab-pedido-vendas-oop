@@ -38,9 +38,11 @@ uses
   DM.Conexao,
   Data.DB,
   RxToolEdit,
-  RxCurrEdit;
+  RxCurrEdit, Vcl.Menus;
 
 type
+  TAbas = ( abaCliente, abaOperadores, abaProdutos, abaNovoPedido, abaGerenciarPedido );
+
   TfrmPrincipal = class(TForm)
     PageControlPrincipal: TPageControl;
     edtOperador: TEdit;
@@ -128,6 +130,11 @@ type
     procedure btnCancelarPedidoClick(Sender: TObject);
     procedure btnConfirmarPedidoClick(Sender: TObject);
     procedure btnIniciarPedidoClick(Sender: TObject);
+    procedure popupMenuPedidoPopup(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure RemoverItem1Click(Sender: TObject);
+    procedure edtCodProdutoPesqKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
 
   private
     FOperador   : iOperador;
@@ -155,6 +162,13 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
+  FPedidoController.Remover(FPedido.CodigoCliente);
+  FConexao.DataSource.DataSet.Close;
+end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
@@ -428,23 +442,58 @@ begin
 
   if edtCodCliente.CanFocus then
     edtCodCliente.SetFocus;
+
+   PageControlPrincipalChange(Self);
 end;
 
 procedure TfrmPrincipal.PageControlPrincipalChange(Sender: TObject);
 begin
   FConexao.DataSource.DataSet.Close; { limpa o dataset ao mudar de aba. }
 
-  { criar lógica para recuperar os dados do dataset de acordo com a page }
-
-  if PageControlPrincipal.TabIndex = 3 then
+  if PageControlPrincipal.TabIndex = Integer(abaCliente) then
+  begin
+    FConexao.DataSource.DataSet := FClienteController.RecuperaTodos;
+    dbgrdCliente.Columns[0].Width := 100; // codigo
+    dbgrdCliente.Columns[1].Width := 300; // nome
+    dbgrdCliente.Columns[2].Width := 220; // cidade
+    dbgrdCliente.Columns[3].Width := 110; // uf
+  end
+  else if PageControlPrincipal.TabIndex = Integer(abaOperadores) then
+  begin
+    FConexao.DataSource.DataSet := FOperadorController.RecuperaTodos;
+    dbgrdOperador.Columns[0].Width := 100; // codigo
+    dbgrdOperador.Columns[1].Width := 400; // nome
+  end
+  else if PageControlPrincipal.TabIndex = Integer(abaProdutos) then
+  begin
+    FConexao.DataSource.DataSet := FProdutoController.RecuperaTodos;
+    dbgrdProdutos.Columns[0].Width := 100; // codigo
+    dbgrdProdutos.Columns[1].Width := 400; // descricao
+    dbgrdProdutos.Columns[2].Width := 130; // preco
+  end
+  else if PageControlPrincipal.TabIndex = Integer(abaNovoPedido) then
   begin
     btnConfirmarPedido.Enabled := False;
     btnRecuProdPesq.Enabled    := False;
     btnAddProdPesq.Enabled     := False;
     edtCodProdutoPesq.Enabled  := False;
     btnCancelarPedido.Enabled  := False;
+  end
+  else if PageControlPrincipal.TabIndex = Integer(abaGerenciarPedido) then
+  begin
+
   end;
 
+end;
+
+procedure TfrmPrincipal.popupMenuPedidoPopup(Sender: TObject);
+begin
+ShowMessage('PopUp');
+end;
+
+procedure TfrmPrincipal.RemoverItem1Click(Sender: TObject);
+begin
+  ShowMessage('Removerndo Item');
 end;
 
 procedure TfrmPrincipal.btnIniciarPedidoClick(Sender: TObject);
@@ -482,12 +531,11 @@ begin
     habilitarBotoes;
     edtCodProdutoPesq.Enabled := True;
     btnIniciarPedido.Enabled  := False;
+
+    edtCodProdutoPesq.SetFocus;
   end
   else
-  begin
     ShowMessage('Pedido não pode ser efetuado sem um cliente válido.');
-    btnCancelarPedidoClick(self);
-  end;
 end;
 
 procedure TfrmPrincipal.btnRecuProdPesqClick(Sender: TObject);
@@ -512,18 +560,27 @@ end;
 procedure TfrmPrincipal.desabilitarAcoes;
 begin
   { rotina para desabilitar ações ao cancelar o pedido }
-  btnConfirmarPedido.Enabled := False;
-  btnRecuProdPesq.Enabled    := False;
-  btnAddProdPesq.Enabled     := False;
-  btnCancelarPedido.Enabled  := False;
-  btnIniciarPedido.Enabled   := True;
-
   edtCodClientePedido.Clear;
   edtClientePedido.Clear;
   edtCodProdutoPesq.Clear;
   edtDescProdutoPesq.Clear;
   edtValorProdutoPesq.Clear;
   edtTotalPedido.Clear;
+
+  btnConfirmarPedido.Enabled := False;
+  btnRecuProdPesq.Enabled    := False;
+  btnAddProdPesq.Enabled     := False;
+  btnCancelarPedido.Enabled  := False;
+  edtCodProdutoPesq.Enabled  := False;
+
+  btnIniciarPedido.Enabled   := True;
+end;
+
+procedure TfrmPrincipal.edtCodProdutoPesqKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+    btnRecuProdPesqClick(self);
 end;
 
 procedure TfrmPrincipal.btnCancelarPedidoClick(Sender: TObject);
@@ -578,11 +635,12 @@ begin
 
     FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
 
-    dbgrdPedido.Columns[0].Width := 100; // codigo_pedido
-    dbgrdPedido.Columns[1].Width := 300; // produto
-    dbgrdPedido.Columns[2].Width := 100; // quantidade
+    //dbgrdPedido.Columns[0].Width := 050; // codigo_pedido
+    dbgrdPedido.Columns[1].Width := 100; // produto
+    dbgrdPedido.Columns[2].Width := 290; // quantidade
     dbgrdPedido.Columns[3].Width := 100; // valor_unitario
     dbgrdPedido.Columns[4].Width := 100; // total
+    dbgrdPedido.Columns[5].Width := 100; // total
 
   finally
     edtCodProdutoPesq.Clear;

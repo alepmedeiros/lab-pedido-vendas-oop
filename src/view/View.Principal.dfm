@@ -13,6 +13,7 @@ object frmPrincipal: TfrmPrincipal
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poMainFormCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   TextHeight = 15
@@ -615,7 +616,7 @@ object frmPrincipal: TfrmPrincipal
       end
       object lblCarrinho: TLabel
         Left = 20
-        Top = 142
+        Top = 138
         Width = 64
         Height = 21
         Caption = 'Carrinho:'
@@ -641,7 +642,7 @@ object frmPrincipal: TfrmPrincipal
       end
       object lblTotalPedido: TLabel
         Left = 468
-        Top = 142
+        Top = 138
         Width = 108
         Height = 21
         Caption = 'Total do Pedido:'
@@ -665,6 +666,7 @@ object frmPrincipal: TfrmPrincipal
         NumbersOnly = True
         ParentFont = False
         TabOrder = 0
+        OnKeyDown = edtCodProdutoPesqKeyDown
       end
       object edtDescProdutoPesq: TEdit
         Left = 165
@@ -824,7 +826,7 @@ object frmPrincipal: TfrmPrincipal
       end
       object edtTotalPedido: TCurrencyEdit
         Left = 584
-        Top = 139
+        Top = 135
         Width = 201
         Height = 29
         Enabled = False

@@ -78,6 +78,7 @@ begin
   LCodigo := IntToStr( aValue );
   FConexao.FDConexao.ExecSQL(
     'SELECT                                         ' +
+    //'  pi.codigo              AS cp,                ' +
     '  p.codigo               AS codigo_produto,    ' +
     '  p.descricao            AS descricao,         ' +
     '  sum(pi.quantidade)     AS quantidade,        ' +
