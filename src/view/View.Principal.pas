@@ -103,7 +103,7 @@ type
     edtCodClientePedido: TEdit;
     edtTotalPedido: TCurrencyEdit;
     lblTotalPedido: TLabel;
-    edtQuantiade: TEdit;
+    edtQuantidade: TEdit;
     lblQuantidade: TLabel;
     btnRemoverEntrada: TButton;
 
@@ -133,17 +133,18 @@ type
     procedure btnCancelarPedidoClick(Sender: TObject);
     procedure btnConfirmarPedidoClick(Sender: TObject);
     procedure btnIniciarPedidoClick(Sender: TObject);
-    procedure popupMenuPedidoPopup(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure RemoverItem1Click(Sender: TObject);
     procedure edtCodProdutoPesqKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure edtQuantiadeKeyDown(Sender: TObject; var Key: Word;
+    procedure edtQuantidadeKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure edtQuantiadeEnter(Sender: TObject);
+    procedure edtQuantidadeEnter(Sender: TObject);
     procedure edtCodProdutoPesqExit(Sender: TObject);
     procedure btnRemoverEntradaClick(Sender: TObject);
     procedure dbgrdPedidoCellClick(Column: TColumn);
+    procedure PageControlPrincipalChanging(Sender: TObject;
+      var AllowChange: Boolean);
 
   private
     FOperador   : iOperador;
@@ -307,7 +308,7 @@ begin
     end;
   end
   else
-    ShowMessage('Código não pode ser vazio.'); // verificar depois validações no controller
+    ShowMessage('Código não pode ser vazio.');
 end;
 
 procedure TfrmPrincipal.btnRecTodosOperadoresClick(Sender: TObject);
@@ -497,7 +498,7 @@ begin
     btnRemoverEntrada.Enabled  := False;
 
     edtCodProdutoPesq.Enabled  := False;
-    edtQuantiade.Enabled       := False;
+    edtQuantidade.Enabled       := False;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaGerenciarPedido) then
   begin
@@ -506,9 +507,13 @@ begin
 
 end;
 
-procedure TfrmPrincipal.popupMenuPedidoPopup(Sender: TObject);
+procedure TfrmPrincipal.PageControlPrincipalChanging(Sender: TObject;
+  var AllowChange: Boolean);
 begin
-ShowMessage('PopUp');
+  if PageControlPrincipal.TabIndex = Integer(abaNovoPedido) then
+  begin
+    btnCancelarPedidoClick(self);
+  end;
 end;
 
 procedure TfrmPrincipal.RemoverItem1Click(Sender: TObject);
@@ -531,7 +536,7 @@ var
     btnIniciarPedido.Enabled   := False;
 
     edtCodProdutoPesq.Enabled  := True;
-    edtQuantiade.Enabled       := True;
+    edtQuantidade.Enabled       := True;
   end;
 
 begin
@@ -567,9 +572,17 @@ begin
     try
       edtDescProdutoPesq.Text  := FProdutoController.RecuperaPorCodigo(StrToInt(edtCodProdutoPesq.Text), 'descricao');
       edtValorProdutoPesq.Text := FProdutoController.RecuperaPorCodigo(StrToInt(edtCodProdutoPesq.Text), 'preco_venda');
-    finally
-      edtQuantiade.SetFocus;
-      edtQuantiade.SelectAll;
+      edtQuantidade.SetFocus;
+      edtQuantidade.SelectAll;
+    except
+      on E: Exception do
+      begin
+        edtQuantidade.Clear;
+        edtCodProdutoPesq.SetFocus;
+        edtCodProdutoPesq.SelectAll;
+
+        raise Exception.Create(E.Message);
+      end;
     end;
   end
   else
@@ -581,6 +594,12 @@ end;
 
 procedure TfrmPrincipal.btnRemoverEntradaClick(Sender: TObject);
 begin
+  if FNumEntrada = 0 then
+  begin
+    ShowMessage('Selecione uma entrada no carrinho!');
+    Exit;
+  end;
+
   if Application.MessageBox(
     PWideChar('Deseja remover a entrada ' + inttostr(FNumEntrada) + '?'), 'Atenção', 52) = mrYes
   then
@@ -601,7 +620,7 @@ begin
   edtDescProdutoPesq.Clear;
   edtValorProdutoPesq.Clear;
   edtTotalPedido.Clear;
-  edtQuantiade.Clear;
+  edtQuantidade.Clear;
 
   btnConfirmarPedido.Enabled := False;
   btnRecuProdPesq.Enabled    := False;
@@ -610,7 +629,7 @@ begin
   btnRemoverEntrada.Enabled  := False;
 
   edtCodProdutoPesq.Enabled  := False;
-  edtQuantiade.Enabled       := False;
+  edtQuantidade.Enabled       := False;
 
   btnIniciarPedido.Enabled   := True;
 end;
@@ -626,17 +645,17 @@ begin
   if (Key = VK_RETURN) then
   begin
     btnRecuProdPesqClick(self);
-    edtQuantiade.SetFocus;
+    edtQuantidade.SetFocus;
   end;
 
 end;
 
-procedure TfrmPrincipal.edtQuantiadeEnter(Sender: TObject);
+procedure TfrmPrincipal.edtQuantidadeEnter(Sender: TObject);
 begin
-  edtQuantiade.Text := '1';
+  edtQuantidade.Text := '1';
 end;
 
-procedure TfrmPrincipal.edtQuantiadeKeyDown(Sender: TObject; var Key: Word;
+procedure TfrmPrincipal.edtQuantidadeKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_RETURN then
@@ -689,9 +708,9 @@ begin
     FPedidoItem
       .NumeroPedido(FPedido.NumeroPedido)
       .NumeroItemPedido(StrToInt(edtCodProdutoPesq.Text))
-      .Quantidade(StrToInt(edtQuantiade.Text)) { vai ser mudado para poder dizer quantas unidades irão ser }
+      .Quantidade(StrToInt(edtQuantidade.Text))
       .ValorUnitario(StrToCurr(edtValorProdutoPesq.Text))
-      .ValorTotal(StrToCurr(edtValorProdutoPesq.Text) * 1);
+      .ValorTotal(StrToCurr(edtValorProdutoPesq.Text) * StrToInt(edtQuantidade.Text));
 
     FPedidoItemController
       .AdicionarItem(TPedidoItemModel(FPedidoItem));
@@ -701,7 +720,7 @@ begin
       FPedido.NumeroPedido
     );
 
-    edtQuantiade.Clear;
+    edtQuantidade.Clear;
 
     edtTotalPedido.Value := FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido);
 

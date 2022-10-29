@@ -26,6 +26,8 @@ type
     function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
     function VerificaSeExiste(aValue : integer ) : Boolean;
     function RecuperaTodos : TFDMemTable ;
+
+    function RetornaOperador( aValue : Integer) : TOperadorModel;
   end;
 
 implementation
@@ -75,6 +77,11 @@ begin
     FDAOOperador.Remover(aValue)
   else
     raise Exception.Create('Operador não existe.');
+end;
+
+function TOperadorController.RetornaOperador(aValue: Integer): TOperadorModel;
+begin
+  Result := TOperadorModel(FDAOOperador.RetornaOperador(aValue));
 end;
 
 procedure TOperadorController.salvar(aValue: TOperadorModel);

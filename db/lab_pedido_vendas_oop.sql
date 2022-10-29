@@ -250,7 +250,7 @@ UPDATE pedido_item SET status_pedido = 'C' WHERE codigo_pedido = :codigo_pedido 
 UPDATE pedido SET status = 'C' WHERE codigo = :codigo_pedido ;
 
 SELECT * FROM pedido p WHERE p.status = 'A' ;
-SELECT * FROM pedido_item pi WHERE pi.status_pedido = 'A';
+SELECT * FROM pedido_item pi WHERE pi.status_pedido = 'C';
 
 -- TESTE REMOVER ITEM DO PEDIDO
 
@@ -302,3 +302,23 @@ FROM
       codigo_pedido = 1
   ) AS pedido ;
   
+-- RESET DATABASE
+
+DELETE FROM cliente ;
+DELETE FROM operador ;
+DELETE FROM pedido ;
+DELETE FROM pedido_item ;
+DELETE FROM produto ;
+
+UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'cliente';
+UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'operador';
+UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'pedido';
+UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'pedido_item';
+UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'produto';
+
+SELECT * FROM operador o ;
+
+INSERT INTO operador (nome) VALUES ('Operador Bruno'); 
+
+SELECT * FROM pedido p ;
+SELECT * FROM pedido_item pi ;

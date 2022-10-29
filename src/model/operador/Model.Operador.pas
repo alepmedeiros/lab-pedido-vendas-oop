@@ -21,10 +21,6 @@ type
 
     function Nome (aValue : string) : iOperador; overload;
     function Nome : string; overload;
-
-    //property Codigo : Integer read FCodigo write FCodigo;
-    //property Nome   : String read  FCodigo write FNome;
-
   end;
 
 implementation

@@ -26,9 +26,14 @@ type
     function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
     function VerificaSeExiste(aValue : integer ) : Boolean;
     function RecuperaTodos : TFDMemTable ;
+
+    function RetornaOperador( aValue : Integer) : TOperadorModel;
   end;
 
 implementation
+
+uses
+  Model.Interfaces.Operador;
 
 { TOperadorDAO }
 
@@ -78,6 +83,19 @@ begin
     'DELETE FROM operador WHERE codigo = :codigo',
     [aValue]
   );
+end;
+
+function TOperadorDAO.RetornaOperador(aValue: Integer): TOperadorModel;
+var
+  LOperador : iOperador;
+begin
+  LOperador := TOperadorModel.New;
+
+  LOperador
+    .Codigo(StrToInt(RecuperaPorCodigo(aValue, 'codigo')))
+    .Nome(RecuperaPorCodigo(aValue, 'nome'));
+
+  Result := TOperadorModel(LOperador);
 end;
 
 procedure TOperadorDAO.Salvar(aValue: TOperadorModel);

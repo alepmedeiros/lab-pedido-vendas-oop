@@ -15,6 +15,8 @@ type
     function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
     function VerificaSeExiste(aValue : integer ) : Boolean;
     function RecuperaTodos : TFDMemTable ;
+
+    function RetornaOperador( aValue : Integer) : TOperadorModel;
   end;
 
 implementation
