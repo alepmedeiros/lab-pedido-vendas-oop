@@ -10,6 +10,7 @@ type
   iPedidoIemDAO = interface
     procedure AdicionarItem( aValue : TPedidoItemModel );
     procedure RemoverPedidos( aValue: integer );
+    procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(NumeroPedido: Integer);
 
     function RecuperaTodos : TFDMemTable ;

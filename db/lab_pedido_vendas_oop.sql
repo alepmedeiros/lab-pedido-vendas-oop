@@ -227,25 +227,6 @@ WHERE
 GROUP BY
   pi.codigo_produto ;
 
--- TOTAL DO PEDIDO
-SELECT
-  COALESCE(
-    SUM(total), 0
-  ) AS total_pedido
-FROM
-  (
-    SELECT
-      p.codigo               AS codigo_produto,
-      p.descricao            AS descricao,
-      sum(pi.quantidade)     AS quantidade,
-      pi.valor_unitario      AS valor,
-      sum(pi.valor_unitario) AS total
-    FROM pedido_item pi
-    LEFT JOIN produto p ON (pi.codigo_produto = p.codigo)
-    WHERE pi.codigo_pedido = :codigo_pedido
-    GROUP BY pi.codigo_produto
-  ) ;
-
 SELECT * FROM pedido p ;
 SELECT * FROM pedido_item pi ;
 
@@ -277,4 +258,47 @@ SELECT * FROM pedido_item pi ;
 
 DELETE FROM pedido_item WHERE codigo_pedido = :codigo_pedido AND codigo_produto = :codigo_produto ;
 SELECT * FROM pedido_item pi ;
+
+SELECT p.codigo, p.descricao, PRINTF("R$ %.2f", preco_venda) as preco_venda FROM produto p ORDER BY codigo ;                       
+
+-- 
+
+DELETE FROM pedido_item WHERE codigo_pedido = :codigo_pedido AND codigo = :codigo_entrada ;
+SELECT * FROM pedido_item pi WHERE pi.status_pedido = 'A' AND codigo_pedido = 1 ;
+
+SELECT
+  pi.codigo AS '#',
+  p.codigo AS codigo_produto ,
+  p.descricao AS descricao,
+  pi.quantidade AS quantidade,
+  PRINTF("R$ %.2f",
+    pi.valor_unitario
+  ) AS valor , 
+  PRINTF("R$ %.2f",
+    (pi.valor_unitario * pi.quantidade)
+  ) AS total
+FROM
+  pedido_item pi
+LEFT JOIN produto p ON
+  ( p.codigo = pi.codigo_produto )
+WHERE
+  codigo_pedido = 1 ;
+
+-- TOTAL DO PEDIDO
+SELECT
+  COALESCE( 
+    SUM(pedido.total),
+    0
+  ) AS total_pedido
+FROM
+  (
+    SELECT
+      (pi.valor_unitario * pi.quantidade) AS total
+    FROM
+      pedido_item pi
+    LEFT JOIN produto p ON
+      ( p.codigo = pi.codigo_produto )
+    WHERE
+      codigo_pedido = 1
+  ) AS pedido ;
   

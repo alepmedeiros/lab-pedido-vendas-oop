@@ -21,6 +21,7 @@ type
   public
     procedure AdicionarItem( aValue : TPedidoItemModel );
     procedure RemoverPedidos( aValue: integer );
+    procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(NumeroPedido: Integer);
 
     function RecuperaTodos : TFDMemTable;
@@ -77,21 +78,23 @@ var
 begin
   LCodigo := IntToStr( aValue );
   FConexao.FDConexao.ExecSQL(
-    'SELECT                                         ' +
-    //'  pi.codigo              AS cp,                ' +
-    '  p.codigo               AS codigo_produto,    ' +
-    '  p.descricao            AS descricao,         ' +
-    '  sum(pi.quantidade)     AS quantidade,        ' +
-    '  pi.valor_unitario      AS valor,             ' +
-    '  sum(pi.valor_unitario) AS total              ' +
-    'FROM                                           ' +
-    '  pedido_item pi                               ' +
-    'LEFT JOIN                                      ' +
-    '  produto p ON (pi.codigo_produto = p.codigo)  ' +
-    'WHERE                                          ' +
-    '  pi.codigo_pedido = ' + LCodigo + '           ' +
-    'GROUP BY                                       ' +
-    '  pi.codigo_produto                            '
+    'SELECT                                   ' +
+    '  pi.codigo     AS ''#'',                ' +
+    '  p.codigo      AS produto,              ' +
+    '  p.descricao   AS descricao,            ' +
+    '  pi.quantidade AS quantidade,           ' +
+    '  PRINTF("R$ %.2f",                      ' +
+    '    pi.valor_unitario                    ' +
+    '  ) AS valor ,                           ' +
+    '  PRINTF("R$ %.2f",                      ' +
+    '    (pi.valor_unitario * pi.quantidade)  ' +
+    '  ) AS total                             ' +
+    'FROM                                     ' +
+    '  pedido_item pi                         ' +
+    'LEFT JOIN produto p ON                   ' +
+    '  ( p.codigo = pi.codigo_produto )       ' +
+    'WHERE                                    ' +
+    '  pi.codigo_pedido = ' + LCodigo + '     '
     ,TDataSet(FConexao.FDMemTable)
   );
 
@@ -117,6 +120,15 @@ begin
   );
 
   Result := FConexao.FDMemTable;
+end;
+
+procedure TPedidoItemDAO.RemoverEntrada(aCodPedido, aCodEntrada: integer);
+begin
+  FConexao.FDConexao.ExecSQL(
+    'DELETE FROM pedido_item WHERE codigo_pedido = :codigo_pedido AND codigo = :codigo_entrada ',
+    [aCodPedido, aCodEntrada],
+    [ftInteger, ftInteger]
+  );
 end;
 
 procedure TPedidoItemDAO.RemoverPedidos(aValue: integer);

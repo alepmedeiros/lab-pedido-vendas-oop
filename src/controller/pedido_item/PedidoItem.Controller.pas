@@ -21,6 +21,7 @@ type
   public
     procedure AdicionarItem( aValue : TPedidoItemModel );
     procedure RemoverPedidos( aValue: integer );
+    procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(NumeroPedido: Integer);
 
     function RecuperaTodos : TFDMemTable ;
@@ -57,6 +58,12 @@ end;
 function TPedidoItemController.RecuperaTodos: TFDMemTable;
 begin
   Result := FDAOPedidoItem.RecuperaTodos;
+end;
+
+procedure TPedidoItemController.RemoverEntrada(aCodPedido,
+  aCodEntrada: integer);
+begin
+  FDAOPedidoItem.RemoverEntrada(aCodPedido, aCodEntrada);
 end;
 
 procedure TPedidoItemController.RemoverPedidos(aValue: integer);

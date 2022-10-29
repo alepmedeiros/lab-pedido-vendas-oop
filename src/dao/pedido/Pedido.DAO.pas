@@ -93,21 +93,16 @@ begin
   Result := FConexao.FDConexao.ExecSQLScalar(
     'SELECT                                                     ' +
     '  COALESCE(                                                ' +
-    '    SUM(total), 0                                          ' +
+    '    SUM(pedido.total), 0                                   ' +
     '  ) AS total_pedido                                        ' +
     'FROM                                                       ' +
     '  (                                                        ' +
     '    SELECT                                                 ' +
-    '      p.codigo               AS codigo_produto,            ' +
-    '      p.descricao            AS descricao,                 ' +
-    '      sum(pi.quantidade)     AS quantidade,                ' +
-    '      pi.valor_unitario      AS valor,                     ' +
-    '      sum(pi.valor_unitario) AS total                      ' +
+    '      (pi.valor_unitario * pi.quantidade) AS total         ' +
     '    FROM pedido_item pi                                    ' +
     '    LEFT JOIN produto p ON (pi.codigo_produto = p.codigo)  ' +
     '    WHERE pi.codigo_pedido = :codigo_pedido                ' +
-    '    GROUP BY pi.codigo_produto                             ' +
-    ')                                                          ',
+    ' ) AS pedido                                               ',
     [ aNumPedido ],
     [ ftCurrency ]
   );

@@ -66,7 +66,7 @@ end;
 function TProdutoDAO.RecuperaTodos: TFDMemTable;
 begin
   FConexao.FDConexao.ExecSQL(
-    'SELECT * FROM produto ORDER BY codigo',
+    'SELECT p.codigo, p.descricao, PRINTF("R$ %.2f", preco_venda) as preco_venda FROM produto p ORDER BY codigo ',
     TDataSet(FConexao.FDMemTable)
   );
 
