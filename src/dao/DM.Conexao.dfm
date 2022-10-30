@@ -1,14 +1,12 @@
 object DataModuleConexao: TDataModuleConexao
-  OnCreate = DataModuleCreate
-  OnDestroy = DataModuleDestroy
   Height = 480
   Width = 640
   object FDConexao: TFDConnection
     ConnectionName = 'SQLite'
     Params.Strings = (
       
-        'Database=C:\Users\bruno\Documentos\Meus Projetos\lab-pedido-vend' +
-        'as-oop\_LabPedidoOOP_OLD\db\lab_pedido_loja.db'
+        'Database=Z:\Bruno\Documentos\Meus Projetos\lab-pedido-vendas-oop' +
+        '\db\lab_pedido_loja.db'
       'LockingMode=Normal'
       'User_Name=silvab'
       'DriverID=SQLite')

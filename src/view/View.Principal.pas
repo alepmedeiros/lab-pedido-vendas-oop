@@ -38,7 +38,8 @@ uses
   DM.Conexao,
   Data.DB,
   RxToolEdit,
-  RxCurrEdit, Vcl.Menus;
+  RxCurrEdit,
+  Vcl.Menus;
 
 type
   TAbas = ( abaCliente, abaOperadores, abaProdutos, abaNovoPedido, abaGerenciarPedido );
@@ -180,6 +181,7 @@ type
     procedure desabilitarAcoes;
     procedure AtualizaGridPedido(Sender: TObject);
     procedure AtualizaPedidoItemConcluidos(Sender: TObject);
+    procedure ConfiguracaoInicial;
 
   public
   end;
@@ -193,26 +195,61 @@ implementation
 
 procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
-  FPedidoController.Remover(FPedido.CodigoCliente, 'A');
-  FConexao.DataSource.DataSet.Close;
+  if FPedidoController.PedidoEmAndamento then
+  begin
+    FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
+    FPedidoController.Remover(FPedido.CodigoCliente, 'A');
+    FConexao.DataSource.DataSet.Close;
+  end;
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
+  ConfiguracaoInicial;
+
   FOperador   := TOperadorModel.New;
   FCliente    := TClienteModel.New;
   FProduto    := TProdutoModel.New;
   FPedido     := TPedidoModel.New;
   FPedidoItem := TPedidoItemModel.New;
 
-  FConexao := TDataModuleConexao.New;
-
   FOperadorController   := TOperadorController.Create;
   FClienteController    := TClienteController.Create;
   FProdutoController    := TProdutoController.Create;
   FPedidoController     := TPedidoController.Create;
   FPedidoItemController := TPedidoItemController.Create;
+end;
+
+procedure TfrmPrincipal.ConfiguracaoInicial;
+begin
+  FConexao := TDataModuleConexao.New;
+
+  with FConexao do
+  begin
+    if not FConexao.LerIni then
+    begin
+      raise Exception.Create('Nenhum arquivo INI configurado!');
+    end
+    else
+    begin
+      ShowMessage(
+        'Dados da conexão:' + sLineBreak + sLineBreak +
+        'Driver: ' + DriverName + sLineBreak +
+        'User: ' + UserName + sLineBreak +
+        'Databse: ' + BancoCaminho
+      );
+    end;
+
+    //GravarIni;
+
+    try
+      ConfigurarConn;
+    except
+      on E:Exception do
+        raise Exception.Create('Error: ' + E.Message);
+    end;
+  end;
+
 end;
 
 procedure TfrmPrincipal.btnCadClienteClick(Sender: TObject);
@@ -225,7 +262,8 @@ begin
         .Cidade(edtCidadeCliente.Text)
         .UF(edtUfCliente.Text);
 
-      FClienteController.Salvar(TClienteModel(FCliente));
+      FClienteController
+        .Salvar(TClienteModel(FCliente));
     end
     else
       ShowMessage('Campos não podem estar vazios.');
@@ -246,9 +284,11 @@ begin
   try
     if edtOperador.Text <> '' then
     begin
-      FOperador.Nome(edtOperador.Text);
+      FOperador
+        .Nome(edtOperador.Text);
 
-      FOperadorController.Salvar(TOperadorModel(FOperador));
+      FOperadorController
+        .Salvar(TOperadorModel(FOperador));
 
       btnRecTodosOperadoresClick(self);
     end
@@ -265,9 +305,12 @@ begin
   try
     if edtDescricaoProduto.Text <> '' then
     begin
-      FProduto.Descricao(edtDescricaoProduto.Text).PrecoProduto(StrToCurr(edtValorProduto.Text));
+      FProduto
+        .Descricao(edtDescricaoProduto.Text)
+        .PrecoProduto(StrToCurr(edtValorProduto.Text));
 
-      FProdutoController.Salvar(TProdutoModel(FProduto));
+      FProdutoController
+        .Salvar(TProdutoModel(FProduto));
 
       btnRecTodosProdutosClick(self);
     end
@@ -536,8 +579,11 @@ end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
-  if not FConexao.FDConexao.Connected = true then
+  if not FConexao.FDConexao.Connected then
+  begin
     ShowMessage('Não conectado!');
+    Application.Terminate;
+  end;
 
   PageControlPrincipal.ActivePageIndex := 0;
 
@@ -607,6 +653,7 @@ begin
         FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
         FPedidoController.Remover(FPedido.CodigoCliente, 'A');
         FConexao.DataSource.DataSet.Close;
+        desabilitarAcoes;
       end
       else
       begin
