@@ -111,7 +111,7 @@ type
     dbgrdPedidoItemConcluidos: TDBGrid;
     lblPedidosConcluidos: TLabel;
     lblItensPedidos: TLabel;
-    btnEscluixPedido: TButton;
+    btnExcluirPedido: TButton;
     btnAttEntrada: TButton;
 
     procedure FormCreate(Sender: TObject);
@@ -159,7 +159,10 @@ type
       Shift: TShiftState);
     procedure dbgrdPedidoDblClick(Sender: TObject);
     procedure btnAttEntradaClick(Sender: TObject);
-    procedure btnEscluixPedidoClick(Sender: TObject);
+    procedure btnExcluirPedidoClick(Sender: TObject);
+    procedure dbgrdPedidosConcluidosMouseWheel(Sender: TObject;
+      Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
+      var Handled: Boolean);
 
   private
     FOperador   : iOperador;
@@ -176,6 +179,7 @@ type
     FPedidoController     : TPedidoController;
     FPedidoItemController : TPedidoItemController;
 
+    FNumPedido,
     FNumEntrada : Integer;
 
     procedure desabilitarAcoes;
@@ -461,6 +465,17 @@ begin
   AtualizaPedidoItemConcluidos(self);
 end;
 
+procedure TfrmPrincipal.dbgrdPedidosConcluidosMouseWheel(Sender: TObject;
+  Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
+  var Handled: Boolean);
+begin
+  FConexao.DataSourceAux.DataSet := FPedidoItemController
+    .RecuperaItemPedidoPorCodigo(
+      dbgrdPedidosConcluidos.Fields[0].AsInteger
+    );
+  AtualizaPedidoItemConcluidos(self);
+end;
+
 procedure TfrmPrincipal.dbgrdProdutosDblClick(Sender: TObject);
 var
   LCodProduto: Integer;
@@ -553,8 +568,15 @@ begin
   btnRecTodosProdutosClick(self);
 end;
 
-procedure TfrmPrincipal.btnEscluixPedidoClick(Sender: TObject);
+procedure TfrmPrincipal.btnExcluirPedidoClick(Sender: TObject);
 begin
+
+  if dbgrdPedidosConcluidos.Fields[0].AsString = '' then
+  begin
+    ShowMessage('Escolha uma entrada!');
+    Exit;
+  end;
+
   if Application.MessageBox('Deseja exlcuir o pedido selecionado?', 'Atenção', 52) = mrYes then
   begin
     FPedidoController.Remover(dbgrdPedidosConcluidos.Fields[0].AsInteger);
@@ -625,20 +647,20 @@ begin
     btnAddProdPesq.Enabled     := False;
     btnCancelarPedido.Enabled  := False;
     btnRemoverEntrada.Enabled  := False;
+    btnAttEntrada.Enabled      := False;
 
     edtCodProdutoPesq.Enabled  := False;
     edtQuantidade.Enabled      := False;
-    btnAttEntrada.Enabled      := False;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaGerenciarPedido) then
   begin
+    FNumPedido := 0;
     FConexao.DataSource.DataSet := FPedidoController.RecuperaTodos;
     dbgrdPedidosConcluidos.Columns[0].Width := 100; // codigo
     dbgrdPedidosConcluidos.Columns[1].Width := 300; // cliente
     dbgrdPedidosConcluidos.Columns[2].Width := 130; // data
     dbgrdPedidosConcluidos.Columns[3].Width := 130; // total
   end;
-
 end;
 
 procedure TfrmPrincipal.PageControlPrincipalChanging(Sender: TObject;
@@ -788,7 +810,24 @@ end;
 
 procedure TfrmPrincipal.edtCodProdutoPesqExit(Sender: TObject);
 begin
-  btnRecuProdPesqClick(Self);
+  if Trim(edtCodProdutoPesq.Text) <> '' then
+  begin
+    try
+      edtDescProdutoPesq.Text  := FProdutoController.RecuperaPorCodigo(StrToInt(edtCodProdutoPesq.Text), 'descricao');
+      edtValorProdutoPesq.Text := FProdutoController.RecuperaPorCodigo(StrToInt(edtCodProdutoPesq.Text), 'preco_venda');
+      edtQuantidade.SetFocus;
+      edtQuantidade.SelectAll;
+    except
+      on E: Exception do
+      begin
+        edtQuantidade.Clear;
+        edtCodProdutoPesq.SetFocus;
+        edtCodProdutoPesq.SelectAll;
+
+        raise Exception.Create(E.Message);
+      end;
+    end;
+  end;
 end;
 
 procedure TfrmPrincipal.edtCodProdutoPesqKeyDown(Sender: TObject; var Key: Word;
@@ -887,7 +926,12 @@ end;
 
 procedure TfrmPrincipal.btnAttEntradaClick(Sender: TObject);
 begin
-  // aQuantidade, aValorUnitario, aCodPedido, aCodEntrada
+  if FNumEntrada = 0 then
+  begin
+    ShowMessage('Escola uma entrada no carrinho para atualizar!');
+    Abort;
+  end;
+
   FPedidoItemController.AtualizarEntrada(
     StrToCurr(edtValorProdutoPesq.Text),
     StrToInt(edtQuantidade.Text),
