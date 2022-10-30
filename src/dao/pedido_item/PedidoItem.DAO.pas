@@ -8,7 +8,8 @@ uses
   Model.PedidoItem,
   DM.Conexao,
   Firedac.Comp.Client,
-  Data.DB;
+  Data.DB,
+  Variants;
 
 type
   TPedidoItemDAO = class(TInterfacedObject, iPedidoIemDAO)
@@ -23,9 +24,11 @@ type
     procedure RemoverPedidos( aValue: integer );
     procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(NumeroPedido: Integer);
+    procedure AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
 
     function RecuperaTodos : TFDMemTable;
     function RecuperaItemPedidoPorCodigo( aValue : integer ) : TFDMemTable;
+    function RecuperaPorCodigo( aValue: Integer; aColuna : string ) : Variant;
   end;
 
 implementation
@@ -47,6 +50,34 @@ begin
     [ftInteger, ftInteger, ftInteger, ftCurrency, ftCurrency]
   )
   
+end;
+
+procedure TPedidoItemDAO.AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
+begin
+  FConexao.FDConexao.ExecSQL(
+    'UPDATE                                            ' +
+    '  pedido_item                                     ' +
+    'SET                                               ' +
+    '  quantidade     = :quantidade,                   ' +
+    '  valor_unitario = :valor_unitario                ' +
+    'WHERE                                             ' +
+    '  codigo_pedido  = :codigo_pedido                 ' +
+    '  AND codigo     = :codigo_entrada                ',
+    [aQuantidade, aValorUnitario, aCodPedido, aCodEntrada],
+    [ftInteger,   ftCurrency,     ftInteger,  ftInteger  ]
+  );
+
+  FConexao.FDConexao.ExecSQL(
+    'UPDATE                                            ' +
+    '  pedido_item                                     ' +
+    'SET                                               ' +
+    '  valor_total    = quantidade * valor_unitario    ' +
+    'WHERE                                             ' +
+    '  codigo_pedido  = :codigo_pedido                 ' +
+    '  AND codigo     = :codigo_entrada                ',
+    [aCodPedido, aCodEntrada],
+    [ftInteger,  ftInteger  ]
+  );
 end;
 
 procedure TPedidoItemDAO.ConfirmaPedidoItem(NumeroPedido: Integer);
@@ -99,6 +130,15 @@ begin
   );
 
   Result := FConexao.FDMemTable;
+end;
+
+function TPedidoItemDAO.RecuperaPorCodigo(aValue: Integer;
+  aColuna: string): Variant;
+begin
+  Result := FConexao.FDConexao.ExecSQLScalar(
+    'SELECT ' + aColuna + ' FROM pedido_item pi WHERE pi.codigo = :codigo',
+    [InttoStr(aValue)]
+  );
 end;
 
 function TPedidoItemDAO.RecuperaTodos: TFDMemTable;

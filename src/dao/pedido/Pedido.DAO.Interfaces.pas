@@ -11,9 +11,11 @@ type
   iPedidoDAO = interface
     function NovoCodigoPedido : Variant;
     function RetornaTotalPedido( aNumPedido : integer) : Currency;
+    function RecuperaTodos: TFDMemTable;
 
     procedure salvar( aValue: TPedidoModel);
-    procedure Remover( aValue : integer);
+    procedure Remover( aValue: integer ); overload;
+    procedure Remover( aValue: integer; aStatus: string ); overload;
     procedure AtualizarTotalPedido(valorTotalPedido: Currency; NumeroPedido: integer);
     procedure ConfirmaPedido( NumeroPedido : Integer );
   end;

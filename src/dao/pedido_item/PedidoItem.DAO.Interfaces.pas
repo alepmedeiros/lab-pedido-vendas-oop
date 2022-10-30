@@ -12,9 +12,11 @@ type
     procedure RemoverPedidos( aValue: integer );
     procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(NumeroPedido: Integer);
+    procedure AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
 
     function RecuperaTodos : TFDMemTable ;
     function RecuperaItemPedidoPorCodigo( aValue : integer ) : TFDMemTable;
+    function RecuperaPorCodigo( aValue: Integer; aColuna : string ) : Variant;
   end;
 
 implementation

@@ -35,6 +35,8 @@ type
     DataSource: TDataSource;
     FDMemTable: TFDMemTable;
     FDScriptCarregaTabelas: TFDScript;
+    FDMemTableAux: TFDMemTable;
+    DataSourceAux: TDataSource;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
 

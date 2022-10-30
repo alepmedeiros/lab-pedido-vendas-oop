@@ -23,9 +23,12 @@ type
     public
       function NovoCodigoPedido : Variant;
       function RetornaTotalPedido( aNumPedido : integer) : Currency;
+      function RecuperaTodos: TFDMemTable;
+      function PedidoEmAndamento: Boolean;
 
       procedure salvar( aValue : TPedidoModel);
-      procedure Remover( aValue : integer);
+      procedure Remover( aValue: integer ); overload;
+      procedure Remover( aValue: integer; aStatus: string ); overload;
       procedure AtualizarTotalPedido( valorTotalPedido: Currency; NumeroPedido: integer );
       procedure ConfirmaPedido( NumeroPedido : Integer );
   end;
@@ -68,22 +71,71 @@ end;
 function TPedidoDAO.NovoCodigoPedido: Variant;
 begin
   Result := FConexao.FDConexao.ExecSQLScalar(
-    'SELECT                       ' +
-    '  COALESCE (                 ' +
-    '    max(codigo) + 1,         ' +
-    '    1) AS novo_codigo_pedido ' +
-    'FROM                         ' +
-    '  pedido p                   '
+    'SELECT                        ' +
+    '  COALESCE (                  ' +
+    '    max(codigo) + 1,          ' +
+    '    1) AS novo_codigo_pedido  ' +
+    'FROM                          ' +
+    '  pedido p                    '
   );
 
   if Result = Null then
     Result := 1;
 end;
 
+function TPedidoDAO.PedidoEmAndamento: Boolean;
+var
+  LExistePedido : Variant;
+begin
+  Result := False;
+
+  LExistePedido := FConexao.FDConexao.ExecSQLScalar(
+    'SELECT COALESCE(count(*), 0) FROM pedido p WHERE p.status = ''A'' '
+  );
+
+  if LExistePedido > 0 then
+    Result := True;
+end;
+
+function TPedidoDAO.RecuperaTodos: TFDMemTable;
+begin
+   FConexao.FDConexao.ExecSQL(
+    'SELECT                            ' +
+    '  p.codigo,                       ' +
+    '  c.nome,                         ' +
+    '  p.data_emissao,                 ' +
+    '  PRINTF("R$ %.2f",               ' +
+    '    p.valor_total                 ' +
+    ' ) AS valor_total                 ' +
+    'FROM                              ' +
+    '  pedido p                        ' +
+    'LEFT JOIN cliente c ON            ' +
+    '  ( c.codigo = p.codigo_cliente ) ' +
+    'WHERE                             ' +
+    '  p.status = ''C''                ' ,
+    TDataSet(FConexao.FDMemTable)
+  );
+
+  Result := FConexao.FDMemTable;
+end;
+
+procedure TPedidoDAO.Remover(aValue: integer; aStatus: string);
+begin
+  FConexao.FDConexao.ExecSQL(
+    'DELETE FROM pedido WHERE codigo_cliente = :codigo AND status = ''' + aStatus + '''',
+    [aValue]
+  );
+end;
+
 procedure TPedidoDAO.Remover(aValue: integer);
 begin
   FConexao.FDConexao.ExecSQL(
-    'DELETE FROM pedido WHERE codigo_cliente = :codigo AND status = ''A''',
+    'DELETE FROM pedido_item WHERE codigo_pedido = :codigo_pedido',
+    [aValue]
+  );
+
+  FConexao.FDConexao.ExecSQL(
+    'DELETE FROM pedido WHERE codigo = :codigo ',
     [aValue]
   );
 end;
@@ -113,7 +165,10 @@ begin
   FConexao.FDConexao.ExecSQL(
     'INSERT INTO pedido (codigo, codigo_cliente, data_emissao, valor_total)' +
     'VALUES (:codigo, :codigo_cliente, :data_emissao, :valor_total)',
-    [aValue.NumeroPedido, aValue.CodigoCliente, aValue.DataEmissao, aValue.ValorTotal],
+    [aValue.NumeroPedido,
+     aValue.CodigoCliente,
+     aValue.DataEmissao,
+     aValue.ValorTotal],
     [ftInteger, ftInteger, ftDate, ftCurrency]
   );
 end;

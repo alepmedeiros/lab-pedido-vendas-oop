@@ -23,14 +23,21 @@ type
     procedure RemoverPedidos( aValue: integer );
     procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(NumeroPedido: Integer);
+    procedure AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
 
     function RecuperaTodos : TFDMemTable ;
     function RecuperaItemPedidoPorCodigo( aValue : integer ) : TFDMemTable;
+    function RecuperaPorCodigo( aValue: Integer; aColuna : string ) : Variant;
   end;
 
 implementation
 
 { TPedidoItemController }
+
+procedure TPedidoItemController.AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
+begin
+  FDAOPedidoItem.AtualizarEntrada(aValorUnitario, aQuantidade, aCodPedido, aCodEntrada);
+end;
 
 procedure TPedidoItemController.ConfirmaPedidoItem(NumeroPedido: Integer);
 begin
@@ -53,6 +60,12 @@ function TPedidoItemController.RecuperaItemPedidoPorCodigo(
   aValue: integer): TFDMemTable;
 begin
   Result := FDAOPedidoItem.RecuperaItemPedidoPorCodigo(aValue);
+end;
+
+function TPedidoItemController.RecuperaPorCodigo(aValue: Integer;
+  aColuna: string): Variant;
+begin
+  Result := FDAOPedidoItem.RecuperaPorCodigo(aValue, aColuna);
 end;
 
 function TPedidoItemController.RecuperaTodos: TFDMemTable;

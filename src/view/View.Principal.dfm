@@ -22,7 +22,7 @@ object frmPrincipal: TfrmPrincipal
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = Operadores
+    ActivePage = Pedidos
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange
@@ -56,7 +56,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         ParentFont = False
       end
-      object Label1: TLabel
+      object lblNome: TLabel
         Left = 172
         Top = 18
         Width = 46
@@ -755,6 +755,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
         ParentFont = False
+        ReadOnly = True
         TabOrder = 10
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
@@ -763,6 +764,7 @@ object frmPrincipal: TfrmPrincipal
         TitleFont.Style = [fsBold]
         StyleName = 'Windows'
         OnCellClick = dbgrdPedidoCellClick
+        OnDblClick = dbgrdPedidoDblClick
       end
       object btnConfirmarPedido: TButton
         Left = 656
@@ -883,10 +885,109 @@ object frmPrincipal: TfrmPrincipal
         TabOrder = 3
         OnClick = btnRemoverEntradaClick
       end
+      object btnAttEntrada: TButton
+        Left = 264
+        Top = 131
+        Width = 101
+        Height = 33
+        Caption = 'Atualizar Ent.'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 14
+        OnClick = btnAttEntradaClick
+      end
     end
     object GerenciarPedidos: TTabSheet
       Caption = 'Gerenciar Pedidos'
       ImageIndex = 4
+      object lblPedidosConcluidos: TLabel
+        Left = 20
+        Top = 18
+        Width = 57
+        Height = 21
+        Caption = 'Pedidos:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lblItensPedidos: TLabel
+        Left = 20
+        Top = 237
+        Width = 109
+        Height = 21
+        Caption = 'Itens do Pedido:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object dbgrdPedidosConcluidos: TDBGrid
+        Left = 20
+        Top = 45
+        Width = 765
+        Height = 180
+        DataSource = DataModuleConexao.DataSource
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Segoe UI'
+        TitleFont.Style = []
+        OnCellClick = dbgrdPedidosConcluidosCellClick
+        OnKeyDown = dbgrdPedidosConcluidosKeyDown
+        OnKeyUp = dbgrdPedidosConcluidosKeyUp
+      end
+      object dbgrdPedidoItemConcluidos: TDBGrid
+        Left = 20
+        Top = 267
+        Width = 765
+        Height = 233
+        DataSource = DataModuleConexao.DataSourceAux
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Segoe UI'
+        TitleFont.Style = []
+      end
+      object btnEscluixPedido: TButton
+        Left = 20
+        Top = 515
+        Width = 141
+        Height = 33
+        Caption = 'Excluir Pedido'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        OnClick = btnEscluixPedidoClick
+      end
     end
   end
 end

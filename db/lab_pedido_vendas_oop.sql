@@ -57,14 +57,12 @@ ALTER TABLE pedido_item ADD COLUMN status_pedido char DEFAULT 'A' ;
 INSERT INTO pedido_item (codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total)
 VALUES (1,1,1,4.3,4.3);
 
-SELECT * FROM pedido_item pi ;
-
 -- Update status after cofirm pedido
 /*
  * A: ANDAMENTO.
  * E: EFETUADO.
  * C: CANCELADO.
- * 
+ *
  * */
 UPDATE pedido_item SET status_pedido = 'E' WHERE status_pedido = 'A' ;
 
@@ -96,12 +94,7 @@ INSERT INTO produto (descricao, preco_venda) VALUES (:descricao, :precovenda);
 INSERT INTO pedido (codigo_cliente, data_emissao, valor_total) VALUES (1, '2022-10-22', 200);
 DELETE FROM pedido WHERE codigo_cliente = :codigo AND status = 'A';
 
-
 -- ==========================================
--- ==========================================
-
-SELECT * FROM pedido_item pi ORDER BY pi.codigo ;
-SELECT * FROM pedido p ;
 
 -- insert/remove item pedido
 INSERT INTO pedido_item
@@ -129,19 +122,6 @@ LEFT JOIN produto p ON (pi.codigo_produto = p.codigo) ;
 
 SELECT * FROM pedido_item pi ORDER BY pi.codigo ;
 
-INSERT INTO pedido_item
-(codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
-VALUES(99, 1, 1, 4.3, 4.3, 'A');
-INSERT INTO pedido_item
-(codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
-VALUES(99, 2, 1, 40, 4.3, 'A');
-INSERT INTO pedido_item
-(codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
-VALUES(99, 3, 1, 390, 4.3, 'A');
-INSERT INTO pedido_item
-(codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total, status_pedido)
-VALUES(99, 5, 1, 350, 4.3, 'A');
-
 -- Novo select para itens de produto que considera as entradas individuais dos produtos no carrinho
 
 SELECT * FROM pedido_item pi ORDER BY pi.codigo ;
@@ -156,13 +136,14 @@ FROM
   pedido_item pi
 LEFT JOIN
   produto p ON (pi.codigo_produto = p.codigo)
-WHERE 
+WHERE
   pi.codigo_pedido = 1
 GROUP BY
   pi.codigo_produto ;
 
 -- insert de pedido item para o projeto
-INSERT INTO pedido_item 
+
+INSERT INTO pedido_item
 ( codigo_pedido, codigo_produto, quantidade, valor_unitario, valor_total )
 VALUES
 ( :codigo_pedido, :codigo_produto, :quantidade, :valor_unitario, :valor_total );
@@ -194,21 +175,11 @@ INSERT INTO pedido
 (codigo, codigo_cliente, data_emissao, valor_total, status)
 VALUES(0, 0, '1999-01-01', 0, 'D');
 
-
-SELECT * FROM pedido p ;
-
-SELECT max(codigo)+1 AS novo_codigo_pedido FROM pedido p ;
+-- REMOVENDO PEDIDO E ITEM PEDIDO
 
 DELETE FROM pedido WHERE codigo_cliente = :codigo AND status = 'A';
 
-SELECT * FROM pedido_item pi ;
-
 DELETE FROM pedido_item  WHERE codigo_pedido = :codigo_pedido AND status_pedido = 'A' ;
-
--- TESTE DE PEDIDO EFETUADO
-
--- PEDIDO CRIADO
-SELECT * FROM pedido p ;
 
 -- PEDIDO RECUPERADO
 SELECT
@@ -222,7 +193,7 @@ FROM
   pedido_item pi
 LEFT JOIN
   produto p ON (pi.codigo_produto = p.codigo)
-WHERE 
+WHERE
   pi.codigo_pedido = :codigo_pedido AND p.codigo = :coodigo_cliente
 GROUP BY
   pi.codigo_produto ;
@@ -257,14 +228,10 @@ SELECT * FROM pedido_item pi WHERE pi.status_pedido = 'C';
 SELECT * FROM pedido_item pi ;
 
 DELETE FROM pedido_item WHERE codigo_pedido = :codigo_pedido AND codigo_produto = :codigo_produto ;
-SELECT * FROM pedido_item pi ;
 
-SELECT p.codigo, p.descricao, PRINTF("R$ %.2f", preco_venda) as preco_venda FROM produto p ORDER BY codigo ;                       
-
--- 
+SELECT p.codigo, p.descricao, PRINTF("R$ %.2f", preco_venda) as preco_venda FROM produto p ORDER BY codigo ;
 
 DELETE FROM pedido_item WHERE codigo_pedido = :codigo_pedido AND codigo = :codigo_entrada ;
-SELECT * FROM pedido_item pi WHERE pi.status_pedido = 'A' AND codigo_pedido = 1 ;
 
 SELECT
   pi.codigo AS '#',
@@ -273,7 +240,7 @@ SELECT
   pi.quantidade AS quantidade,
   PRINTF("R$ %.2f",
     pi.valor_unitario
-  ) AS valor , 
+  ) AS valor ,
   PRINTF("R$ %.2f",
     (pi.valor_unitario * pi.quantidade)
   ) AS total
@@ -286,7 +253,7 @@ WHERE
 
 -- TOTAL DO PEDIDO
 SELECT
-  COALESCE( 
+  COALESCE(
     SUM(pedido.total),
     0
   ) AS total_pedido
@@ -301,7 +268,7 @@ FROM
     WHERE
       codigo_pedido = 1
   ) AS pedido ;
-  
+
 -- RESET DATABASE
 
 DELETE FROM cliente ;
@@ -318,7 +285,62 @@ UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'produto';
 
 SELECT * FROM operador o ;
 
-INSERT INTO operador (nome) VALUES ('Operador Bruno'); 
+INSERT INTO operador (nome) VALUES ('Operador Bruno');
 
 SELECT * FROM pedido p ;
 SELECT * FROM pedido_item pi ;
+
+-- PEDIDOS FEITOS
+
+SELECT
+  p.codigo,
+  c.nome,
+  p.data_emissao,
+  PRINTF("R$ %.2f",
+    p.valor_total
+  ) AS valor_total
+FROM
+  pedido p
+LEFT JOIN cliente c ON
+  ( c.codigo = p.codigo_cliente )
+WHERE
+  p.status = 'C';
+
+-- PRODUTOS DO PEDIDO SELECIONADO
+
+SELECT
+  p.codigo,
+  p.descricao,
+  pi.quantidade,
+  PRINTF("R$ %.2f", p.preco_venda) AS preco_venda,
+  PRINTF("R$ %.2f", pi.valor_total) AS valor_total
+FROM
+  pedido_item pi
+LEFT JOIN produto p ON ( p.codigo = pi.codigo_produto )
+WHERE
+  codigo_pedido = :codigo_pedido ;
+
+-- EDITANDO ENTRADA DE ITEM DE UM PEDIDO
+-- Valores de quantidade e valor unitário
+UPDATE
+  pedido_item
+SET
+  quantidade     = :quantidade,
+  valor_unitario = :valor_unitario
+WHERE
+  codigo_pedido  = :codigo_pedido
+  AND codigo     = :codigo_entrada ;
+
+-- Valores de total
+UPDATE
+  pedido_item
+SET
+  valor_total    = quantidade * valor_unitario
+WHERE
+  codigo_pedido  = :codigo_pedido
+  AND codigo     = :codigo_entrada ;
+
+-- VERIFICANDO SE EXISTE PEDIDO EM ANDAMENTO
+
+SELECT COALESCE(count(*), 0) FROM pedido p WHERE p.status = 'A' ;
+

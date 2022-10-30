@@ -21,9 +21,12 @@ type
   public
     function NovoCodigoPedido : Variant;
     function RetornaTotalPedido(aNumPedido: integer): Currency;
+    function RecuperaTodos: TFDMemTable;
+    function PedidoEmAndamento: Boolean;
 
     procedure Salvar( aValue: TPedidoModel );
-    procedure Remover( aValue: integer );
+    procedure Remover( aValue: integer ); overload;
+    procedure Remover( aValue: integer; aStatus: string ); overload;
     procedure AtualizarTotalPedido(valorTotalPedido: Currency; NumeroPedido: integer);
     procedure ConfirmaPedido(NumeroPedido: Integer);
   end;
@@ -61,6 +64,26 @@ end;
 function TPedidoController.NovoCodigoPedido: Variant;
 begin
   Result := FDAOPedido.NovoCodigoPedido;
+end;
+
+function TPedidoController.PedidoEmAndamento: Boolean;
+begin
+  Result := FDAOPedido.PedidoEmAndamento;
+end;
+
+function TPedidoController.RecuperaTodos: TFDMemTable;
+begin
+  Result := FDAOPedido.RecuperaTodos;
+end;
+
+procedure TPedidoController.Remover(aValue: integer; aStatus: string);
+begin
+  try
+    FDAOPedido.Remover(aValue, aStatus);
+  except
+    on E: Exception do
+      raise Exception.Create(E.Message);
+  end;
 end;
 
 procedure TPedidoController.Remover(aValue: integer);

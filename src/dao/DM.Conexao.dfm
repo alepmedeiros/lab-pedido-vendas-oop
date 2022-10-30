@@ -12,13 +12,13 @@ object DataModuleConexao: TDataModuleConexao
       'LockingMode=Normal'
       'User_Name=silvab'
       'DriverID=SQLite')
-    Left = 200
-    Top = 112
+    Left = 72
+    Top = 88
   end
   object DataSource: TDataSource
     DataSet = FDMemTable
-    Left = 200
-    Top = 336
+    Left = 192
+    Top = 328
   end
   object FDMemTable: TFDMemTable
     FetchOptions.AssignedValues = [evMode]
@@ -38,7 +38,23 @@ object DataModuleConexao: TDataModuleConexao
     Connection = FDConexao
     Params = <>
     Macros = <>
-    Left = 328
-    Top = 184
+    Left = 208
+    Top = 96
+  end
+  object FDMemTableAux: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 296
+    Top = 224
+  end
+  object DataSourceAux: TDataSource
+    DataSet = FDMemTableAux
+    Left = 288
+    Top = 336
   end
 end
