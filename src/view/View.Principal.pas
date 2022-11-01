@@ -37,8 +37,6 @@ uses
   Cliente.Controller,
   DM.Conexao,
   Data.DB,
-  RxToolEdit,
-  RxCurrEdit,
   Vcl.Menus;
 
 type
@@ -77,7 +75,6 @@ type
     lblNomeProduto: TLabel;
     edtDescricaoProduto: TEdit;
     lblPrecoProduto: TLabel;
-    edtValorProduto: TCurrencyEdit;
     dbgrdProdutos: TDBGrid;
     btnCadProduto: TButton;
     btnRecTodosProdutos: TButton;
@@ -90,7 +87,6 @@ type
     lblDescProdPesq: TLabel;
     edtDescProdutoPesq: TEdit;
     lblPrecoProdPesq: TLabel;
-    edtValorProdutoPesq: TCurrencyEdit;
     btnRecuProdPesq: TButton;
     btnAddProdPesq: TButton;
     dbgrdPedido: TDBGrid;
@@ -102,7 +98,6 @@ type
     edtClientePedido: TEdit;
     lblClientePedido: TLabel;
     edtCodClientePedido: TEdit;
-    edtTotalPedido: TCurrencyEdit;
     lblTotalPedido: TLabel;
     edtQuantidade: TEdit;
     lblQuantidade: TLabel;
@@ -113,6 +108,9 @@ type
     lblItensPedidos: TLabel;
     btnExcluirPedido: TButton;
     btnAttEntrada: TButton;
+    edtValorProdutoPesq: TEdit;
+    edtValorProduto: TEdit;
+    edtTotalPedido: TEdit;
 
     procedure FormCreate(Sender: TObject);
     procedure btnCadOperadorClick(Sender: TObject);
@@ -232,16 +230,8 @@ begin
   begin
     if not FConexao.LerIni then
     begin
-      raise Exception.Create('Nenhum arquivo INI configurado!');
-    end
-    else
-    begin
-      ShowMessage(
-        'Dados da conexão:' + sLineBreak + sLineBreak +
-        'Driver: ' + DriverName + sLineBreak +
-        'User: ' + UserName + sLineBreak +
-        'Databse: ' + BancoCaminho
-      );
+      showmessage('Nenhum arquivo .INI configurado!');
+      Application.Terminate;
     end;
 
     //GravarIni;
@@ -420,7 +410,7 @@ begin
   FNumEntrada := dbgrdPedido.Fields[0].AsInteger;
   { valores que precisam vir do banco }
   edtQuantidade.Text        := IntToStr( FPedidoItemController.RecuperaPorCodigo(FNumEntrada, 'quantidade') );
-  edtValorProdutoPesq.Value := FPedidoItemController.RecuperaPorCodigo(FNumEntrada, 'valor_unitario');
+  edtValorProdutoPesq.Text  := FormatFloat('###,##0.00', FPedidoItemController.RecuperaPorCodigo(FNumEntrada, 'valor_unitario'));
 
   { dado que pode vir do dbgrid pois vai ser apenas visual }
   edtDescProdutoPesq.Text := dbgrdPedido.Fields[2].AsString;
@@ -483,7 +473,7 @@ begin
   LCodProduto              := dbgrdProdutos.Fields[0].AsInteger;
   edtCodigoProduto.Text    := FProdutoController.RecuperaPorCodigo(LCodProduto, 'codigo');
   edtDescricaoProduto.Text := FProdutoController.RecuperaPorCodigo(LCodProduto, 'descricao');
-  edtValorProduto.Text     := FProdutoController.RecuperaPorCodigo(LCodProduto, 'preco_venda');
+  edtValorProduto.Text     := FormatFloat('###,##0.00', FProdutoController.RecuperaPorCodigo(LCodProduto, 'preco_venda'));
 end;
 
 procedure TfrmPrincipal.btnRecTodosClienteClick(Sender: TObject);
@@ -557,7 +547,7 @@ end;
 
 procedure TfrmPrincipal.btnEdtProdutoClick(Sender: TObject);
 begin
-  FProduto.Codigo(StrToInt(edtCodigoProduto.Text)).Descricao(edtDescricaoProduto.Text).PrecoProduto(edtValorProduto.Value);
+  FProduto.Codigo(StrToInt(edtCodigoProduto.Text)).Descricao(edtDescricaoProduto.Text).PrecoProduto(StrToCurr(edtValorProduto.Text));
 
   FProdutoController.Editar(TProdutoModel(FProduto));
 
@@ -642,12 +632,13 @@ begin
   end
   else if PageControlPrincipal.TabIndex = Integer(abaNovoPedido) then
   begin
-    btnConfirmarPedido.Enabled := False;
-    btnRecuProdPesq.Enabled    := False;
-    btnAddProdPesq.Enabled     := False;
-    btnCancelarPedido.Enabled  := False;
-    btnRemoverEntrada.Enabled  := False;
-    btnAttEntrada.Enabled      := False;
+    btnConfirmarPedido.Enabled  := False;
+    btnRecuProdPesq.Enabled     := False;
+    btnAddProdPesq.Enabled      := False;
+    btnCancelarPedido.Enabled   := False;
+    btnRemoverEntrada.Enabled   := False;
+    btnAttEntrada.Enabled       := False;
+    edtValorProdutoPesq.Enabled := False;
 
     edtCodProdutoPesq.Enabled  := False;
     edtQuantidade.Enabled      := False;
@@ -777,7 +768,7 @@ begin
   begin
     FPedidoItemController.RemoverEntrada(FPedido.NumeroPedido, FNumEntrada);
     FNumEntrada := 0;
-    edtTotalPedido.Value        := FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido);
+    edtTotalPedido.Text         := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido));
     FConexao.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
     AtualizaGridPedido(self);
   end;
@@ -911,7 +902,7 @@ begin
 
     edtQuantidade.Clear;
 
-    edtTotalPedido.Value := FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido);
+    edtTotalPedido.Text := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido));
 
     FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
 
@@ -943,7 +934,8 @@ begin
   FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
   AtualizaGridPedido(self);
   btnAddProdPesq.Enabled := True;
-  edtTotalPedido.Value := FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido);
+
+  edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido));
 
   edtCodProdutoPesq.Clear;
   edtCodProdutoPesq.SetFocus;

@@ -24,7 +24,7 @@ type
     procedure Remover ( aValue : integer);
     procedure Editar( aValue : TProdutoModel );
 
-    function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
+    function RecuperaPorCodigo(aValue: integer; aColuna: string): Variant;
     function VerificaSeExiste(aValue : integer ) : Boolean;
     function RecuperaTodos : TFDMemTable ;
   end;
@@ -55,7 +55,7 @@ begin
   );
 end;
 
-function TProdutoDAO.RecuperaPorCodigo(aValue: integer; aColuna: string): string;
+function TProdutoDAO.RecuperaPorCodigo(aValue: integer; aColuna: string): Variant;
 begin
   Result := FConexao.FDConexao.ExecSQLScalar(
     'SELECT ' + aColuna + ' FROM produto p WHERE p.codigo = :codigo',

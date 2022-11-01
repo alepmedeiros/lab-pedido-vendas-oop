@@ -13,7 +13,7 @@ type
      procedure Remover ( aValue : integer);
      procedure Editar( aValue : TProdutoModel );
 
-     function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
+     function RecuperaPorCodigo(aValue: integer; aColuna: string): Variant;
      function VerificaSeExiste(aValue : integer ) : Boolean;
      function RecuperaTodos : TFDMemTable ;
 

@@ -63,11 +63,12 @@ end;
 
 function TClienteDAO.RecuperaTodos: TFDMemTable;
 begin
-  FConexao.FDConexao.ExecSQL(
-    'SELECT * FROM cliente o ORDER BY o.codigo',
-    TDataSet(FConexao.FDMemTable)
+  FConexao.FDQuery.SQL.Clear;
+  FConexao.FDQuery.Open(
+    'SELECT * FROM cliente ORDER BY codigo'
   );
 
+  FConexao.FDMemTable.Data := FConexao.FDQuery.Data;
   Result := FConexao.FDMemTable;
 end;
 

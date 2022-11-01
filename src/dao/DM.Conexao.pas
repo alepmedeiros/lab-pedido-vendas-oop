@@ -27,16 +27,17 @@ uses
   FireDAC.Comp.ScriptCommands,
   FireDAC.Stan.Util,
   FireDAC.Comp.Script,
-  FireDAC.Comp.DataSet;
+  FireDAC.Comp.DataSet,
+  FireDAC.Phys.IBWrapper;
 
 type
   TDataModuleConexao = class(TDataModule)
     FDConexao: TFDConnection;
     DataSource: TDataSource;
     FDMemTable: TFDMemTable;
-    FDScriptCarregaTabelas: TFDScript;
     FDMemTableAux: TFDMemTable;
     DataSourceAux: TDataSource;
+    FDQuery: TFDQuery;
 
   private
     FBancoCaminho: string;

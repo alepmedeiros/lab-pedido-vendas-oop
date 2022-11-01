@@ -22,7 +22,7 @@ object frmPrincipal: TfrmPrincipal
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = GerenciarPedidos
+    ActivePage = Pedidos
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange
@@ -475,19 +475,6 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
         TabOrder = 1
       end
-      object edtValorProduto: TCurrencyEdit
-        Left = 584
-        Top = 45
-        Width = 201
-        Height = 29
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -16
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 2
-      end
       object dbgrdProdutos: TDBGrid
         AlignWithMargins = True
         Left = 20
@@ -503,7 +490,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
         ParentFont = False
-        TabOrder = 7
+        TabOrder = 6
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -12
@@ -524,7 +511,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 2
         OnClick = btnCadProdutoClick
       end
       object btnRecTodosProdutos: TButton
@@ -539,7 +526,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 5
         OnClick = btnRecTodosProdutosClick
       end
       object btnEdtProduto: TButton
@@ -554,7 +541,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 3
         OnClick = btnEdtProdutoClick
       end
       object btnDelProduto: TButton
@@ -569,8 +556,21 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 4
         OnClick = btnDelProdutoClick
+      end
+      object edtValorProduto: TEdit
+        Left = 584
+        Top = 45
+        Width = 201
+        Height = 29
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 7
       end
     end
     object Pedidos: TTabSheet
@@ -695,21 +695,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 6
-      end
-      object edtValorProdutoPesq: TCurrencyEdit
-        Left = 584
-        Top = 45
-        Width = 201
-        Height = 29
-        Enabled = False
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -16
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 2
+        TabOrder = 5
       end
       object btnRecuProdPesq: TButton
         Left = 20
@@ -723,7 +709,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 7
+        TabOrder = 6
         OnClick = btnRecuProdPesqClick
       end
       object btnAddProdPesq: TButton
@@ -738,7 +724,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 2
         OnClick = btnAddProdPesqClick
       end
       object dbgrdPedido: TDBGrid
@@ -757,7 +743,7 @@ object frmPrincipal: TfrmPrincipal
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
         ParentFont = False
         ReadOnly = True
-        TabOrder = 11
+        TabOrder = 10
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -12
@@ -779,7 +765,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 10
+        TabOrder = 9
         OnClick = btnConfirmarPedidoClick
       end
       object btnCancelarPedido: TButton
@@ -794,7 +780,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 8
+        TabOrder = 7
         OnClick = btnCancelarPedidoClick
       end
       object btnIniciarPedido: TButton
@@ -809,7 +795,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 9
+        TabOrder = 8
         OnClick = btnIniciarPedidoClick
       end
       object edtClientePedido: TEdit
@@ -824,7 +810,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 12
+        TabOrder = 11
       end
       object edtCodClientePedido: TEdit
         Left = 423
@@ -839,21 +825,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         NumbersOnly = True
         ParentFont = False
-        TabOrder = 13
-      end
-      object edtTotalPedido: TCurrencyEdit
-        Left = 584
-        Top = 135
-        Width = 201
-        Height = 29
-        Enabled = False
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -16
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 14
+        TabOrder = 12
       end
       object edtQuantidade: TEdit
         Left = 142
@@ -883,7 +855,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 3
         OnClick = btnRemoverEntradaClick
       end
       object btnAttEntrada: TButton
@@ -898,8 +870,35 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 4
         OnClick = btnAttEntradaClick
+      end
+      object edtValorProdutoPesq: TEdit
+        Left = 584
+        Top = 45
+        Width = 201
+        Height = 29
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 13
+      end
+      object edtTotalPedido: TEdit
+        Left = 584
+        Top = 134
+        Width = 201
+        Height = 29
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 14
       end
     end
     object GerenciarPedidos: TTabSheet

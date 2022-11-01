@@ -4,13 +4,13 @@ object DataModuleConexao: TDataModuleConexao
   object FDConexao: TFDConnection
     ConnectionName = 'SQLite'
     Params.Strings = (
+      'LockingMode=Normal'
+      'User_Name=silvab'
       
         'Database=Z:\Bruno\Documentos\Meus Projetos\lab-pedido-vendas-oop' +
         '\db\lab_pedido_loja.db'
-      'LockingMode=Normal'
-      'User_Name=silvab'
       'DriverID=SQLite')
-    Left = 72
+    Left = 56
     Top = 88
   end
   object DataSource: TDataSource
@@ -29,16 +29,6 @@ object DataModuleConexao: TDataModuleConexao
     Left = 192
     Top = 224
   end
-  object FDScriptCarregaTabelas: TFDScript
-    SQLScripts = <
-      item
-      end>
-    Connection = FDConexao
-    Params = <>
-    Macros = <>
-    Left = 208
-    Top = 96
-  end
   object FDMemTableAux: TFDMemTable
     FetchOptions.AssignedValues = [evMode]
     FetchOptions.Mode = fmAll
@@ -54,5 +44,10 @@ object DataModuleConexao: TDataModuleConexao
     DataSet = FDMemTableAux
     Left = 288
     Top = 336
+  end
+  object FDQuery: TFDQuery
+    Connection = FDConexao
+    Left = 56
+    Top = 160
   end
 end
