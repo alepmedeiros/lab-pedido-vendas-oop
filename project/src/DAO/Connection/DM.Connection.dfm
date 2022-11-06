@@ -1,9 +1,12 @@
 object DataModuleConnection: TDataModuleConnection
+  OldCreateOrder = True
   Height = 262
   Width = 225
   object FDMConnection: TFDConnection
     Params.Strings = (
-      'Database=C:\CursosDelphi\lab-pedido-vendas-oop\project\DB\OOP.db'
+      
+        'Database=C:\cursosDev\lab-alex\lab-pedido-vendas-oop\project\DB\' +
+        'OOP.db'
       'DriverID=SQLite')
     Left = 40
     Top = 30

@@ -16,7 +16,7 @@ uses
   View.Product;
 
 type
-  TForm1 = class(TForm)
+  TFormMain = class(TForm)
     btnProducts: TButton;
     btnCustomers: TButton;
     btnPurchaseOrder: TButton;
@@ -31,30 +31,30 @@ type
   end;
 
 var
-  Form1: TForm1;
+  FormMain: TFormMain;
 
 implementation
 
 {$R *.dfm}
 
-procedure TForm1.btnCustomersClick(Sender: TObject);
+procedure TFormMain.btnCustomersClick(Sender: TObject);
 begin
 //
 end;
 
-procedure TForm1.btnProductsClick(Sender: TObject);
+procedure TFormMain.btnProductsClick(Sender: TObject);
 begin
-  Form1.Visible := false;
+  FormMain.Visible := false;
   FormProduct.ShowModal;
 
 end;
 
-constructor TForm1.Create;
+constructor TFormMain.Create;
 begin
   ReportMemoryLeaksOnShutdown := True;
 end;
 
-procedure TForm1.FormShow(Sender: TObject);
+procedure TFormMain.FormShow(Sender: TObject);
 begin
  //FormProduct.ShowModal;
 end;

@@ -88,30 +88,7 @@ begin
   Fconnection.FDataSource.DataSet := FConnection.FDMTable;
 
   Result := FProduct;
-//  LString :=
-//    FConnection.FDMConnection.ExecSQLScalar(
-//    'SELECT codigo FROM produto WHERE codigo = :codigo',[aValue]
-//    );
-//
-//  FProduct.id(LString);
-//
-//  LString :=
-//    FConnection.FDMConnection.ExecSQLScalar(
-//    'SELECT descricao FROM produto WHERE codigo = :codigo',[aValue]
-//  );
-//
-//  FProduct.Description(Lstring);
-//
-//  LString :=
-//    FConnection.FDMConnection.ExecSQLScalar(
-//    'SELECT preco_de_venda FROM produto WHERE codigo = :codigo',[aValue]
-//  );
-//
-//  FProduct.SellPrice(Lstring);
-//
-// // FConnection.FDMConnection.Close;
-//
-//  Result := FProduct;
+
 end;
 
 procedure TProductDAO.Update(aValue: TProduct);

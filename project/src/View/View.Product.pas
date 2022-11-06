@@ -15,8 +15,6 @@ uses
   Vcl.StdCtrls,
   Vcl.ExtCtrls,
   Vcl.Mask,
-  RxToolEdit,
-  RxCurrEdit,
   Data.DB,
   Vcl.Grids,
   Vcl.DBGrids,
@@ -32,7 +30,6 @@ type
     lblDescricao: TLabel;
     edtCodigo: TEdit;
     edtDescricao: TEdit;
-    edtPrecoVenda: TCurrencyEdit;
     lblValorProduto: TLabel;
     btnAdicionar: TButton;
     btnEditar: TButton;
@@ -40,6 +37,7 @@ type
     btnRecuperar: TButton;
     dbgrdProdutos: TDBGrid;
     btnEncontrarTodos: TButton;
+    edtPrecoVenda: TEdit;
     procedure btnAdicionarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnExcluirClick(Sender: TObject);
@@ -70,12 +68,12 @@ procedure TFormProduct.btnAdicionarClick(Sender: TObject);
 begin
   edtCodigo.Clear;
 
-  if (edtDescricao.Text <>'') AND (edtPrecoVenda.Value > 0) then
+  if (edtDescricao.Text <>'') AND (edtPrecoVenda.Text <> '') then
   begin
   try
     Fproduct
       .Description(edtDescricao.Text)
-      .SellPrice(edtPrecoVenda.Value);
+      .SellPrice(StrToFloat(edtPrecoVenda.Text));
 
     FProductDAO.Add(TProduct(Fproduct));
     ShowMessage('Produto incluido com sucesso!');
@@ -91,13 +89,13 @@ end;
 
 procedure TFormProduct.btnEditarClick(Sender: TObject);
 begin
-if (edtCodigo.Text <> '') and (edtDescricao.Text <> '') and (edtPrecoVenda.Value >0) then
+if (edtCodigo.Text <> '') and (edtDescricao.Text <> '') and (edtPrecoVenda.Text <>'') then
   begin
   try
     Fproduct
       .id(edtCodigo.Text)
       .Description(edtDescricao.Text)
-      .SellPrice(edtPrecoVenda.Value);
+      .SellPrice(StrToFloat(edtPrecoVenda.Text));
 
     FProductDAO.Update(TProduct(Fproduct));
   except
@@ -142,7 +140,7 @@ begin
    Fproduct := FProductDAO.RetrieveById(StrToInt(edtCodigo.Text));
 
    edtCodigo.Text := IntToStr( Fproduct.id);
-   edtPrecoVenda.Value := Fproduct.SellPrice;
+   edtPrecoVenda.Text := FloatToStr( Fproduct.SellPrice);
    edtDescricao.Text := (Fproduct.Description);
   except
     on E : Exception do
@@ -159,13 +157,13 @@ begin
   // pegar o selecionado e jogar pra cima
   edtCodigo.Text := dbgrdProdutos.Fields[0].asString;
   edtDescricao.Text := dbgrdProdutos.Fields[1].asString;
-  edtPrecoVenda.Value := dbgrdProdutos.Fields[2].asFloat;
+  //edtPrecoVenda.Value := dbgrdProdutos.Fields[2].asFloat;
 end;
 
 procedure TFormProduct.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
-  Form1.Visible := true;
+  FormMain.Visible := true;
 //  Form1.ShowModal;
 
   //inherited;

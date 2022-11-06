@@ -2,7 +2,7 @@ program PedidoVendasOOP;
 
 uses
   Vcl.Forms,
-  View.Main in '..\src\View\View.Main.pas' {Form1},
+  View.Main in '..\src\View\View.Main.pas' {FormMain},
   View.Product in '..\src\View\View.Product.pas' {FormProduct},
   Model.Product in '..\src\Model\Model.Product.pas',
   Model.Product.Interfaces in '..\src\Model\Model.Product.Interfaces.pas',
@@ -20,7 +20,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TFormMain, FormMain);
   Application.CreateForm(TFormProduct, FormProduct);
   Application.CreateForm(TDataModuleConnection, DataModuleConnection);
   Application.CreateForm(TForm2, Form2);

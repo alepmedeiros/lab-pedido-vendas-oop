@@ -10,9 +10,11 @@ object FormProduct: TFormProduct
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  OldCreateOrder = True
   Position = poOwnerFormCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  PixelsPerInch = 96
   TextHeight = 15
   object pnlBG: TPanel
     Left = 0
@@ -23,7 +25,6 @@ object FormProduct: TFormProduct
     Color = clGradientInactiveCaption
     ParentBackground = False
     TabOrder = 0
-    ExplicitWidth = 545
     object lblCodigo: TLabel
       Left = 2
       Top = 0
@@ -77,20 +78,13 @@ object FormProduct: TFormProduct
       Height = 23
       TabOrder = 1
     end
-    object edtPrecoVenda: TCurrencyEdit
-      Left = 383
-      Top = 18
-      Width = 121
-      Height = 23
-      TabOrder = 2
-    end
     object btnAdicionar: TButton
       Left = 0
       Top = 58
       Width = 80
       Height = 39
       Caption = 'Adicionar'
-      TabOrder = 3
+      TabOrder = 2
       OnClick = btnAdicionarClick
     end
     object btnEditar: TButton
@@ -99,7 +93,7 @@ object FormProduct: TFormProduct
       Width = 80
       Height = 39
       Caption = 'Editar'
-      TabOrder = 4
+      TabOrder = 3
       OnClick = btnEditarClick
     end
     object btnExcluir: TButton
@@ -108,7 +102,7 @@ object FormProduct: TFormProduct
       Width = 80
       Height = 39
       Caption = 'Excluir'
-      TabOrder = 5
+      TabOrder = 4
       OnClick = btnExcluirClick
     end
     object btnRecuperar: TButton
@@ -117,7 +111,7 @@ object FormProduct: TFormProduct
       Width = 80
       Height = 39
       Caption = 'Recuperar'
-      TabOrder = 6
+      TabOrder = 5
       OnClick = btnRecuperarClick
     end
     object dbgrdProdutos: TDBGrid
@@ -141,8 +135,15 @@ object FormProduct: TFormProduct
       Width = 69
       Height = 39
       Caption = 'Todos'
-      TabOrder = 8
+      TabOrder = 6
       OnClick = btnEncontrarTodosClick
+    end
+    object edtPrecoVenda: TEdit
+      Left = 386
+      Top = 18
+      Width = 121
+      Height = 23
+      TabOrder = 8
     end
   end
 end
