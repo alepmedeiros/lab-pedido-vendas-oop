@@ -3,9 +3,12 @@ unit Cliente.Controller;
 interface
 
 uses
+  { Cliente }
   Cliente.Controller.Interfaces,
   Cliente.DAO,
   Model.Cliente,
+  Model.Interfaces.Cliente,
+  {  }
   DM.Conexao,
   Data.DB,
   FireDAC.Comp.Client;
@@ -17,9 +20,12 @@ type
 
   private
     FDAOCliente : TClienteDAO;
+    FCliente    : iCliente;
 
   public
-    procedure Salvar( aValue : TClienteModel );
+    procedure Salvar( aValue : TClienteModel ); overload;
+    procedure Salvar( aNome, aCidade, aUF : string ); overload;
+    
     procedure Remover ( aValue : integer);
     procedure Editar( aValue : TClienteModel );
 
@@ -76,6 +82,18 @@ begin
     FDAOCliente.Remover(aValue)
   else
     raise Exception.Create('Cliente não existe.');
+end;
+
+procedure TClienteController.Salvar(aNome, aCidade, aUF: string);
+begin
+  FCliente := TClienteModel.New;
+
+  FCliente
+    .Nome(aNome)
+    .Cidade(aCidade)
+    .UF(aUF);
+
+  FDAOCliente.Salvar( TClienteModel(FCliente) );
 end;
 
 procedure TClienteController.Salvar(aValue: TClienteModel);

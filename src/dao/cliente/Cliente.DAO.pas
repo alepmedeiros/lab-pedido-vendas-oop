@@ -3,6 +3,7 @@ unit Cliente.DAO;
 interface
 
 uses
+  vcl.Dialogs,
   System.SysUtils,
   Cliente.DAO.Interfaces,
   Model.Cliente,
@@ -19,7 +20,9 @@ type
     FCliente  : TClienteModel;
 
   public
-    procedure Salvar( aValue : TClienteModel );
+    procedure Salvar( aValue : TClienteModel ); overload;
+    procedure Salvar( aNome, aCidade, aUF : string ); overload;
+    
     procedure Remover ( aValue : integer);
     procedure Editar( aValue : TClienteModel );
 
@@ -63,12 +66,21 @@ end;
 
 function TClienteDAO.RecuperaTodos: TFDMemTable;
 begin
+  {
   FConexao.FDQuery.SQL.Clear;
   FConexao.FDQuery.Open(
     'SELECT * FROM cliente ORDER BY codigo'
   );
 
   FConexao.FDMemTable.Data := FConexao.FDQuery.Data;
+  Result := FConexao.FDMemTable;
+  }
+
+  FConexao.FDConexao.ExecSQL(
+    'SELECT * FROM cliente c ORDER BY c.codigo',
+    TDataSet(FConexao.FDMemTable)
+  );
+
   Result := FConexao.FDMemTable;
 end;
 
@@ -80,12 +92,32 @@ begin
   );
 end;
 
+procedure TClienteDAO.Salvar(aNome, aCidade, aUF: string);
+begin
+  try
+    FConexao.FDConexao.ExecSQL(
+      'INSERT INTO cliente (nome, cidade, uf) VALUES (:nome, :cidade, :uf)',
+      [aNome, aCidade, aUF]
+    );  
+  except
+    on E: Exception do
+    begin
+      ShowMessage('Erro: ' + E.Message );
+    end;
+  end;
+end;
+
 procedure TClienteDAO.Salvar(aValue: TClienteModel);
 begin
-  FConexao.FDConexao.ExecSQL(
-    'INSERT INTO cliente (nome, cidade, uf) VALUES (:nome, :cidade, :uf)',
-    [aValue.Nome, aValue.Cidade, aValue.UF]
-  );
+  try
+    FConexao.FDConexao.ExecSQL(
+      'INSERT INTO cliente (nome, cidade, uf) VALUES (:nome, :cidade, :uf)',
+      [aValue.Nome, aValue.Cidade, aValue.UF]
+    );
+  except
+    on E: Exception do  
+      raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
+  end;
 end;
 
 function TClienteDAO.VerificaSeExiste(aValue: integer): Boolean;

@@ -8,7 +8,9 @@ uses
 
 type
   iClienteController = interface
-    procedure Salvar( aValue : TClienteModel );
+    procedure Salvar( aValue : TClienteModel ); overload;
+    procedure Salvar( aNome, aCidade, aUF : string ); overload;
+    
     procedure Remover ( aValue : integer);
     procedure Editar( aValue : TClienteModel );
 

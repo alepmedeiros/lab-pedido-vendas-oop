@@ -20,24 +20,27 @@ uses
   Vcl.ExtDlgs,
   Vcl.Mask,
   Vcl.DBCtrls,
+  Vcl.Menus,
+  
   Model.Interfaces.Produto,
   Model.Interfaces.Operador,
   Model.Interfaces.Pedido,
   Model.Interfaces.PedidoItem,
   Model.Interfaces.Cliente,
+  
   Model.Produto,
   Model.Operador,
   Model.Pedido,
   Model.PedidoItem,
   Model.Cliente,
+  
   Produto.Controller,
   Operador.Controller,
   Pedido.Controller,
   PedidoItem.Controller,
   Cliente.Controller,
   DM.Conexao,
-  Data.DB,
-  Vcl.Menus;
+  Data.DB;
 
 type
   TAbas = ( abaCliente, abaOperadores, abaProdutos, abaNovoPedido, abaGerenciarPedido );
@@ -249,26 +252,18 @@ end;
 procedure TfrmPrincipal.btnCadClienteClick(Sender: TObject);
 begin
   try
-    if (edtCliente.Text <> '') and (edtCidadeCliente.Text <> '') and (edtUfCliente.Text <> '') then
-    begin
-      FCliente
-        .Nome(edtCliente.Text)
-        .Cidade(edtCidadeCliente.Text)
-        .UF(edtUfCliente.Text);
-
-      FClienteController
-        .Salvar(TClienteModel(FCliente));
-    end
-    else
-      ShowMessage('Campos não podem estar vazios.');
+    FClienteController
+      .Salvar(
+        edtCliente.Text,
+        edtCidadeCliente.Text,
+        edtUfCliente.Text
+      );
   finally
     edtCodCliente.Clear;
     edtCliente.Clear;
     edtCidadeCliente.Clear;
     edtUfCliente.Clear;
-
     edtCliente.SetFocus;
-
     btnRecTodosClienteClick(self);
   end;
 end;
