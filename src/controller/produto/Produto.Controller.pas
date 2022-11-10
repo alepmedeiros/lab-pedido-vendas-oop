@@ -4,6 +4,7 @@ interface
 
 uses
   Produto.Controller.Interfaces,
+  Model.Interfaces.Produto,
   Model.Produto,
   Produto.DAO,
   DM.Conexao,
@@ -17,11 +18,16 @@ type
 
     private
       FDAOProduto : TProdutoDAO;
+      FProduto : iProduto;
 
     public
-      procedure Salvar( aValue : TProdutoModel );
+      procedure Salvar( aValue : TProdutoModel ); overload;
+      procedure Salvar( aDescricao, aValor : string ); overload;
+
       procedure Remover ( aValue : integer);
-      procedure Editar( aValue : TProdutoModel  );
+
+      procedure Editar( aValue : TProdutoModel ); overload;
+      procedure Editar( aCodigo, aDescricao, aValor : string ); overload;
 
       function RecuperaPorCodigo(aValue: integer; aColuna: string): Variant;
       function VerificaSeExiste(aValue : integer ) : Boolean;
@@ -47,6 +53,18 @@ begin
   inherited;
 end;
 
+procedure TProdutoController.Editar(aCodigo, aDescricao, aValor: string);
+begin
+  FProduto := TProdutoModel.New;
+
+  FProduto
+    .Codigo( StrToInt(aCodigo) )
+    .Descricao(aDescricao)
+    .PrecoProduto( StrToCurr(aValor) );
+
+  FDAOProduto.Editar( TProdutoModel(FProduto) );
+end;
+
 procedure TProdutoController.Editar(aValue: TProdutoModel);
 begin
   if VerificaSeExiste(aValue.Codigo) then
@@ -54,8 +72,6 @@ begin
   else
     raise Exception.Create('Produto não existe.');
 end;
-
-
 
 function TProdutoController.RecuperaPorCodigo(aValue: integer;
   aColuna: string): Variant;
@@ -77,6 +93,17 @@ begin
     FDAOProduto.Remover(aValue)
   else
     raise Exception.Create('Produto não existe.');
+end;
+
+procedure TProdutoController.Salvar(aDescricao, aValor: string);
+begin
+  FProduto := TProdutoModel.New;
+
+  FProduto
+    .Descricao(aDescricao)
+    .PrecoProduto( StrToCurr(aValor) );
+
+  FDAOProduto.Salvar( TProdutoModel(FProduto) );
 end;
 
 procedure TProdutoController.Salvar(aValue: TProdutoModel);

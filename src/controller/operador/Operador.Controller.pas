@@ -5,6 +5,7 @@ interface
 uses
   Operador.Controller.Interfaces,
   Model.Operador,
+  Model.Interfaces.Operador,
   DM.Conexao,
   FireDAC.Comp.Client,
   Data.DB,
@@ -17,11 +18,15 @@ type
 
   private
     FDAOOperador : TOperadorDAO;
+    FOperador : iOperador;
 
   public
-    procedure salvar( aValue : TOperadorModel );
+    procedure salvar( aNome : string );
     procedure Remover ( aValue : integer);
-    procedure Editar( aValue : TOperadorModel );
+
+    procedure Editar( aValue : TOperadorModel ); overload;
+    procedure Editar( aCodigo, aNome : string ); overload;
+
 
     function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
     function VerificaSeExiste(aValue : integer ) : Boolean;
@@ -57,6 +62,22 @@ begin
     raise Exception.Create('Operador não existe.');
 end;
 
+procedure TOperadorController.Editar(aCodigo, aNome: string);
+begin
+  if VerificaSeExiste( StrToInt(aCodigo) ) then
+  begin
+    FOperador := TOperadorModel.New;
+
+    FOperador
+      .Codigo( StrToInt(aCodigo) )
+      .Nome( aNome );
+
+    FDAOOperador.Editar( TOperadorModel(FOperador) );
+  end
+  else
+    raise Exception.Create('Operador não existe.');
+end;
+
 function TOperadorController.RecuperaPorCodigo(aValue: integer;
   aColuna: string): string;
 begin
@@ -84,9 +105,14 @@ begin
   Result := TOperadorModel(FDAOOperador.RetornaOperador(aValue));
 end;
 
-procedure TOperadorController.salvar(aValue: TOperadorModel);
+procedure TOperadorController.salvar(aNome : string);
 begin
-  FDAOOperador.Salvar(aValue);
+  FOperador := TOperadorModel.New;
+
+  FOperador
+    .Nome(aNome);
+
+  FDAOOperador.Salvar( TOperadorModel(FOperador) );
 end;
 
 function TOperadorController.VerificaSeExiste(aValue: integer): Boolean;

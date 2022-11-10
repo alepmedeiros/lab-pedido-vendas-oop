@@ -25,9 +25,11 @@ type
   public
     procedure Salvar( aValue : TClienteModel ); overload;
     procedure Salvar( aNome, aCidade, aUF : string ); overload;
-    
+
+    procedure Editar( aValue : TClienteModel ); overload;
+    procedure Editar( aCodigo, aNome, aCidade, aUF : string ); overload;
+
     procedure Remover ( aValue : integer);
-    procedure Editar( aValue : TClienteModel );
 
     function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
     function VerificaSeExiste(aValue : integer ) : Boolean;
@@ -52,6 +54,19 @@ begin
   FDAOCliente.Free;
 
   inherited;
+end;
+
+procedure TClienteController.Editar(aCodigo, aNome, aCidade, aUF: string);
+begin
+  FCliente := TClienteModel.New;
+
+  FCliente
+    .Codigo( StrToInt(aCodigo) )
+    .Nome(aNome)
+    .Cidade(aCidade)
+    .UF(aUF);
+
+  FDAOCliente.Editar( TClienteModel(FCliente) );
 end;
 
 procedure TClienteController.Editar(aValue: TClienteModel);

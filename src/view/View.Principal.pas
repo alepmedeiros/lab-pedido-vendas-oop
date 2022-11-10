@@ -1,4 +1,4 @@
-unit View.Principal;
+Ôªøunit View.Principal;
 
 interface
 
@@ -21,19 +21,8 @@ uses
   Vcl.Mask,
   Vcl.DBCtrls,
   Vcl.Menus,
-  
-  Model.Interfaces.Produto,
-  Model.Interfaces.Operador,
   Model.Interfaces.Pedido,
-  Model.Interfaces.PedidoItem,
-  Model.Interfaces.Cliente,
-  
-  Model.Produto,
-  Model.Operador,
   Model.Pedido,
-  Model.PedidoItem,
-  Model.Cliente,
-  
   Produto.Controller,
   Operador.Controller,
   Pedido.Controller,
@@ -166,11 +155,7 @@ type
       var Handled: Boolean);
 
   private
-    FOperador   : iOperador;
-    FCliente    : iCliente;
-    FProduto    : iProduto;
     FPedido     : iPedido;
-    FPedidoItem : iPedidoItem;
 
     FConexao: TDataModuleConexao;
 
@@ -212,11 +197,7 @@ procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
   ConfiguracaoInicial;
 
-  FOperador   := TOperadorModel.New;
-  FCliente    := TClienteModel.New;
-  FProduto    := TProdutoModel.New;
   FPedido     := TPedidoModel.New;
-  FPedidoItem := TPedidoItemModel.New;
 
   FOperadorController   := TOperadorController.Create;
   FClienteController    := TClienteController.Create;
@@ -233,11 +214,14 @@ begin
   begin
     if not FConexao.LerIni then
     begin
-      showmessage('Nenhum arquivo .INI configurado!');
-      Application.Terminate;
+      showmessage('Nenhum arquivo .INI configurado.' + sLineBreak + 'Gravando .INI com dados padr√£o.');
+      try
+        GravarIni;
+      finally
+        ShowMessage('Arquivo .INI criado com sucesso. Verifique-o, configure-o e reinicie a aplica√ß√£o.');
+        Application.Terminate;
+      end;
     end;
-
-    //GravarIni;
 
     try
       ConfigurarConn;
@@ -271,19 +255,10 @@ end;
 procedure TfrmPrincipal.btnCadOperadorClick(Sender: TObject);
 begin
   try
-    if edtOperador.Text <> '' then
-    begin
-      FOperador
-        .Nome(edtOperador.Text);
-
-      FOperadorController
-        .Salvar(TOperadorModel(FOperador));
-
-      btnRecTodosOperadoresClick(self);
-    end
-    else
-      ShowMessage('Campo nome n„o poder ser vazio.');
+    FOperadorController
+      .Salvar(edtOperador.Text);
   finally
+    btnRecTodosOperadoresClick(self);
     edtOperador.Clear;
     edtOperador.SetFocus;
   end;
@@ -292,22 +267,34 @@ end;
 procedure TfrmPrincipal.btnCadProdutoClick(Sender: TObject);
 begin
   try
-    if edtDescricaoProduto.Text <> '' then
-    begin
-      FProduto
-        .Descricao(edtDescricaoProduto.Text)
-        .PrecoProduto(StrToCurr(edtValorProduto.Text));
-
-      FProdutoController
-        .Salvar(TProdutoModel(FProduto));
-
-      btnRecTodosProdutosClick(self);
-    end
-    else
-      ShowMessage('Campo nome n„o poder ser vazio.');
+    FProdutoController
+      .Salvar(
+        edtDescricaoProduto.Text,
+        edtValorProduto.Text
+      );
   finally
-    edtDescricaoProduto.Clear;
+    btnRecTodosProdutosClick(self);
+    edtCodigoProduto.Clear;
     edtValorProduto.Clear;
+    edtDescricaoProduto.Clear;
+    edtDescricaoProduto.SetFocus;
+  end;
+end;
+
+procedure TfrmPrincipal.btnEdtProdutoClick(Sender: TObject);
+begin
+  try
+    FProdutoController
+      .Editar(
+        edtCodigoProduto.Text,
+        edtDescricaoProduto.Text,
+        edtValorProduto.Text
+      );
+  finally
+    btnRecTodosProdutosClick(self);
+    edtCodigoProduto.Clear;
+    edtValorProduto.Clear;
+    edtDescricaoProduto.Clear;
     edtDescricaoProduto.SetFocus;
   end;
 end;
@@ -328,7 +315,7 @@ begin
       end
       else
       begin
-        ShowMessage('Cliente n„o existe');
+        ShowMessage('Cliente n√£o existe');
         edtCliente.Clear;
         edtCidadeCliente.Clear;
         edtUfCliente.Clear;
@@ -340,7 +327,7 @@ begin
     end;
   end
   else
-    ShowMessage('CÛdigo n„o pode ser vazio.');
+    ShowMessage('C√≥digo n√£o pode ser vazio.');
 end;
 
 procedure TfrmPrincipal.btnRecOperadorClick(Sender: TObject);
@@ -355,7 +342,7 @@ begin
     end;
   end
   else
-    ShowMessage('CÛdigo n„o pode ser vazio.');
+    ShowMessage('C√≥digo n√£o pode ser vazio.');
 end;
 
 procedure TfrmPrincipal.btnRecTodosOperadoresClick(Sender: TObject);
@@ -482,7 +469,7 @@ end;
 
 procedure TfrmPrincipal.btnDelClienteClick(Sender: TObject);
 begin
-  if Application.MessageBox('Deseja realmente excluir?', 'AtenÁ„o', 52) = mrYes then
+  if Application.MessageBox('Deseja realmente excluir?', 'Aten√ß√£o', 52) = mrYes then
     FClienteController.Remover(StrToInt(edtCodCliente.Text));
 
   edtCodCliente.Clear;
@@ -495,7 +482,7 @@ end;
 
 procedure TfrmPrincipal.btnDelOperadorClick(Sender: TObject);
 begin
-  if Application.MessageBox('Deseja realmente excluir?', 'AtenÁ„o', 52) = mrYes then
+  if Application.MessageBox('Deseja realmente excluir?', 'Aten√ß√£o', 52) = mrYes then
     FOperadorController.Remover(StrToInt(edtCodigoOperador.Text));
 
   edtCodigoOperador.Clear;
@@ -505,7 +492,7 @@ end;
 
 procedure TfrmPrincipal.btnDelProdutoClick(Sender: TObject);
 begin
-  if Application.MessageBox('Deseja realmente excluir?', 'AtenÁ„o', 52) = mrYes then
+  if Application.MessageBox('Deseja realmente excluir?', 'Aten√ß√£o', 52) = mrYes then
     FProdutoController.Remover(StrToInt(edtCodigoProduto.Text));
 
   edtCodigoProduto.Clear;
@@ -516,9 +503,13 @@ end;
 
 procedure TfrmPrincipal.btnEdtClienteClick(Sender: TObject);
 begin
-  FCliente.Codigo(StrToInt(edtCodCliente.Text)).Nome(edtCliente.Text).Cidade(edtCidadeCliente.Text).UF(edtUfCliente.Text);
-
-  FClienteController.Editar(TClienteModel(FCliente));
+  FClienteController
+    .Editar(
+      edtCodCliente.Text,
+      edtCliente.Text,
+      edtCidadeCliente.Text,
+      edtUfCliente.Text
+    );
 
   edtCliente.Clear;
   edtCodCliente.Clear;
@@ -530,27 +521,16 @@ end;
 
 procedure TfrmPrincipal.btnEdtOperadorClick(Sender: TObject);
 begin
-  FOperador.Codigo(StrToInt(edtCodigoOperador.Text)).Nome(edtOperador.Text);
-
-  FOperadorController.Editar(TOperadorModel(FOperador));
+  FOperadorController
+    .Editar(
+      edtCodigoOperador.Text,
+      edtOperador.Text
+    );
 
   edtCodigoOperador.Clear;
   edtOperador.Clear;
 
   btnRecTodosOperadoresClick(self);
-end;
-
-procedure TfrmPrincipal.btnEdtProdutoClick(Sender: TObject);
-begin
-  FProduto.Codigo(StrToInt(edtCodigoProduto.Text)).Descricao(edtDescricaoProduto.Text).PrecoProduto(StrToCurr(edtValorProduto.Text));
-
-  FProdutoController.Editar(TProdutoModel(FProduto));
-
-  edtCodigoProduto.Clear;
-  edtDescricaoProduto.Clear;
-  edtCodigoProduto.Clear;
-
-  btnRecTodosProdutosClick(self);
 end;
 
 procedure TfrmPrincipal.btnExcluirPedidoClick(Sender: TObject);
@@ -562,7 +542,7 @@ begin
     Exit;
   end;
 
-  if Application.MessageBox('Deseja exlcuir o pedido selecionado?', 'AtenÁ„o', 52) = mrYes then
+  if Application.MessageBox('Deseja exlcuir o pedido selecionado?', 'Aten√ß√£o', 52) = mrYes then
   begin
     FPedidoController.Remover(dbgrdPedidosConcluidos.Fields[0].AsInteger);
     FConexao.DataSource.DataSet := FPedidoController.RecuperaTodos;
@@ -588,7 +568,7 @@ procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
   if not FConexao.FDConexao.Connected then
   begin
-    ShowMessage('N„o conectado!');
+    ShowMessage('N√£o conectado!');
     Application.Terminate;
   end;
 
@@ -656,7 +636,7 @@ begin
   begin
     if FPedidoController.PedidoEmAndamento = True then
     begin
-      if Application.MessageBox('Deseja cancelar o pedido?', 'AtenÁ„o', 52) = mrYes then
+      if Application.MessageBox('Deseja cancelar o pedido?', 'Aten√ß√£o', 52) = mrYes then
       begin
         FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
         FPedidoController.Remover(FPedido.CodigoCliente, 'A');
@@ -697,7 +677,7 @@ var
   end;
 
 begin
-  InputQuery('Cliente', 'CÛd. Cliente', lCodCliente);
+  InputQuery('Cliente', 'C√≥d. Cliente', lCodCliente);
 
   if lCodCliente <> '' then
   begin
@@ -714,12 +694,12 @@ begin
     FPedidoController
       .Salvar(TPedidoModel(FPedido));
 
-    { habilitar os botıes/edits de aÁ„o do pedido }
+    { habilitar os bot√µes/edits de a√ß√£o do pedido }
     habilitarCampos;
     edtCodProdutoPesq.SetFocus;
   end
   else
-    ShowMessage('Pedido n„o pode ser efetuado sem um cliente v·lido.');
+    ShowMessage('Pedido n√£o pode ser efetuado sem um cliente v√°lido.');
 end;
 
 procedure TfrmPrincipal.btnRecuProdPesqClick(Sender: TObject);
@@ -744,7 +724,7 @@ begin
   end
   else
   begin
-    ShowMessage('Campo cÛdigo n„o pode ser vazio!');
+    ShowMessage('Campo c√≥digo n√£o pode ser vazio!');
     edtCodProdutoPesq.SetFocus;
   end
 end;
@@ -758,7 +738,7 @@ begin
   end;
 
   if Application.MessageBox(
-    PWideChar('Deseja remover a entrada ' + inttostr(FNumEntrada) + '?'), 'AtenÁ„o', 52) = mrYes
+    PWideChar('Deseja remover a entrada ' + inttostr(FNumEntrada) + '?'), 'Aten√ß√£o', 52) = mrYes
   then
   begin
     FPedidoItemController.RemoverEntrada(FPedido.NumeroPedido, FNumEntrada);
@@ -771,7 +751,7 @@ end;
 
 procedure TfrmPrincipal.desabilitarAcoes;
 begin
-  { rotina para desabilitar aÁıes ao cancelar o pedido }
+  { rotina para desabilitar a√ß√µes ao cancelar o pedido }
   edtCodClientePedido.Clear;
   edtClientePedido.Clear;
   edtCodProdutoPesq.Clear;
@@ -841,9 +821,9 @@ end;
 
 procedure TfrmPrincipal.btnCancelarPedidoClick(Sender: TObject);
 begin
-  if Application.MessageBox('Deseja cancelar o pedido?', 'AtenÁ„o', 52) = mrYes then
+  if Application.MessageBox('Deseja cancelar o pedido?', 'Aten√ß√£o', 52) = mrYes then
   begin
-    { lÛgica para remover os itens dos pedidos antes do pedido }
+    { l√≥gica para remover os itens dos pedidos antes do pedido }
     FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
     FPedidoController.Remover(FPedido.CodigoCliente, 'A');
     FConexao.DataSource.DataSet.Close;
@@ -854,9 +834,9 @@ end;
 
 procedure TfrmPrincipal.btnConfirmarPedidoClick(Sender: TObject);
 begin
-  if Application.MessageBox('Deseja confirmar o pedido?', 'AtenÁ„o', 52) = mrYes then
+  if Application.MessageBox('Deseja confirmar o pedido?', 'Aten√ß√£o', 52) = mrYes then
   begin
-    { lÛgica para remover os itens dos pedidos antes do pedido }
+    { l√≥gica para remover os itens dos pedidos antes do pedido }
     FPedidoItemController.ConfirmaPedidoItem(FPedido.NumeroPedido);
     FPedidoController.ConfirmaPedido(FPedido.NumeroPedido);
     FConexao.DataSource.DataSet.Close;
@@ -878,17 +858,23 @@ end;
 procedure TfrmPrincipal.btnAddProdPesqClick(Sender: TObject);
 begin
   try
-    { adicionar o pedido recuperado ‡ tabela de pedido item com os dados do cliente }
+    { adicionar o pedido recuperado √† tabela de pedido item com os dados do cliente }
 
-    FPedidoItem
-      .NumeroPedido(FPedido.NumeroPedido)
-      .NumeroItemPedido(StrToInt(edtCodProdutoPesq.Text))
-      .Quantidade(StrToInt(edtQuantidade.Text))
-      .ValorUnitario(StrToCurr(edtValorProdutoPesq.Text))
-      .ValorTotal(StrToCurr(edtValorProdutoPesq.Text) * StrToInt(edtQuantidade.Text));
+//    FPedidoItem
+//      .NumeroPedido(FPedido.NumeroPedido)
+//      .NumeroItemPedido(StrToInt(edtCodProdutoPesq.Text))
+//      .Quantidade(StrToInt(edtQuantidade.Text))
+//      .ValorUnitario(StrToCurr(edtValorProdutoPesq.Text))
+//      .ValorTotal(StrToCurr(edtValorProdutoPesq.Text) * StrToInt(edtQuantidade.Text));
 
     FPedidoItemController
-      .AdicionarItem(TPedidoItemModel(FPedidoItem));
+      .AdicionarItem(
+        IntToStr(FPedido.NumeroPedido),
+        edtCodProdutoPesq.Text,
+        edtQuantidade.Text,
+        edtValorProdutoPesq.Text,
+        '0'
+      );
 
     FPedidoController.AtualizarTotalPedido(
       FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido),

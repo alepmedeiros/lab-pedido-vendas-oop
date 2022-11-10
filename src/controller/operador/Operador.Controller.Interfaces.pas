@@ -8,7 +8,7 @@ uses
 
 type
   iOperadorController = interface
-    procedure Salvar( aValue : TOperadorModel );
+    procedure salvar( aNome : string );
     procedure Remover ( aValue : integer);
     procedure Editar( aValue : TOperadorModel );
 

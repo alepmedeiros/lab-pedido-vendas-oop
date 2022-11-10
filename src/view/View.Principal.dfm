@@ -12,17 +12,19 @@ object frmPrincipal: TfrmPrincipal
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  OldCreateOrder = True
   Position = poMainFormCenter
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
+  PixelsPerInch = 96
   TextHeight = 15
   object PageControlPrincipal: TPageControl
     Left = 0
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = Clientes
+    ActivePage = Pedidos
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange
@@ -490,7 +492,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Style = []
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 7
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -12
@@ -511,7 +513,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 2
+        TabOrder = 3
         OnClick = btnCadProdutoClick
       end
       object btnRecTodosProdutos: TButton
@@ -526,7 +528,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 6
         OnClick = btnRecTodosProdutosClick
       end
       object btnEdtProduto: TButton
@@ -541,7 +543,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 4
         OnClick = btnEdtProdutoClick
       end
       object btnDelProduto: TButton
@@ -556,7 +558,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 5
         OnClick = btnDelProdutoClick
       end
       object edtValorProduto: TEdit
@@ -570,7 +572,7 @@ object frmPrincipal: TfrmPrincipal
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 7
+        TabOrder = 2
       end
     end
     object Pedidos: TTabSheet

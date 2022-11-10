@@ -3,7 +3,9 @@ unit PedidoItem.Controller;
 interface
 
 uses
+  System.SysUtils,
   PedidoItem.DAO.Interfaces,
+  Model.interfaces.PedidoItem,
   Model.PedidoItem,
   DM.Conexao,
   FireDac.Comp.Client,
@@ -17,9 +19,12 @@ type
 
   private
     FDAOPedidoItem : TPedidoItemDAO;
+    FPedidoItem : iPedidoItem;
 
   public
-    procedure AdicionarItem( aValue : TPedidoItemModel );
+    procedure AdicionarItem( aValue : TPedidoItemModel ); overload;
+    procedure AdicionarItem( aNumPedido, aNumItemPedido, aQuantidade, aValorUnitario, aValorTotal : string ); overload;
+
     procedure RemoverPedidos( aValue: integer );
     procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(NumeroPedido: Integer);
@@ -86,7 +91,22 @@ end;
 
 procedure TPedidoItemController.AdicionarItem(aValue: TPedidoItemModel);
 begin
-  FDAOPedidoItem.AdicionarItem(aValue);
+  FDAOPedidoItem.AdicionarItem( TPedidoItemModel(FPedidoItem) );
+end;
+
+procedure TPedidoItemController.AdicionarItem(aNumPedido, aNumItemPedido,
+  aQuantidade, aValorUnitario, aValorTotal: string);
+begin
+   FPedidoItem := TPedidoItemModel.New;
+
+   FPedidoItem
+    .NumeroPedido( StrToInt( aNumPedido ) )
+    .NumeroItemPedido( StrToInt( aNumItemPedido ) )
+    .Quantidade( StrToInt( aQuantidade ) )
+    .ValorUnitario( StrToCurr( aValorUnitario ) )
+    .ValorTotal( StrToCurr( aValorUnitario ) * StrToInt( aQuantidade ) );
+
+   FDAOPedidoItem.AdicionarItem( TPedidoItemModel( FPedidoItem) );
 end;
 
 end.

@@ -10,7 +10,9 @@ uses
 
 type
   iPedidoItemController = interface
-    procedure AdicionarItem( aValue : TPedidoItemModel );
+    procedure AdicionarItem( aValue : TPedidoItemModel ); overload;
+    procedure AdicionarItem( aNumPedido, aNumItemPedido, aQuantidade, aValorUnitario, aValorTotal : string ); overload;
+
     procedure RemoverPedidos( aValue: integer );
     procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(NumeroPedido: Integer);

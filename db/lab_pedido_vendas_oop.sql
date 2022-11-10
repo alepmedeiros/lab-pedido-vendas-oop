@@ -75,6 +75,20 @@ CREATE TABLE produto (
     preco_venda DECIMAL (18, 2) NOT NULL
 );
 
+-- Table: estoque produto
+-- DROP TABLE IF EXISTS estoque_produto ;
+
+CREATE TABLE estoque_produto (
+    codigo INTEGER PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT NOT NULL,
+    codigo_produto INTEGER REFERENCES produto (codigo) ON DELETE SET NULL NOT NULL,
+    quantidade INTEGER NOT NULL,
+    modificado DATE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO estoque_produto ( codigo_produto, quantidade ) VALUES ( 1, 300 ) ;
+
+SELECT *, strftime('%d/%m/%Y', ep.modificado) AS data FROM estoque_produto ep ;
+
 INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Computador Lenovo 3i', 4300 );
 INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Mouse Gamer Fortrek', 40 );
 INSERT INTO produto ( descricao, preco_venda ) VALUES ( 'Mesa Gamer 1Mx2m', 390 );
