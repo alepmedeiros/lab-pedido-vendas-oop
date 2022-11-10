@@ -54,7 +54,6 @@ var
   DataModuleConnection: TDataModuleConnection;
 const
   DBName    = '\OOP.db';
-//  BDPath = 'C:\CursosDelphi\lab-pedido-vendas-oop\project\DB' + DBName;
   BDPath = 'C:\cursosDev\lab-alex\lab-pedido-vendas-oop\project\DB' + DBName;
 implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}

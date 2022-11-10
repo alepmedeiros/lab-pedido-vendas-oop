@@ -5,8 +5,11 @@ interface
 uses
  Model.Product.Interfaces,
  System.SysUtils;
+
 type
   TProduct = class(TInterfacedObject, IProductInterface )
+    constructor create;
+    destructor destroy; override;
     private
     FId : Integer;
     FSellPrice : Float64;
@@ -37,9 +40,22 @@ begin
   FDescription := Avalue;
 end;
 
+constructor TProduct.create;
+begin
+  //FId := -1;
+  //FDescription :='';
+  //FSellPrice := 0;
+end;
+
 function TProduct.Description: string;
 begin
   Result := FDescription;
+end;
+
+destructor TProduct.destroy;
+begin
+
+  inherited;
 end;
 
 function TProduct.id: Integer;

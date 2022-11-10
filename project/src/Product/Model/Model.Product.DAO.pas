@@ -1,4 +1,4 @@
-unit Product.DAO;
+unit Model.Product.DAO;
 
 interface
 
@@ -6,7 +6,9 @@ uses
   FireDAC.Comp.Client,
   DM.Connection,
   Model.Product,
-  System.Generics.Collections;
+  System.Generics.Collections,
+  Model.Connections.Interfaces,
+  Model.Connections.Firedac.Query;
 
 type
  TProductDAO = class
@@ -16,7 +18,7 @@ type
    private
    FConnection : TDataModuleConnection;
    FProduct : TProduct;
-   //FProductList : TObjectlist<TProduct>;
+   iConnection : iModelConnectionQuery;
 
    public
    procedure Add    (aValue : TProduct);
@@ -37,18 +39,29 @@ uses
 
 procedure TProductDAO.Add(aValue: TProduct);
 begin
-  FConnection.FDMConnection.ExecSQL(
+
+
+ { FConnection.FDMConnection.ExecSQL(
     'INSERT INTO produto (descricao, preco_de_venda) VALUES ( :nome, :preco  )',
     [aValue.Description, aValue.SellPrice],[ftString,ftFloat]
-  );
+  );  }
+
+  iConnection
+  .SQL
+  .Add('INSERT INTO produto (descricao, preco_de_venda) VALUES ( ''teste'', 1  )');
+
+  iConnection
+  .Open.
+  ExecSQl;
 
   FConnection.FDMConnection.Close;
 end;
 
 constructor TProductDAO.Create;
 begin
-  Self.FConnection := TDataModuleConnection.New;
-  Self.FProduct := TProduct.Create;
+  //Self.FConnection := TDataModuleConnection.New;
+  //Self.FProduct := TProduct.Create;
+  Self.iConnection := TModelConnectionsFiredacQuery.New;
 end;
 
 procedure TProductDAO.Delete(avalue: Integer);

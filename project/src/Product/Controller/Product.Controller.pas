@@ -5,18 +5,21 @@ interface
 uses
   Product.Controller.Interfaces,
   Model.Product,
-  Product.DAO;
+  Model.Product.DAO,
+  Model.Connections.Interfaces;
 
 type
   TproductController = class(Tinterfacedobject, iProductController)
   constructor Create;
   destructor Destroy; override;
+  class function New: iProductController;
 
   private
-    FDAOProduct :TProductDAO;
+    FDAOProduct : TProductDAO;
+    FConnection : iModelConnectionQuery;
   public
 
-  procedure Add (aValue : TProduct);
+  function Add (aStrValue : string; aFloatValue : float64) : iProductController;
   procedure Delete (avalue : Integer);
   procedure Update (aValue : TProduct);
 
@@ -26,16 +29,32 @@ type
 
 implementation
 
+uses
+  Model.Connections.Firedac.Query;
+
 { TproductController }
 
-procedure TproductController.Add(aValue: TProduct);
+function TproductController.Add( aStrValue : string; aFloatValue : float64) : iProductController;
+var
+  LProduct : TProduct;
 begin
-  FDAOProduct.Add(aValue);
+  try  // fazer funcionar
+    LProduct.Create;
+    LProduct.Description(aStrValue);
+    LProduct.SellPrice(aFloatValue);
+
+    FDAOProduct.Add(LProduct);
+  finally
+    LProduct.Free;
+  end;
+
+  Result := Self;
 end;
 
 constructor TproductController.Create;
 begin
   FDAOProduct.Create;
+  FConnection := TModelConnectionsFiredacQuery.New;
 end;
 
 procedure TproductController.Delete(avalue: Integer);
@@ -48,6 +67,11 @@ begin
   FDAOProduct.Free;
 
   inherited;
+end;
+
+class function TproductController.New: iProductController;
+begin
+  Result := Self.Create;
 end;
 
 function TproductController.RetrieveById(aValue: integer): TProduct;

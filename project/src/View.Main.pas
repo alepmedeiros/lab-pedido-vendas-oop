@@ -23,7 +23,8 @@ type
     procedure btnProductsClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnCustomersClick(Sender: TObject);
-    constructor Create;
+    procedure FormCreate(Sender: TObject);
+
   private
     { Private declarations }
   public
@@ -49,7 +50,7 @@ begin
 
 end;
 
-constructor TFormMain.Create;
+procedure TFormMain.FormCreate(Sender: TObject);
 begin
   ReportMemoryLeaksOnShutdown := True;
 end;

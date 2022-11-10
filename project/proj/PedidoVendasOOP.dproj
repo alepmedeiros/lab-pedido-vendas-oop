@@ -101,29 +101,29 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\src\View\View.Main.pas">
+        <DCCReference Include="..\src\View.Main.pas">
             <Form>FormMain</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\src\View\View.Product.pas">
+        <DCCReference Include="..\src\Product\View\View.Product.pas">
             <Form>FormProduct</Form>
         </DCCReference>
-        <DCCReference Include="..\src\Model\Model.Product.pas"/>
-        <DCCReference Include="..\src\Model\Model.Product.Interfaces.pas"/>
-        <DCCReference Include="..\src\Model\Model.Customer.Interfaces.pas"/>
-        <DCCReference Include="..\src\Model\Model.Costumer.pas"/>
-        <DCCReference Include="..\src\DAO\Connection\DM.Connection.pas">
+        <DCCReference Include="..\src\Product\Model\Model.Product.pas"/>
+        <DCCReference Include="..\src\Product\Model\Model.Product.Interfaces.pas"/>
+        <DCCReference Include="..\src\Costumer\Model\Model.Customer.Interfaces.pas"/>
+        <DCCReference Include="..\src\Costumer\Model\Model.Costumer.pas"/>
+        <DCCReference Include="..\src\Datamodule\DM.Connection.pas">
             <Form>DataModuleConnection</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\src\DAO\Product\Product.DAO.pas"/>
-        <DCCReference Include="..\src\View\View.Customer.pas">
-            <Form>Form2</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="..\src\DAO\Product\product.DAO.interfaces.pas"/>
-        <DCCReference Include="..\src\Controller\Product.Controller.pas"/>
-        <DCCReference Include="..\src\Controller\Product.Controller.Interfaces.pas"/>
+        <DCCReference Include="..\src\Product\Model\Model.Product.DAO.pas"/>
+        <DCCReference Include="..\src\Product\Model\Model.Product.DAO.Interfaces.pas"/>
+        <DCCReference Include="..\src\Product\Controller\Product.Controller.pas"/>
+        <DCCReference Include="..\src\Product\Controller\Product.Controller.Interfaces.pas"/>
+        <DCCReference Include="..\src\Connections\Model\Model.Connections.Firedac.Query.pas"/>
+        <DCCReference Include="..\src\Connections\Model\Model.Connections.Interfaces.pas"/>
+        <DCCReference Include="..\src\Connections\Model\Model.Connections.pas"/>
+        <DCCReference Include="..\src\Connections\Model\Model.Connections.Firedac.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

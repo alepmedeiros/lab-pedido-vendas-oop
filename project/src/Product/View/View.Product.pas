@@ -19,7 +19,7 @@ uses
   Vcl.Grids,
   Vcl.DBGrids,
   Model.Product.Interfaces,
-  Product.DAO,
+  Model.Product.DAO,
   Model.Product,
   DM.Connection;
 
@@ -60,7 +60,8 @@ var
 implementation
 
 uses
-  View.Main;
+  View.Main,
+  Product.Controller;
 
 {$R *.dfm}
 
@@ -68,23 +69,28 @@ procedure TFormProduct.btnAdicionarClick(Sender: TObject);
 begin
   edtCodigo.Clear;
 
-  if (edtDescricao.Text <>'') AND (edtPrecoVenda.Text <> '') then
-  begin
-  try
-    Fproduct
-      .Description(edtDescricao.Text)
-      .SellPrice(StrToFloat(edtPrecoVenda.Text));
+  TproductController.New
+    .Add(edtDescricao.Text, strtofloat(edtPrecoVenda.Text));
 
-    FProductDAO.Add(TProduct(Fproduct));
-    ShowMessage('Produto incluido com sucesso!');
-  except
-    on E : Exception do
-    ShowMessage('erro');
+//add antigo com o "datamodule"
 
-  end;
-  end
-  else
-    ShowMessage('Preencha os campos descrição e preço venda para Adicionar o produto');
+//  if (edtDescricao.Text <>'') AND (edtPrecoVenda.Text <> '') then
+//  begin
+//  try
+//    Fproduct
+//      .Description(edtDescricao.Text)
+//      .SellPrice(StrToFloat(edtPrecoVenda.Text));
+//
+//    FProductDAO.Add(TProduct(Fproduct));
+//    ShowMessage('Produto incluido com sucesso!');
+//  except
+//    on E : Exception do
+//    ShowMessage('erro');
+//
+//  end;
+//  end
+//  else
+//    ShowMessage('Preencha os campos descrição e preço venda para Adicionar o produto');
 end;
 
 procedure TFormProduct.btnEditarClick(Sender: TObject);
@@ -173,6 +179,7 @@ procedure TFormProduct.FormCreate(Sender: TObject);
 begin
   Fproduct := Tproduct.New;
   FProductDAO := TProductDAO.Create;
+ // FProductController := Tprod
 
 end;
 

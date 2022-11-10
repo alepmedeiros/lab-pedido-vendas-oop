@@ -79,7 +79,7 @@ object FormProduct: TFormProduct
       TabOrder = 1
     end
     object btnAdicionar: TButton
-      Left = 0
+      Left = -3
       Top = 58
       Width = 80
       Height = 39
