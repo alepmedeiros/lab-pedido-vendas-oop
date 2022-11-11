@@ -170,9 +170,13 @@ type
     FNumEntrada : Integer;
 
     procedure desabilitarAcoes;
-    procedure AtualizaGridPedido(Sender: TObject);
-    procedure AtualizaPedidoItemConcluidos(Sender: TObject);
+    procedure AtualizaGridPedido;
+    procedure AtualizaPedidoItemConcluidos;
     procedure ConfiguracaoInicial;
+    procedure AtualizaGridCliente;
+    procedure AtualizaGridOperador;
+    procedure AtualizaGridProduto;
+    procedure AtualizaGridPedidosConcluidos;
 
   public
   end;
@@ -336,7 +340,7 @@ end;
 
 procedure TfrmPrincipal.btnRecOperadorClick(Sender: TObject);
 begin
-  {  // melhoria: fazer o controller retornar um objeto. }
+  { melhoria: fazer o controller retornar um objeto. }
   if edtCodigoOperador.Text <> '' then
   begin
     try
@@ -353,16 +357,13 @@ end;
 procedure TfrmPrincipal.btnRecTodosOperadoresClick(Sender: TObject);
 begin
   FConexao.DataSource.DataSet := FOperadorController.RecuperaTodos;
-  dbgrdOperador.Columns[0].Width := 100; // codigo
-  dbgrdOperador.Columns[1].Width := 400; // nome
+  AtualizaGridOperador;
 end;
 
 procedure TfrmPrincipal.btnRecTodosProdutosClick(Sender: TObject);
 begin
   FConexao.DataSource.DataSet := FProdutoController.RecuperaTodos;
-  dbgrdProdutos.Columns[0].Width := 100; // codigo
-  dbgrdProdutos.Columns[1].Width := 400; // descricao
-  dbgrdProdutos.Columns[2].Width := 130; // preco
+  AtualizaGridProduto;
 end;
 
 procedure TfrmPrincipal.dbgrdClienteDblClick(Sender: TObject);
@@ -403,23 +404,13 @@ begin
   edtDescProdutoPesq.Text := dbgrdPedido.Fields[2].AsString;
 end;
 
-procedure TfrmPrincipal.AtualizaPedidoItemConcluidos(Sender: TObject);
-begin
-  dbgrdPedidoItemConcluidos.Columns[0].Width := 100; // entrada
-  dbgrdPedidoItemConcluidos.Columns[1].Width := 100; // produto
-  dbgrdPedidoItemConcluidos.Columns[2].Width := 220; // descricao
-  dbgrdPedidoItemConcluidos.Columns[3].Width := 100; // quantidade
-  dbgrdPedidoItemConcluidos.Columns[4].Width := 100; // valor
-  dbgrdPedidoItemConcluidos.Columns[5].Width := 100; // total
-end;
-
 procedure TfrmPrincipal.dbgrdPedidosConcluidosCellClick(Column: TColumn);
 begin
   FConexao.DataSourceAux.DataSet := FPedidoItemController
     .RecuperaItemPedidoPorCodigo(
       dbgrdPedidosConcluidos.Fields[0].AsInteger
     );
-  AtualizaPedidoItemConcluidos(self);
+  AtualizaPedidoItemConcluidos;
 end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosKeyDown(Sender: TObject;
@@ -429,7 +420,7 @@ begin
     .RecuperaItemPedidoPorCodigo(
       dbgrdPedidosConcluidos.Fields[0].AsInteger
     );
-  AtualizaPedidoItemConcluidos(self);
+  AtualizaPedidoItemConcluidos;
 end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosKeyUp(Sender: TObject;
@@ -439,7 +430,7 @@ begin
     .RecuperaItemPedidoPorCodigo(
       dbgrdPedidosConcluidos.Fields[0].AsInteger
     );
-  AtualizaPedidoItemConcluidos(self);
+  AtualizaPedidoItemConcluidos;
 end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosMouseWheel(Sender: TObject;
@@ -450,7 +441,7 @@ begin
     .RecuperaItemPedidoPorCodigo(
       dbgrdPedidosConcluidos.Fields[0].AsInteger
     );
-  AtualizaPedidoItemConcluidos(self);
+  AtualizaPedidoItemConcluidos;
 end;
 
 procedure TfrmPrincipal.dbgrdProdutosDblClick(Sender: TObject);
@@ -466,10 +457,7 @@ end;
 procedure TfrmPrincipal.btnRecTodosClienteClick(Sender: TObject);
 begin
   FConexao.DataSource.DataSet := FClienteController.RecuperaTodos;
-  dbgrdCliente.Columns[0].Width := 100; // codigo
-  dbgrdCliente.Columns[1].Width := 300; // nome
-  dbgrdCliente.Columns[2].Width := 220; // cidade
-  dbgrdCliente.Columns[3].Width := 110; // uf
+  AtualizaGridCliente;
 end;
 
 procedure TfrmPrincipal.btnDelClienteClick(Sender: TObject);
@@ -551,12 +539,7 @@ begin
   begin
     FPedidoController.Remover(dbgrdPedidosConcluidos.Fields[0].AsInteger);
     FConexao.DataSource.DataSet := FPedidoController.RecuperaTodos;
-
-    dbgrdPedidosConcluidos.Columns[0].Width := 100; // codigo
-    dbgrdPedidosConcluidos.Columns[1].Width := 300; // cliente
-    dbgrdPedidosConcluidos.Columns[2].Width := 130; // data
-    dbgrdPedidosConcluidos.Columns[3].Width := 130; // total
-
+    AtualizaGridPedidosConcluidos;
     FConexao.DataSourceAux.DataSet.Close;
   end;
 end;
@@ -592,23 +575,17 @@ begin
   if PageControlPrincipal.TabIndex = Integer(abaCliente) then
   begin
     FConexao.DataSource.DataSet := FClienteController.RecuperaTodos;
-    dbgrdCliente.Columns[0].Width := 100; // codigo
-    dbgrdCliente.Columns[1].Width := 300; // nome
-    dbgrdCliente.Columns[2].Width := 220; // cidade
-    dbgrdCliente.Columns[3].Width := 110; // uf
+    AtualizaGridCliente;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaOperadores) then
   begin
     FConexao.DataSource.DataSet := FOperadorController.RecuperaTodos;
-    dbgrdOperador.Columns[0].Width := 100; // codigo
-    dbgrdOperador.Columns[1].Width := 400; // nome
+    AtualizaGridOperador;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaProdutos) then
   begin
     FConexao.DataSource.DataSet := FProdutoController.RecuperaTodos;
-    dbgrdProdutos.Columns[0].Width := 100; // codigo
-    dbgrdProdutos.Columns[1].Width := 400; // descricao
-    dbgrdProdutos.Columns[2].Width := 130; // preco
+    AtualizaGridProduto;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaNovoPedido) then
   begin
@@ -619,18 +596,14 @@ begin
     btnRemoverEntrada.Enabled   := False;
     btnAttEntrada.Enabled       := False;
     edtValorProdutoPesq.Enabled := False;
-
-    edtCodProdutoPesq.Enabled  := False;
-    edtQuantidade.Enabled      := False;
+    edtCodProdutoPesq.Enabled   := False;
+    edtQuantidade.Enabled       := False;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaGerenciarPedido) then
   begin
     FNumPedido := 0;
     FConexao.DataSource.DataSet := FPedidoController.RecuperaTodos;
-    dbgrdPedidosConcluidos.Columns[0].Width := 100; // codigo
-    dbgrdPedidosConcluidos.Columns[1].Width := 300; // cliente
-    dbgrdPedidosConcluidos.Columns[2].Width := 130; // data
-    dbgrdPedidosConcluidos.Columns[3].Width := 130; // total
+    AtualizaGridPedidosConcluidos;
   end;
 end;
 
@@ -668,14 +641,13 @@ var
 
   procedure habilitarCampos;
   begin
-    btnConfirmarPedido.Enabled := True;
-    btnCancelarPedido.Enabled  := True;
-    btnRecuProdPesq.Enabled    := True;
-    btnAddProdPesq.Enabled     := True;
-    btnRemoverEntrada.Enabled  := True;
-    btnAttEntrada.Enabled      := True;
-    btnIniciarPedido.Enabled   := False;
-
+    btnConfirmarPedido.Enabled  := True;
+    btnCancelarPedido.Enabled   := True;
+    btnRecuProdPesq.Enabled     := True;
+    btnAddProdPesq.Enabled      := True;
+    btnRemoverEntrada.Enabled   := True;
+    btnAttEntrada.Enabled       := True;
+    btnIniciarPedido.Enabled    := False;
     edtCodProdutoPesq.Enabled   := True;
     edtQuantidade.Enabled       := True;
     edtValorProdutoPesq.Enabled := True;
@@ -691,15 +663,6 @@ begin
     edtClientePedido.Text    := FClienteController.RecuperaPorCodigo(StrToInt(lCodCliente), 'nome');
 
     { montar e inserir o pedido na tabela correspondente (pedido) }
-    {FPedido
-      .NumeroPedido(FPedidoController.NovoCodigoPedido)
-      .CodigoCliente(StrToInt(edtCodClientePedido.Text))
-      .DataEmissao(now)
-      .ValorTotal(0.0);}
-
-    {FPedidoController
-      .Salvar(TPedidoModel(FPedido));}
-
     FNumPedido := FPedidoController.NovoCodigoPedido;
 
     FPedidoController
@@ -772,7 +735,7 @@ begin
     FNumEntrada := 0;
     edtTotalPedido.Text         := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FNumPedido));
     FConexao.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
-    AtualizaGridPedido(self);
+    AtualizaGridPedido;
 
 
   end;
@@ -880,16 +843,6 @@ begin
   desabilitarAcoes;
 end;
 
-procedure TfrmPrincipal.AtualizaGridPedido(Sender: TObject);
-begin
-  dbgrdPedido.Columns[0].Width := 060; // codigo_pedido
-  dbgrdPedido.Columns[1].Width := 060; // produto
-  dbgrdPedido.Columns[2].Width := 300; // quantidade
-  dbgrdPedido.Columns[3].Width := 100; // valor_unitario
-  dbgrdPedido.Columns[4].Width := 100; // total
-  dbgrdPedido.Columns[5].Width := 100; // total
-end;
-
 procedure TfrmPrincipal.btnAddProdPesqClick(Sender: TObject);
 begin
   try
@@ -912,7 +865,7 @@ begin
     edtTotalPedido.Text := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FNumPedido));
     FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
 
-    AtualizaGridPedido(self);
+    AtualizaGridPedido;
   finally
     edtCodProdutoPesq.Clear;
     edtCodProdutoPesq.SetFocus;
@@ -943,7 +896,7 @@ begin
 
   { apos atualizar a entrada }
   FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
-  AtualizaGridPedido(self);
+  AtualizaGridPedido;
   btnAddProdPesq.Enabled := True;
 
   edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FNumPedido));
@@ -953,6 +906,81 @@ begin
   edtDescProdutoPesq.Clear;
   edtValorProdutoPesq.Clear;
   edtQuantidade.Clear;
+end;
+
+
+procedure TfrmPrincipal.AtualizaGridCliente;
+begin
+  dbgrdCliente.Columns[0].Title.Caption := 'Código';
+  dbgrdCliente.Columns[0].Width := 100;    
+  dbgrdCliente.Columns[1].Title.Caption := 'Cliente';
+  dbgrdCliente.Columns[1].Width := 300;
+  dbgrdCliente.Columns[2].Title.Caption := 'Cidade';
+  dbgrdCliente.Columns[2].Width := 220;
+  dbgrdCliente.Columns[3].Title.Caption := 'UF';
+  dbgrdCliente.Columns[3].Width := 110; 
+end;
+
+procedure TfrmPrincipal.AtualizaGridOperador;
+begin
+  dbgrdOperador.Columns[0].Title.Caption := 'Código';
+  dbgrdOperador.Columns[0].Width := 100;
+  dbgrdOperador.Columns[1].Title.Caption := 'Operador';
+  dbgrdOperador.Columns[1].Width := 400;
+end;
+
+procedure TfrmPrincipal.AtualizaGridProduto;
+begin
+  dbgrdProdutos.Columns[0].Title.Caption := 'Código';
+  dbgrdProdutos.Columns[0].Width := 100;
+  dbgrdProdutos.Columns[1].Title.Caption := 'Descrição';
+  dbgrdProdutos.Columns[1].Width := 400;
+  dbgrdProdutos.Columns[2].Title.Caption := 'Valor Unitário';
+  dbgrdProdutos.Columns[2].Width := 130;
+end;
+
+procedure TfrmPrincipal.AtualizaGridPedido;
+begin
+  dbgrdPedido.Columns[0].Title.Caption := 'Entrada';
+  dbgrdPedido.Columns[0].Width := 060;
+  dbgrdPedido.Columns[1].Title.Caption := 'Cod. Prod.';
+  dbgrdPedido.Columns[1].Width := 060;
+  dbgrdPedido.Columns[2].Title.Caption := 'Descrição';
+  dbgrdPedido.Columns[2].Width := 320;
+  dbgrdPedido.Columns[3].Title.Caption := 'Quantidade';
+  dbgrdPedido.Columns[3].Width := 100;
+  dbgrdPedido.Columns[4].Title.Caption := 'Val Uni.';
+  dbgrdPedido.Columns[4].Width := 100;
+  dbgrdPedido.Columns[5].Title.Caption := 'Total';
+  dbgrdPedido.Columns[5].Width := 100;
+end;
+
+procedure TfrmPrincipal.AtualizaGridPedidosConcluidos;
+begin
+  dbgrdPedidosConcluidos.Columns[0].Title.Caption := 'Código';
+  dbgrdPedidosConcluidos.Columns[0].Width := 100;
+  dbgrdPedidosConcluidos.Columns[1].Title.Caption := 'Cliente';
+  dbgrdPedidosConcluidos.Columns[1].Width := 350;
+  dbgrdPedidosConcluidos.Columns[2].Title.Caption := 'Data';
+  dbgrdPedidosConcluidos.Columns[2].Width := 130;
+  dbgrdPedidosConcluidos.Columns[3].Title.Caption := 'Valor Total';
+  dbgrdPedidosConcluidos.Columns[3].Width := 130;
+end;
+
+procedure TfrmPrincipal.AtualizaPedidoItemConcluidos;
+begin
+  dbgrdPedidoItemConcluidos.Columns[0].Title.Caption := '#';
+  dbgrdPedidoItemConcluidos.Columns[0].Width := 100;
+  dbgrdPedidoItemConcluidos.Columns[1].Title.Caption := 'Produto';
+  dbgrdPedidoItemConcluidos.Columns[1].Width := 100;
+  dbgrdPedidoItemConcluidos.Columns[2].Title.Caption := 'Descrição';
+  dbgrdPedidoItemConcluidos.Columns[2].Width := 220;
+  dbgrdPedidoItemConcluidos.Columns[3].Title.Caption := 'Quantidade';
+  dbgrdPedidoItemConcluidos.Columns[3].Width := 100;
+  dbgrdPedidoItemConcluidos.Columns[4].Title.Caption := 'Valor Uni.';
+  dbgrdPedidoItemConcluidos.Columns[4].Width := 100;
+  dbgrdPedidoItemConcluidos.Columns[5].Title.Caption := 'Valor Total';
+  dbgrdPedidoItemConcluidos.Columns[5].Width := 100;
 end;
 
 end.

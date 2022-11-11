@@ -12,19 +12,17 @@ object frmPrincipal: TfrmPrincipal
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
-  OldCreateOrder = True
   Position = poMainFormCenter
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 15
   object PageControlPrincipal: TPageControl
     Left = 0
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = Pedidos
+    ActivePage = GerenciarPedidos
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange

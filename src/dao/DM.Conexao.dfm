@@ -1,5 +1,4 @@
 object DataModuleConexao: TDataModuleConexao
-  OldCreateOrder = True
   Height = 480
   Width = 640
   object FDConexao: TFDConnection
@@ -8,8 +7,8 @@ object DataModuleConexao: TDataModuleConexao
       'LockingMode=Normal'
       'User_Name=silvab'
       
-        'Database=Z:\Bruno\Documentos\Meus Projetos\lab-pedido-vendas-oop' +
-        '\db\lab_pedido_loja.db'
+        'Database=C:\Users\Bruno Silva\Projetos\lab-pedido-vendas-oop\db\' +
+        'lab_pedido_loja.db'
       'DriverID=SQLite')
     Left = 56
     Top = 88
