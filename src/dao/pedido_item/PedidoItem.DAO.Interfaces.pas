@@ -8,8 +8,12 @@ uses
 
 type
   iPedidoIemDAO = interface
-    procedure AdicionarItem( aValue : TPedidoItemModel );
-    procedure RemoverPedidos( aValue: integer );
+    procedure AdicionarItem( aValue : TPedidoItemModel ); overload;
+    procedure AdicionarItem( aNumPedido, aNumItemPedido, aQuantidade, aValorUnitario, aValorTotal : string ); overload;
+
+    procedure RemoverPedidos( aValue: integer ); overload;
+    procedure RemoverPedidos(aValue: string); overload;
+
     procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(NumeroPedido: Integer);
     procedure AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);

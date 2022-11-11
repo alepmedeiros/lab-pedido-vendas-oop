@@ -4,6 +4,7 @@ interface
 
 uses
   Pedido.Controller.Interfaces,
+  Model.Interfaces.Pedido,
   Model.Pedido,
   DM.Conexao,
   Firedac.Comp.Client,
@@ -17,6 +18,7 @@ type
 
   private
     FDAOPedido : TPedidoDAO;
+    FPedido : iPedido;
 
   public
     function NovoCodigoPedido : Variant;
@@ -24,8 +26,11 @@ type
     function RecuperaTodos: TFDMemTable;
     function PedidoEmAndamento: Boolean;
 
-    procedure Salvar( aValue: TPedidoModel );
+    procedure Salvar( aValue: TPedidoModel ); overload;
+    procedure Salvar( aNumPedido, aCodCliente, aValorTotal: string; aDataEmissao: TDateTime ); overload;
+
     procedure Remover( aValue: integer ); overload;
+    procedure Remover( aStatus: string ); overload;
     procedure Remover( aValue: integer; aStatus: string ); overload;
     procedure AtualizarTotalPedido(valorTotalPedido: Currency; NumeroPedido: integer);
     procedure ConfirmaPedido(NumeroPedido: Integer);
@@ -86,6 +91,16 @@ begin
   end;
 end;
 
+procedure TPedidoController.Remover(aStatus: string);
+begin
+  try
+    FDAOPedido.Remover(aStatus);
+  except
+    on E: Exception do
+      raise Exception.Create(E.Message);
+  end;
+end;
+
 procedure TPedidoController.Remover(aValue: integer);
 begin
   try
@@ -99,6 +114,20 @@ end;
 function TPedidoController.RetornaTotalPedido(aNumPedido: integer): Currency;
 begin
   Result := FDAOPedido.RetornaTotalPedido(aNumPedido);
+end;
+
+procedure TPedidoController.Salvar(aNumPedido, aCodCliente,
+  aValorTotal: string; aDataEmissao: TDateTime);
+begin
+  FPedido := TPedidoModel.New;
+
+  FPedido
+    .NumeroPedido( strtoint( aNumPedido ) )
+    .CodigoCliente( StrToInt( aCodCliente ) )
+    .DataEmissao( aDataEmissao )
+    .ValorTotal( StrToCurr( aValorTotal ) );
+
+  FDAOPedido.Salvar( TPedidoModel(FPedido) );
 end;
 
 procedure TPedidoController.Salvar(aValue: TPedidoModel);

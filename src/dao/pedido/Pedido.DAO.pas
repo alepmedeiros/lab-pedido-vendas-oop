@@ -28,6 +28,7 @@ type
 
       procedure salvar( aValue : TPedidoModel);
       procedure Remover( aValue: integer ); overload;
+      procedure Remover( aStatus: string ); overload;
       procedure Remover( aValue: integer; aStatus: string ); overload;
       procedure AtualizarTotalPedido( valorTotalPedido: Currency; NumeroPedido: integer );
       procedure ConfirmaPedido( NumeroPedido : Integer );
@@ -124,6 +125,15 @@ begin
   FConexao.FDConexao.ExecSQL(
     'DELETE FROM pedido WHERE codigo_cliente = :codigo AND status = ''' + aStatus + '''',
     [aValue]
+  );
+end;
+
+procedure TPedidoDAO.Remover(aStatus: string);
+begin
+  FConexao.FDConexao.ExecSQL(
+    'DELETE FROM pedido WHERE status = :status_pedido ',
+    [ aStatus ],
+    [ ftString ]
   );
 end;
 

@@ -20,8 +20,13 @@ type
     FPedidoItem : TPedidoItemModel;
 
   public
-    procedure AdicionarItem( aValue : TPedidoItemModel );
-    procedure RemoverPedidos( aValue: integer );
+    procedure AdicionarItem( aValue : TPedidoItemModel ); overload;
+    procedure AdicionarItem( aNumPedido, aNumItemPedido, aQuantidade, aValorUnitario, aValorTotal : string ); overload;
+
+    procedure RemoverPedidos( aValue: integer ); overload;
+    procedure RemoverPedidos(aValue: string); overload;
+    procedure RemoverPedidos; overload;
+
     procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(NumeroPedido: Integer);
     procedure AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
@@ -49,7 +54,19 @@ begin
       aValue.ValorTotal ],
     [ftInteger, ftInteger, ftInteger, ftCurrency, ftCurrency]
   )
-  
+end;
+
+procedure TPedidoItemDAO.AdicionarItem(aNumPedido, aNumItemPedido,
+  aQuantidade, aValorUnitario, aValorTotal: string);
+begin
+  FConexao.FDConexao.ExecSQL(
+    'INSERT INTO pedido_item                                                         ' +
+    '(  codigo_pedido,  codigo_produto,  quantidade,  valor_unitario,  valor_total ) ' +
+    'VALUES                                                                          ' +
+    '( :codigo_pedido, :codigo_produto, :quantidade, :valor_unitario, :valor_total ) ',
+    [ aNumPedido, aNumItemPedido, aQuantidade, aValorUnitario, aValorTotal ],
+    [ ftInteger, ftInteger, ftInteger, ftCurrency, ftCurrency ]
+  )
 end;
 
 procedure TPedidoItemDAO.AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
@@ -83,7 +100,7 @@ end;
 procedure TPedidoItemDAO.ConfirmaPedidoItem(NumeroPedido: Integer);
 begin
   FConexao.FDConexao.ExecSQL(
-    'UPDATE pedido_item SET status_pedido = ''C'' WHERE codigo_pedido = :codigo_pedido ;',
+    'UPDATE pedido_item SET status_pedido = ''C'' WHERE codigo_pedido = :codigo_pedido',
     [NumeroPedido]
   );
 end;
@@ -171,11 +188,26 @@ begin
   );
 end;
 
+procedure TPedidoItemDAO.RemoverPedidos(aValue: string);
+begin
+  FConexao.FDConexao.ExecSQL(
+    'DELETE FROM pedido_item  WHERE status_pedido = :status_pedido',
+    [aValue]
+  );
+end;
+
 procedure TPedidoItemDAO.RemoverPedidos(aValue: integer);
 begin
   FConexao.FDConexao.ExecSQL(
     'DELETE FROM pedido_item  WHERE codigo_pedido = :codigo_pedido AND status_pedido = ''A''',
     [aValue]
+  );
+end;
+
+procedure TPedidoItemDAO.RemoverPedidos;
+begin
+  FConexao.FDConexao.ExecSQL(
+    'DELETE FROM pedido_item  WHERE status_pedido = ''A'''
   );
 end;
 

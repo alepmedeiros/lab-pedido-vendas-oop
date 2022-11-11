@@ -3,6 +3,7 @@
 interface
 
 uses
+  { Delphi }
   Winapi.Windows,
   Winapi.Messages,
   System.SysUtils,
@@ -21,13 +22,15 @@ uses
   Vcl.Mask,
   Vcl.DBCtrls,
   Vcl.Menus,
-  Model.Interfaces.Pedido,
-  Model.Pedido,
+
+  { Controllers }
   Produto.Controller,
   Operador.Controller,
   Pedido.Controller,
   PedidoItem.Controller,
   Cliente.Controller,
+
+  { Connection }
   DM.Conexao,
   Data.DB;
 
@@ -155,8 +158,6 @@ type
       var Handled: Boolean);
 
   private
-    FPedido     : iPedido;
-
     FConexao: TDataModuleConexao;
 
     FOperadorController   : TOperadorController;
@@ -165,7 +166,7 @@ type
     FPedidoController     : TPedidoController;
     FPedidoItemController : TPedidoItemController;
 
-    FNumPedido,
+    FNumPedido  : Variant;
     FNumEntrada : Integer;
 
     procedure desabilitarAcoes;
@@ -187,9 +188,12 @@ procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   if FPedidoController.PedidoEmAndamento then
   begin
-    FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
-    FPedidoController.Remover(FPedido.CodigoCliente, 'A');
-    FConexao.DataSource.DataSet.Close;
+    if Application.MessageBox('Existe ao menos um pedido em andamento. Deseja cancelar o pedido?', 'Atenção', 52) = mrYes then
+    begin
+      FPedidoItemController.RemoverPedidos('A');
+      FPedidoController.Remover('A');
+      FConexao.DataSource.DataSet.Close;
+    end;
   end;
 end;
 
@@ -197,7 +201,7 @@ procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
   ConfiguracaoInicial;
 
-  FPedido     := TPedidoModel.New;
+  FNumPedido := 0;
 
   FOperadorController   := TOperadorController.Create;
   FClienteController    := TClienteController.Create;
@@ -332,6 +336,7 @@ end;
 
 procedure TfrmPrincipal.btnRecOperadorClick(Sender: TObject);
 begin
+  {  // melhoria: fazer o controller retornar um objeto. }
   if edtCodigoOperador.Text <> '' then
   begin
     try
@@ -638,8 +643,8 @@ begin
     begin
       if Application.MessageBox('Deseja cancelar o pedido?', 'Atenção', 52) = mrYes then
       begin
-        FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
-        FPedidoController.Remover(FPedido.CodigoCliente, 'A');
+        FPedidoItemController.RemoverPedidos('A');
+        FPedidoController.Remover({FPedido.CodigoCliente,} 'A');
         FConexao.DataSource.DataSet.Close;
         desabilitarAcoes;
       end
@@ -681,18 +686,29 @@ begin
 
   if lCodCliente <> '' then
   begin
+    { Recupera dados do cliente cadastrado }
     edtCodClientePedido.Text := FClienteController.RecuperaPorCodigo(StrToInt(lCodCliente), 'codigo');
     edtClientePedido.Text    := FClienteController.RecuperaPorCodigo(StrToInt(lCodCliente), 'nome');
 
     { montar e inserir o pedido na tabela correspondente (pedido) }
-    FPedido
+    {FPedido
       .NumeroPedido(FPedidoController.NovoCodigoPedido)
       .CodigoCliente(StrToInt(edtCodClientePedido.Text))
       .DataEmissao(now)
-      .ValorTotal(0.0);
+      .ValorTotal(0.0);}
+
+    {FPedidoController
+      .Salvar(TPedidoModel(FPedido));}
+
+    FNumPedido := FPedidoController.NovoCodigoPedido;
 
     FPedidoController
-      .Salvar(TPedidoModel(FPedido));
+      .Salvar(
+        FNumPedido,
+        edtCodClientePedido.Text,
+        '0',
+        now
+      );
 
     { habilitar os botões/edits de ação do pedido }
     habilitarCampos;
@@ -741,11 +757,24 @@ begin
     PWideChar('Deseja remover a entrada ' + inttostr(FNumEntrada) + '?'), 'Atenção', 52) = mrYes
   then
   begin
-    FPedidoItemController.RemoverEntrada(FPedido.NumeroPedido, FNumEntrada);
+    FPedidoItemController
+      .RemoverEntrada(
+        FNumPedido,
+        FNumEntrada
+      );
+
+    FPedidoController
+      .AtualizarTotalPedido(
+        FPedidoController.RetornaTotalPedido(FNumPedido),
+        FNumPedido
+      );
+
     FNumEntrada := 0;
-    edtTotalPedido.Text         := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido));
-    FConexao.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
+    edtTotalPedido.Text         := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FNumPedido));
+    FConexao.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
     AtualizaGridPedido(self);
+
+
   end;
 end;
 
@@ -824,9 +853,10 @@ begin
   if Application.MessageBox('Deseja cancelar o pedido?', 'Atenção', 52) = mrYes then
   begin
     { lógica para remover os itens dos pedidos antes do pedido }
-    FPedidoItemController.RemoverPedidos(FPedido.NumeroPedido);
-    FPedidoController.Remover(FPedido.CodigoCliente, 'A');
+    FPedidoItemController.RemoverPedidos( {StrToInt(FNumPedido)} 'A');
+    FPedidoController.Remover({FPedido.CodigoCliente,} 'A');
     FConexao.DataSource.DataSet.Close;
+    FNumPedido := 0;
   end;
 
   desabilitarAcoes;
@@ -836,10 +866,15 @@ procedure TfrmPrincipal.btnConfirmarPedidoClick(Sender: TObject);
 begin
   if Application.MessageBox('Deseja confirmar o pedido?', 'Atenção', 52) = mrYes then
   begin
-    { lógica para remover os itens dos pedidos antes do pedido }
-    FPedidoItemController.ConfirmaPedidoItem(FPedido.NumeroPedido);
-    FPedidoController.ConfirmaPedido(FPedido.NumeroPedido);
+    { lógica para alterar o status dos itens dos pedidos de depois do pedido }
+    FPedidoItemController
+      .ConfirmaPedidoItem(FNumPedido);
+
+    FPedidoController
+      .ConfirmaPedido(FNumPedido);
+
     FConexao.DataSource.DataSet.Close;
+    FNumPedido := 0;
   end;
 
   desabilitarAcoes;
@@ -859,17 +894,9 @@ procedure TfrmPrincipal.btnAddProdPesqClick(Sender: TObject);
 begin
   try
     { adicionar o pedido recuperado à tabela de pedido item com os dados do cliente }
-
-//    FPedidoItem
-//      .NumeroPedido(FPedido.NumeroPedido)
-//      .NumeroItemPedido(StrToInt(edtCodProdutoPesq.Text))
-//      .Quantidade(StrToInt(edtQuantidade.Text))
-//      .ValorUnitario(StrToCurr(edtValorProdutoPesq.Text))
-//      .ValorTotal(StrToCurr(edtValorProdutoPesq.Text) * StrToInt(edtQuantidade.Text));
-
     FPedidoItemController
       .AdicionarItem(
-        IntToStr(FPedido.NumeroPedido),
+        FNumPedido,
         edtCodProdutoPesq.Text,
         edtQuantidade.Text,
         edtValorProdutoPesq.Text,
@@ -877,15 +904,13 @@ begin
       );
 
     FPedidoController.AtualizarTotalPedido(
-      FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido),
-      FPedido.NumeroPedido
+      FPedidoController.RetornaTotalPedido(FNumPedido),
+      FNumPedido
     );
 
     edtQuantidade.Clear;
-
-    edtTotalPedido.Text := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido));
-
-    FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
+    edtTotalPedido.Text := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FNumPedido));
+    FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
 
     AtualizaGridPedido(self);
   finally
@@ -907,16 +932,21 @@ begin
   FPedidoItemController.AtualizarEntrada(
     StrToCurr(edtValorProdutoPesq.Text),
     StrToInt(edtQuantidade.Text),
-    FPedido.NumeroPedido,
+    FNumPedido,
     FNumEntrada
   );
 
+  FPedidoController.AtualizarTotalPedido(
+    FPedidoController.RetornaTotalPedido(FNumPedido),
+    FNumPedido
+  );
+
   { apos atualizar a entrada }
-  FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FPedido.NumeroPedido);
+  FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
   AtualizaGridPedido(self);
   btnAddProdPesq.Enabled := True;
 
-  edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FPedido.NumeroPedido));
+  edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FNumPedido));
 
   edtCodProdutoPesq.Clear;
   edtCodProdutoPesq.SetFocus;

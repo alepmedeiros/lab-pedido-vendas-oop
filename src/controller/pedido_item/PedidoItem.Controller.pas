@@ -25,9 +25,11 @@ type
     procedure AdicionarItem( aValue : TPedidoItemModel ); overload;
     procedure AdicionarItem( aNumPedido, aNumItemPedido, aQuantidade, aValorUnitario, aValorTotal : string ); overload;
 
-    procedure RemoverPedidos( aValue: integer );
+    procedure RemoverPedidos( aValue: integer ); overload;
+    procedure RemoverPedidos(aValue: string); overload;
+
     procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
-    procedure ConfirmaPedidoItem(NumeroPedido: Integer);
+    procedure ConfirmaPedidoItem(aNumeroPedido: Integer);
     procedure AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
 
     function RecuperaTodos : TFDMemTable ;
@@ -44,9 +46,9 @@ begin
   FDAOPedidoItem.AtualizarEntrada(aValorUnitario, aQuantidade, aCodPedido, aCodEntrada);
 end;
 
-procedure TPedidoItemController.ConfirmaPedidoItem(NumeroPedido: Integer);
+procedure TPedidoItemController.ConfirmaPedidoItem(aNumeroPedido: Integer);
 begin
-  FDAOPedidoItem.ConfirmaPedidoItem(NumeroPedido);
+  FDAOPedidoItem.ConfirmaPedidoItem(aNumeroPedido);
 end;
 
 constructor TPedidoItemController.Create;
@@ -85,6 +87,11 @@ begin
 end;
 
 procedure TPedidoItemController.RemoverPedidos(aValue: integer);
+begin
+  FDAOPedidoItem.RemoverPedidos(aValue);
+end;
+
+procedure TPedidoItemController.RemoverPedidos(aValue: string);
 begin
   FDAOPedidoItem.RemoverPedidos(aValue);
 end;

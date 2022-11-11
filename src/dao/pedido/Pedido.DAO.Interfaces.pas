@@ -14,8 +14,11 @@ type
     function RecuperaTodos: TFDMemTable;
 
     procedure salvar( aValue: TPedidoModel);
+
     procedure Remover( aValue: integer ); overload;
+    procedure Remover( aStatus: string ); overload;
     procedure Remover( aValue: integer; aStatus: string ); overload;
+
     procedure AtualizarTotalPedido(valorTotalPedido: Currency; NumeroPedido: integer);
     procedure ConfirmaPedido( NumeroPedido : Integer );
   end;
