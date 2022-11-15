@@ -12,23 +12,22 @@ uses
 
 type
   TOperadorDAO = class(TInterfacedObject, iOperadorDAO)
-    constructor Create;
-    destructor Destroy; override;
+  constructor Create;
+  destructor Destroy; override;
+  private
+    FConexao  : TDataModuleUnit;
+    FOperador : TOperadorModel;
 
-    private
-      FDM       : TDataModuleUnit;
-      FOperador : TOperadorModel;
+  public
+    procedure Salvar( aValue : TOperadorModel );
+    procedure Remover ( aValue : integer);
+    procedure Editar( aValue : TOperadorModel );
 
-    public
-      procedure Salvar( aValue : TOperadorModel );
-      procedure Remover ( aValue : integer);
-      procedure Editar( aValue : TOperadorModel );
+    function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
+    function VerificaSeExiste(aValue : integer ) : Boolean;
+    function RecuperaTodos : TFDMemTable ;
 
-      function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
-      function VerificaSeExiste(aValue : integer ) : Boolean;
-      function RecuperaTodos : TFDMemTable ;
-
-      function RetornaOperador( aValue : Integer) : TOperadorModel;
+    function RetornaOperador( aValue : Integer) : TOperadorModel;
   end;
 
 implementation
@@ -40,13 +39,13 @@ uses
 
 constructor TOperadorDAO.Create;
 begin
-  Self.FDM  := TDataModuleUnit.New;
+  Self.FConexao  := TDataModuleUnit.New;
   Self.FOperador := TOperadorModel.Create;
 end;
 
 destructor TOperadorDAO.Destroy;
 begin
-  FDM.Free;
+  FConexao.Free;
   FOperador.Free;
 
   inherited;
@@ -54,7 +53,7 @@ end;
 
 procedure TOperadorDAO.Editar(aValue: TOperadorModel);
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'UPDATE operador SET nome = :nome WHERE codigo = :codigo',
     [aValue.Nome, aValue.Codigo]
   );
@@ -62,7 +61,7 @@ end;
 
 function TOperadorDAO.RecuperaPorCodigo(aValue: integer; aColuna: string): string;
 begin
-  Result := FDM.FDConexao.ExecSQLScalar(
+  Result := FConexao.FDConexao.ExecSQLScalar(
     'SELECT ' + aColuna + ' FROM operador o WHERE o.codigo = :codigo',
     [InttoStr(aValue)]
   );
@@ -70,17 +69,17 @@ end;
 
 function TOperadorDAO.RecuperaTodos : TFDMemTable;
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'SELECT * FROM operador o ORDER BY o.codigo',
-    TDataSet(FDM.FDMemTable)
+    TDataSet(FConexao.FDMemTable)
   );
 
-  Result := FDM.FDMemTable;
+  Result := FConexao.FDMemTable;
 end;
 
 procedure TOperadorDAO.Remover(aValue: integer);
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'DELETE FROM operador WHERE codigo = :codigo',
     [aValue]
   );
@@ -101,7 +100,7 @@ end;
 
 procedure TOperadorDAO.Salvar(aValue: TOperadorModel);
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'INSERT INTO operador (nome) VALUES (:nome)',
     [aValue.Nome]
   );
@@ -112,7 +111,7 @@ var
   LRetorno : Integer;
 begin
   Result := false;
-  LRetorno := FDM.FDConexao.ExecSQLScalar(
+  LRetorno := FConexao.FDConexao.ExecSQLScalar(
     'SELECT * FROM operador o WHERE o.codigo = :codigo',
     [InttoStr(aValue)]
   );

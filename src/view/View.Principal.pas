@@ -149,8 +149,7 @@ type
     procedure dbgrdPedidoDblClick(Sender: TObject);
     procedure btnAttEntradaClick(Sender: TObject);
     procedure btnExcluirPedidoClick(Sender: TObject);
-    procedure dbgrdPedidosConcluidosMouseWheel(Sender: TObject; Shift: TShiftState;
-      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+    procedure dbgrdPedidosConcluidosMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 
   private
     FConexaoDM: TDataModuleUnit;
@@ -352,7 +351,6 @@ end;
 
 procedure TfrmPrincipal.btnRecTodosProdutosClick(Sender: TObject);
 begin
-  FConexaoDM.DataSource.DataSet.Close;
   FConexaoDM.DataSource.DataSet := FProdutoController.RecuperaTodos;
   AtualizaGridProduto;
 end;

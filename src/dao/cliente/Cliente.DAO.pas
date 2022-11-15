@@ -14,27 +14,26 @@ uses
 
 type
   TClienteDAO = class(TInterfacedObject, iClienteDAO)
-    FDMemTable: TFDMemTable;
-    constructor Create;
-    destructor Destroy; override;
+  FDMemTable: TFDMemTable;
+  constructor Create;
+  destructor Destroy; override;
+  private
+    FDM  : TDataModuleUnit;
+    FCliente  : TClienteModel;
+    FQuery    : TFDQuery;
 
-    private
-      FDM       : TDataModuleUnit;
-      FCliente  : TClienteModel;
-      FQuery    : TFDQuery;
+    procedure RecuperaInstanciaQuery;
 
-      procedure RecuperaInstanciaQuery;
+  public
+    procedure Salvar( aValue : TClienteModel ); overload;
+    procedure Salvar( aNome, aCidade, aUF : string ); overload;
+    
+    procedure Remover ( aValue : integer);
+    procedure Editar( aValue : TClienteModel );
 
-    public
-      procedure Salvar( aValue : TClienteModel ); overload;
-      procedure Salvar( aNome, aCidade, aUF : string ); overload;
-
-      procedure Remover ( aValue : integer);
-      procedure Editar( aValue : TClienteModel );
-
-      function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
-      function VerificaSeExiste(aValue : integer ) : Boolean;
-      function RecuperaTodos : TFDMemTable ;
+    function RecuperaPorCodigo(aValue: integer; aColuna: string): string;
+    function VerificaSeExiste(aValue : integer ) : Boolean;
+    function RecuperaTodos : TFDMemTable ;
   end;
 
 implementation
@@ -69,7 +68,7 @@ begin
     [aValue.Nome, aValue.Cidade, aValue.UF, aValue.Codigo]
   );
   except
-    on E: Exception do
+    on E: Exception do  
       raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
   end;
 end;
@@ -85,7 +84,7 @@ begin
         [InttoStr(aValue)]
       );
     except
-      on E: Exception do
+      on E: Exception do  
         raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
     end;
   finally
@@ -134,7 +133,7 @@ begin
     FQuery.ExecSQL(
       'INSERT INTO cliente (nome, cidade, uf) VALUES (:nome, :cidade, :uf)',
       [aNome, aCidade, aUF]
-    );
+    );  
   except
     on E: Exception do
     begin
@@ -151,7 +150,7 @@ begin
       [aValue.Nome, aValue.Cidade, aValue.UF]
     );
   except
-    on E: Exception do
+    on E: Exception do  
       raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
   end;
 end;

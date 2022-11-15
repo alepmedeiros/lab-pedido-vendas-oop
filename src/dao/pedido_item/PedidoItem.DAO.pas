@@ -13,28 +13,27 @@ uses
 
 type
   TPedidoItemDAO = class(TInterfacedObject, iPedidoIemDAO)
-    constructor Create;
-    destructor Destroy; override;
+  constructor Create;
+  destructor Destroy; override;
+  private
+    FConexao    : TDataModuleUnit;
+    FPedidoItem : TPedidoItemModel;
 
-    private
-      FDM         : TDataModuleUnit;
-      FPedidoItem : TPedidoItemModel;
+  public
+    procedure AdicionarItem( aValue : TPedidoItemModel ); overload;
+    procedure AdicionarItem( aNumPedido, aNumItemPedido, aQuantidade, aValorUnitario, aValorTotal : string ); overload;
 
-    public
-      procedure AdicionarItem( aValue : TPedidoItemModel ); overload;
-      procedure AdicionarItem( aNumPedido, aNumItemPedido, aQuantidade, aValorUnitario, aValorTotal : string ); overload;
+    procedure RemoverPedidos( aValue: integer ); overload;
+    procedure RemoverPedidos(aValue: string); overload;
+    procedure RemoverPedidos; overload;
 
-      procedure RemoverPedidos( aValue: integer ); overload;
-      procedure RemoverPedidos(aValue: string); overload;
-      procedure RemoverPedidos; overload;
+    procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
+    procedure ConfirmaPedidoItem(NumeroPedido: Integer);
+    procedure AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
 
-      procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
-      procedure ConfirmaPedidoItem(NumeroPedido: Integer);
-      procedure AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
-
-      function RecuperaTodos : TFDMemTable;
-      function RecuperaItemPedidoPorCodigo( aValue : integer ) : TFDMemTable;
-      function RecuperaPorCodigo( aValue: Integer; aColuna : string ) : Variant;
+    function RecuperaTodos : TFDMemTable;
+    function RecuperaItemPedidoPorCodigo( aValue : integer ) : TFDMemTable;
+    function RecuperaPorCodigo( aValue: Integer; aColuna : string ) : Variant;
   end;
 
 implementation
@@ -43,7 +42,7 @@ implementation
 
 procedure TPedidoItemDAO.AdicionarItem(aValue: TPedidoItemModel);
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'INSERT INTO pedido_item                                                         ' +
     '(  codigo_pedido,  codigo_produto,  quantidade,  valor_unitario,  valor_total ) ' +
     'VALUES                                                                          ' +
@@ -60,7 +59,7 @@ end;
 procedure TPedidoItemDAO.AdicionarItem(aNumPedido, aNumItemPedido,
   aQuantidade, aValorUnitario, aValorTotal: string);
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'INSERT INTO pedido_item                                                         ' +
     '(  codigo_pedido,  codigo_produto,  quantidade,  valor_unitario,  valor_total ) ' +
     'VALUES                                                                          ' +
@@ -72,7 +71,7 @@ end;
 
 procedure TPedidoItemDAO.AtualizarEntrada(aValorUnitario: Currency; aQuantidade, aCodPedido, aCodEntrada: integer);
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'UPDATE                                            ' +
     '  pedido_item                                     ' +
     'SET                                               ' +
@@ -85,7 +84,7 @@ begin
     [ftInteger,   ftCurrency,     ftInteger,  ftInteger  ]
   );
 
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'UPDATE                                            ' +
     '  pedido_item                                     ' +
     'SET                                               ' +
@@ -100,7 +99,7 @@ end;
 
 procedure TPedidoItemDAO.ConfirmaPedidoItem(NumeroPedido: Integer);
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'UPDATE pedido_item SET status_pedido = ''C'' WHERE codigo_pedido = :codigo_pedido',
     [NumeroPedido]
   );
@@ -108,13 +107,13 @@ end;
 
 constructor TPedidoItemDAO.Create;
 begin
-  Self.FDM    := TDataModuleUnit.New;
+  Self.FConexao    := TDataModuleUnit.New;
   Self.FPedidoItem := TPedidoItemModel.Create;
 end;
 
 destructor TPedidoItemDAO.Destroy;
 begin
-  FDM.Free;
+  FConexao.Free;
   FPedidoItem.Free;
 
   inherited;
@@ -126,7 +125,7 @@ var
   LCodigo : string;
 begin
   LCodigo := IntToStr( aValue );
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'SELECT                                   ' +
     '  pi.codigo     AS ''#'',                ' +
     '  p.codigo      AS produto,              ' +
@@ -144,16 +143,16 @@ begin
     '  ( p.codigo = pi.codigo_produto )       ' +
     'WHERE                                    ' +
     '  pi.codigo_pedido = ' + LCodigo + '     '
-    ,TDataSet(FDM.FDMemTable)
+    ,TDataSet(FConexao.FDMemTable)
   );
 
-  Result := FDM.FDMemTable;
+  Result := FConexao.FDMemTable;
 end;
 
 function TPedidoItemDAO.RecuperaPorCodigo(aValue: Integer;
   aColuna: string): Variant;
 begin
-  Result := FDM.FDConexao.ExecSQLScalar(
+  Result := FConexao.FDConexao.ExecSQLScalar(
     'SELECT ' + aColuna + ' FROM pedido_item pi WHERE pi.codigo = :codigo',
     [InttoStr(aValue)]
   );
@@ -161,7 +160,7 @@ end;
 
 function TPedidoItemDAO.RecuperaTodos: TFDMemTable;
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'SELECT                                         ' +
     '  p.codigo               AS codigo_produto,    ' +
     '  p.descricao            AS descricao,         ' +
@@ -174,15 +173,15 @@ begin
     '  produto p ON (pi.codigo_produto = p.codigo)  ' +
     'GROUP BY                                       ' +
     '  pi.codigo_produto                            '
-    ,TDataSet(FDM.FDMemTable)
+    ,TDataSet(FConexao.FDMemTable)
   );
 
-  Result := FDM.FDMemTable;
+  Result := FConexao.FDMemTable;
 end;
 
 procedure TPedidoItemDAO.RemoverEntrada(aCodPedido, aCodEntrada: integer);
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'DELETE FROM pedido_item WHERE codigo_pedido = :codigo_pedido AND codigo = :codigo_entrada ',
     [aCodPedido, aCodEntrada],
     [ftInteger, ftInteger]
@@ -191,7 +190,7 @@ end;
 
 procedure TPedidoItemDAO.RemoverPedidos(aValue: string);
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'DELETE FROM pedido_item  WHERE status_pedido = :status_pedido',
     [aValue]
   );
@@ -199,7 +198,7 @@ end;
 
 procedure TPedidoItemDAO.RemoverPedidos(aValue: integer);
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'DELETE FROM pedido_item  WHERE codigo_pedido = :codigo_pedido AND status_pedido = ''A''',
     [aValue]
   );
@@ -207,7 +206,7 @@ end;
 
 procedure TPedidoItemDAO.RemoverPedidos;
 begin
-  FDM.FDConexao.ExecSQL(
+  FConexao.FDConexao.ExecSQL(
     'DELETE FROM pedido_item  WHERE status_pedido = ''A'''
   );
 end;
