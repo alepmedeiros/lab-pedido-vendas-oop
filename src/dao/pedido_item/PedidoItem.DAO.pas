@@ -6,7 +6,7 @@ uses
   System.SysUtils,
   PedidoItem.DAO.Interfaces,
   Model.PedidoItem,
-  DM.Conexao,
+  DataModule,
   Firedac.Comp.Client,
   Data.DB,
   Variants;
@@ -16,7 +16,7 @@ type
   constructor Create;
   destructor Destroy; override;
   private
-    FConexao    : TDataModuleConexao;
+    FConexao    : TDataModuleUnit;
     FPedidoItem : TPedidoItemModel;
 
   public
@@ -107,7 +107,7 @@ end;
 
 constructor TPedidoItemDAO.Create;
 begin
-  Self.FConexao    := TDataModuleConexao.New;
+  Self.FConexao    := TDataModuleUnit.New;
   Self.FPedidoItem := TPedidoItemModel.Create;
 end;
 

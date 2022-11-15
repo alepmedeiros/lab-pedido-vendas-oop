@@ -18,7 +18,7 @@ uses
   Model.Interfaces.Produto in 'src\model\produto\Model.Interfaces.Produto.pas',
   Model.Produto in 'src\model\produto\Model.Produto.pas',
   Operador.Controller.Interfaces in 'src\controller\operador\Operador.Controller.Interfaces.pas',
-  DM.Conexao in 'src\dao\DM.Conexao.pas' {DataModuleConexao: TDataModule},
+  DataModule in 'src\dao\DataModule.pas' {DataModuleUnit: TDataModule},
   Operador.DAO in 'src\dao\operador\Operador.DAO.pas',
   Operador.DAO.Interfaces in 'src\dao\operador\Operador.DAO.Interfaces.pas',
   Operador.Controller in 'src\controller\operador\Operador.Controller.pas',
@@ -34,7 +34,8 @@ uses
   PedidoItem.DAO in 'src\dao\pedido_item\PedidoItem.DAO.pas',
   PedidoItem.Controller.Interfaces in 'src\controller\pedido_item\PedidoItem.Controller.Interfaces.pas',
   PedidoItem.Controller in 'src\controller\pedido_item\PedidoItem.Controller.pas',
-  Conexao.Banco in 'src\dao\Conexao.Banco.pas';
+  Conexao.Banco in 'src\dao\Conexao.Banco.pas',
+  Conexao.Banco.Control in 'src\dao\Conexao.Banco.Control.pas';
 
 {$R *.res}
 

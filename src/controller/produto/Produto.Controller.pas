@@ -7,7 +7,7 @@ uses
   Model.Interfaces.Produto,
   Model.Produto,
   Produto.DAO,
-  DM.Conexao,
+  DataModule,
   Data.DB,
   FireDAC.Comp.Client;
 

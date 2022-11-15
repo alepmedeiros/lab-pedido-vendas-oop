@@ -7,7 +7,7 @@ uses
   PedidoItem.DAO.Interfaces,
   Model.interfaces.PedidoItem,
   Model.PedidoItem,
-  DM.Conexao,
+  DataModule,
   FireDac.Comp.Client,
   Data.DB,
   PedidoItem.DAO;

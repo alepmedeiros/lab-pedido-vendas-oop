@@ -8,8 +8,9 @@ uses
   Cliente.DAO,
   Model.Cliente,
   Model.Interfaces.Cliente,
-  {  }
-  DM.Conexao,
+
+  { Banco de daodos }
+  DataModule,
   Data.DB,
   FireDAC.Comp.Client;
 
@@ -108,7 +109,12 @@ begin
     .Cidade(aCidade)
     .UF(aUF);
 
-  FDAOCliente.Salvar( TClienteModel(FCliente) );
+  if (aNome <> '') and (aCidade <> '') and (aUF <> '') then
+  begin
+    FDAOCliente.Salvar( TClienteModel(FCliente) );
+  end
+  else
+    raise Exception.Create('Campo não pode ser vazios!');
 end;
 
 procedure TClienteController.Salvar(aValue: TClienteModel);

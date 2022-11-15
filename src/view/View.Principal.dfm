@@ -12,17 +12,19 @@ object frmPrincipal: TfrmPrincipal
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  OldCreateOrder = True
   Position = poMainFormCenter
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
+  PixelsPerInch = 96
   TextHeight = 15
   object PageControlPrincipal: TPageControl
     Left = 0
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = GerenciarPedidos
+    ActivePage = Clientes
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange
@@ -145,7 +147,7 @@ object frmPrincipal: TfrmPrincipal
         Width = 766
         Height = 360
         BorderStyle = bsNone
-        DataSource = DataModuleConexao.DataSource
+        DataSource = DataModuleUnit.DataSource
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -358,7 +360,7 @@ object frmPrincipal: TfrmPrincipal
         Width = 766
         Height = 360
         BorderStyle = bsNone
-        DataSource = DataModuleConexao.DataSource
+        DataSource = DataModuleUnit.DataSource
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -482,7 +484,7 @@ object frmPrincipal: TfrmPrincipal
         Width = 765
         Height = 359
         BorderStyle = bsNone
-        DataSource = DataModuleConexao.DataSource
+        DataSource = DataModuleUnit.DataSource
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -734,7 +736,7 @@ object frmPrincipal: TfrmPrincipal
         Width = 765
         Height = 314
         BorderStyle = bsNone
-        DataSource = DataModuleConexao.DataSource
+        DataSource = DataModuleUnit.DataSource
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -935,7 +937,7 @@ object frmPrincipal: TfrmPrincipal
         Top = 45
         Width = 765
         Height = 180
-        DataSource = DataModuleConexao.DataSource
+        DataSource = DataModuleUnit.DataSource
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -959,7 +961,7 @@ object frmPrincipal: TfrmPrincipal
         Top = 267
         Width = 765
         Height = 233
-        DataSource = DataModuleConexao.DataSourceAux
+        DataSource = DataModuleUnit.DataSourceAux
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16

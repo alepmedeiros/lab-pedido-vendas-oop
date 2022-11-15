@@ -6,7 +6,7 @@ uses
   System.SysUtils,
   Operador.DAO.Interfaces,
   Model.Operador,
-  DM.Conexao,
+  DataModule,
   FireDAC.Comp.Client,
   Data.DB;
 
@@ -15,7 +15,7 @@ type
   constructor Create;
   destructor Destroy; override;
   private
-    FConexao  : TDataModuleConexao;
+    FConexao  : TDataModuleUnit;
     FOperador : TOperadorModel;
 
   public
@@ -39,7 +39,7 @@ uses
 
 constructor TOperadorDAO.Create;
 begin
-  Self.FConexao  := TDataModuleConexao.New;
+  Self.FConexao  := TDataModuleUnit.New;
   Self.FOperador := TOperadorModel.Create;
 end;
 

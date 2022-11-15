@@ -6,7 +6,7 @@ uses
   Operador.Controller.Interfaces,
   Model.Operador,
   Model.Interfaces.Operador,
-  DM.Conexao,
+  DataModule,
   FireDAC.Comp.Client,
   Data.DB,
   Operador.DAO;

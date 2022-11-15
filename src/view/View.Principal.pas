@@ -31,11 +31,12 @@ uses
   Cliente.Controller,
 
   { Connection }
-  DM.Conexao,
+  DataModule,
+  Conexao.Banco.Control,
   Data.DB;
 
 type
-  TAbas = ( abaCliente, abaOperadores, abaProdutos, abaNovoPedido, abaGerenciarPedido );
+  TAbas = (abaCliente, abaOperadores, abaProdutos, abaNovoPedido, abaGerenciarPedido);
 
   TfrmPrincipal = class(TForm)
     PageControlPrincipal: TPageControl;
@@ -135,30 +136,24 @@ type
     procedure btnIniciarPedidoClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure RemoverItem1Click(Sender: TObject);
-    procedure edtCodProdutoPesqKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure edtQuantidadeKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure edtCodProdutoPesqKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtQuantidadeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure edtQuantidadeEnter(Sender: TObject);
     procedure edtCodProdutoPesqExit(Sender: TObject);
     procedure btnRemoverEntradaClick(Sender: TObject);
     procedure dbgrdPedidoCellClick(Column: TColumn);
-    procedure PageControlPrincipalChanging(Sender: TObject;
-      var AllowChange: Boolean);
+    procedure PageControlPrincipalChanging(Sender: TObject; var AllowChange: Boolean);
     procedure dbgrdPedidosConcluidosCellClick(Column: TColumn);
-    procedure dbgrdPedidosConcluidosKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure dbgrdPedidosConcluidosKeyUp(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure dbgrdPedidosConcluidosKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure dbgrdPedidosConcluidosKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure dbgrdPedidoDblClick(Sender: TObject);
     procedure btnAttEntradaClick(Sender: TObject);
     procedure btnExcluirPedidoClick(Sender: TObject);
-    procedure dbgrdPedidosConcluidosMouseWheel(Sender: TObject;
-      Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
-      var Handled: Boolean);
+    procedure dbgrdPedidosConcluidosMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 
   private
-    FConexao: TDataModuleConexao;
+    FConexaoDM: TDataModuleUnit;
+    FConexao: TConexaoControl;
 
     FOperadorController   : TOperadorController;
     FClienteController    : TClienteController;
@@ -166,8 +161,8 @@ type
     FPedidoController     : TPedidoController;
     FPedidoItemController : TPedidoItemController;
 
-    FNumPedido  : Variant;
-    FNumEntrada : Integer;
+    FNumPedido: Variant;
+    FNumEntrada: Integer;
 
     procedure desabilitarAcoes;
     procedure AtualizaGridPedido;
@@ -194,19 +189,7 @@ uses
 
 procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  if FPedidoController.PedidoEmAndamento then
-  begin
-    if Application.MessageBox(
-      'Existe ao menos um pedido em andamento. Deseja cancelar o pedido?',
-      'Atenção',
-      52) = mrYes
-    then
-    begin
-      FPedidoItemController.RemoverPedidos('A');
-      FPedidoController.Remover('A');
-      FConexao.DataSource.DataSet.Close;
-    end;
-  end;
+  FConexao.Destroy;
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
@@ -224,27 +207,19 @@ begin
 end;
 
 procedure TfrmPrincipal.ConectandoBancoDeDados;
-var
-  LConexao : TConexao;
 begin
-  LConexao := TConexao.Create;
-  LConexao.getConexao.Connected := True;
-
-  try
-    if LConexao.getConexao.Connected then
-      ShowMessage('Conectado ao banco de dados com ' + LConexao.getConexao.DriverName + '!');
-  finally
-    FreeAndNil(LConexao);
-  end;
+  { exemplo que recuperar instância de conexão }
+  FConexao := TConexaoControl.getInstancia;
+  ShowMessage('Dados da conexão: ' + sLineBreak + sLineBreak + 'Driver Name: ' + FConexao.getInstancia.Conexao.getConexao.DriverName + sLineBreak + 'Driver ID: ' + FConexao.getInstancia.Conexao.getConexao.Params.DriverID + sLineBreak + 'Database User: ' + FConexao.getInstancia.Conexao.getConexao.Params.UserName + sLineBreak + 'Database SQLite: ' + FConexao.getInstancia.Conexao.getConexao.Params.Database);
 end;
 
 procedure TfrmPrincipal.ConfiguracaoInicial;
 begin
-  FConexao := TDataModuleConexao.New;
+  FConexaoDM := TDataModuleUnit.New;
 
-  with FConexao do
+  with FConexaoDM do
   begin
-    if not FConexao.LerIni then
+    if not FConexaoDM.LerIni then
     begin
       showmessage('Nenhum arquivo .INI configurado.' + sLineBreak + 'Gravando .INI com dados padrão.');
       try
@@ -258,7 +233,7 @@ begin
     try
       ConfigurarConn;
     except
-      on E:Exception do
+      on E: Exception do
         raise Exception.Create('Error: ' + E.Message);
     end;
   end;
@@ -269,11 +244,7 @@ procedure TfrmPrincipal.btnCadClienteClick(Sender: TObject);
 begin
   try
     FClienteController
-      .Salvar(
-        edtCliente.Text,
-        edtCidadeCliente.Text,
-        edtUfCliente.Text
-      );
+      .Salvar(edtCliente.Text, edtCidadeCliente.Text, edtUfCliente.Text);
   finally
     edtCodCliente.Clear;
     edtCliente.Clear;
@@ -300,10 +271,7 @@ procedure TfrmPrincipal.btnCadProdutoClick(Sender: TObject);
 begin
   try
     FProdutoController
-      .Salvar(
-        edtDescricaoProduto.Text,
-        edtValorProduto.Text
-      );
+      .Salvar(edtDescricaoProduto.Text, edtValorProduto.Text);
   finally
     btnRecTodosProdutosClick(self);
     edtCodigoProduto.Clear;
@@ -317,11 +285,7 @@ procedure TfrmPrincipal.btnEdtProdutoClick(Sender: TObject);
 begin
   try
     FProdutoController
-      .Editar(
-        edtCodigoProduto.Text,
-        edtDescricaoProduto.Text,
-        edtValorProduto.Text
-      );
+      .Editar(edtCodigoProduto.Text, edtDescricaoProduto.Text, edtValorProduto.Text);
   finally
     btnRecTodosProdutosClick(self);
     edtCodigoProduto.Clear;
@@ -368,7 +332,8 @@ begin
   if edtCodigoOperador.Text <> '' then
   begin
     try
-      edtOperador.Text := FOperadorController.RecuperaPorCodigo(StrToInt(edtCodigoOperador.Text), 'nome')
+      edtOperador.Text := FOperadorController
+        .RecuperaPorCodigo(StrToInt(edtCodigoOperador.Text), 'nome')
     finally
       edtCodigoOperador.SetFocus;
       edtCodigoOperador.SelectAll;
@@ -380,13 +345,13 @@ end;
 
 procedure TfrmPrincipal.btnRecTodosOperadoresClick(Sender: TObject);
 begin
-  FConexao.DataSource.DataSet := FOperadorController.RecuperaTodos;
+  FConexaoDM.DataSource.DataSet := FOperadorController.RecuperaTodos;
   AtualizaGridOperador;
 end;
 
 procedure TfrmPrincipal.btnRecTodosProdutosClick(Sender: TObject);
 begin
-  FConexao.DataSource.DataSet := FProdutoController.RecuperaTodos;
+  FConexaoDM.DataSource.DataSet := FProdutoController.RecuperaTodos;
   AtualizaGridProduto;
 end;
 
@@ -421,8 +386,8 @@ begin
 
   FNumEntrada := dbgrdPedido.Fields[0].AsInteger;
   { valores que precisam vir do banco }
-  edtQuantidade.Text        := IntToStr( FPedidoItemController.RecuperaPorCodigo(FNumEntrada, 'quantidade') );
-  edtValorProdutoPesq.Text  := FormatFloat('###,##0.00', FPedidoItemController.RecuperaPorCodigo(FNumEntrada, 'valor_unitario'));
+  edtQuantidade.Text := IntToStr(FPedidoItemController.RecuperaPorCodigo(FNumEntrada, 'quantidade'));
+  edtValorProdutoPesq.Text := FormatFloat('###,##0.00', FPedidoItemController.RecuperaPorCodigo(FNumEntrada, 'valor_unitario'));
 
   { dado que pode vir do dbgrid pois vai ser apenas visual }
   edtDescProdutoPesq.Text := dbgrdPedido.Fields[2].AsString;
@@ -430,41 +395,26 @@ end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosCellClick(Column: TColumn);
 begin
-  FConexao.DataSourceAux.DataSet := FPedidoItemController
-    .RecuperaItemPedidoPorCodigo(
-      dbgrdPedidosConcluidos.Fields[0].AsInteger
-    );
+  FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
 
-procedure TfrmPrincipal.dbgrdPedidosConcluidosKeyDown(Sender: TObject;
-  var Key: Word; Shift: TShiftState);
+procedure TfrmPrincipal.dbgrdPedidosConcluidosKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  FConexao.DataSourceAux.DataSet := FPedidoItemController
-    .RecuperaItemPedidoPorCodigo(
-      dbgrdPedidosConcluidos.Fields[0].AsInteger
-    );
+  FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
 
-procedure TfrmPrincipal.dbgrdPedidosConcluidosKeyUp(Sender: TObject;
-  var Key: Word; Shift: TShiftState);
+procedure TfrmPrincipal.dbgrdPedidosConcluidosKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  FConexao.DataSourceAux.DataSet := FPedidoItemController
-    .RecuperaItemPedidoPorCodigo(
-      dbgrdPedidosConcluidos.Fields[0].AsInteger
-    );
+  FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
 
-procedure TfrmPrincipal.dbgrdPedidosConcluidosMouseWheel(Sender: TObject;
-  Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
-  var Handled: Boolean);
+procedure TfrmPrincipal.dbgrdPedidosConcluidosMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
-  FConexao.DataSourceAux.DataSet := FPedidoItemController
-    .RecuperaItemPedidoPorCodigo(
-      dbgrdPedidosConcluidos.Fields[0].AsInteger
-    );
+  FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
 
@@ -480,14 +430,16 @@ end;
 
 procedure TfrmPrincipal.btnRecTodosClienteClick(Sender: TObject);
 begin
-  FConexao.DataSource.DataSet := FClienteController.RecuperaTodos;
+  FConexaoDM.DataSource.DataSet.Close;
+  FConexaoDM.DataSource.DataSet := FClienteController.RecuperaTodos;
   AtualizaGridCliente;
 end;
 
 procedure TfrmPrincipal.btnDelClienteClick(Sender: TObject);
 begin
   if Application.MessageBox('Deseja realmente excluir?', 'Atenção', 52) = mrYes then
-    FClienteController.Remover(StrToInt(edtCodCliente.Text));
+    FClienteController
+      .Remover(StrToInt(edtCodCliente.Text));
 
   edtCodCliente.Clear;
   edtCliente.Clear;
@@ -500,7 +452,8 @@ end;
 procedure TfrmPrincipal.btnDelOperadorClick(Sender: TObject);
 begin
   if Application.MessageBox('Deseja realmente excluir?', 'Atenção', 52) = mrYes then
-    FOperadorController.Remover(StrToInt(edtCodigoOperador.Text));
+    FOperadorController
+      .Remover(StrToInt(edtCodigoOperador.Text));
 
   edtCodigoOperador.Clear;
   edtOperador.Clear;
@@ -521,12 +474,7 @@ end;
 procedure TfrmPrincipal.btnEdtClienteClick(Sender: TObject);
 begin
   FClienteController
-    .Editar(
-      edtCodCliente.Text,
-      edtCliente.Text,
-      edtCidadeCliente.Text,
-      edtUfCliente.Text
-    );
+    .Editar(edtCodCliente.Text, edtCliente.Text, edtCidadeCliente.Text, edtUfCliente.Text);
 
   edtCliente.Clear;
   edtCodCliente.Clear;
@@ -539,10 +487,7 @@ end;
 procedure TfrmPrincipal.btnEdtOperadorClick(Sender: TObject);
 begin
   FOperadorController
-    .Editar(
-      edtCodigoOperador.Text,
-      edtOperador.Text
-    );
+    .Editar(edtCodigoOperador.Text, edtOperador.Text);
 
   edtCodigoOperador.Clear;
   edtOperador.Clear;
@@ -561,10 +506,11 @@ begin
 
   if Application.MessageBox('Deseja exlcuir o pedido selecionado?', 'Atenção', 52) = mrYes then
   begin
-    FPedidoController.Remover(dbgrdPedidosConcluidos.Fields[0].AsInteger);
-    FConexao.DataSource.DataSet := FPedidoController.RecuperaTodos;
+    FPedidoController
+      .Remover(dbgrdPedidosConcluidos.Fields[0].AsInteger);
+    FConexaoDM.DataSource.DataSet := FPedidoController.RecuperaTodos;
     AtualizaGridPedidosConcluidos;
-    FConexao.DataSourceAux.DataSet.Close;
+    FConexaoDM.DataSourceAux.DataSet.Close;
   end;
 end;
 
@@ -578,7 +524,7 @@ end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
-  if not FConexao.FDConexao.Connected then
+  if not FConexaoDM.FDConexao.Connected then
   begin
     ShowMessage('Não conectado!');
     Application.Terminate;
@@ -589,26 +535,26 @@ begin
   if edtCodCliente.CanFocus then
     edtCodCliente.SetFocus;
 
-   PageControlPrincipalChange(Self);
+  PageControlPrincipalChange(Self);
 end;
 
 procedure TfrmPrincipal.PageControlPrincipalChange(Sender: TObject);
 begin
-  FConexao.DataSource.DataSet.Close; { limpa o dataset ao mudar de aba. }
+  FConexaoDM.DataSource.DataSet.Close; { limpa o dataset ao mudar de aba. }
 
   if PageControlPrincipal.TabIndex = Integer(abaCliente) then
   begin
-    FConexao.DataSource.DataSet := FClienteController.RecuperaTodos;
+    FConexaoDM.DataSource.DataSet := FClienteController.RecuperaTodos;
     AtualizaGridCliente;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaOperadores) then
   begin
-    FConexao.DataSource.DataSet := FOperadorController.RecuperaTodos;
+    FConexaoDM.DataSource.DataSet := FOperadorController.RecuperaTodos;
     AtualizaGridOperador;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaProdutos) then
   begin
-    FConexao.DataSource.DataSet := FProdutoController.RecuperaTodos;
+    FConexaoDM.DataSource.DataSet := FProdutoController.RecuperaTodos;
     AtualizaGridProduto;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaNovoPedido) then
@@ -626,13 +572,12 @@ begin
   else if PageControlPrincipal.TabIndex = Integer(abaGerenciarPedido) then
   begin
     FNumPedido := 0;
-    FConexao.DataSource.DataSet := FPedidoController.RecuperaTodos;
+    FConexaoDM.DataSource.DataSet := FPedidoController.RecuperaTodos;
     AtualizaGridPedidosConcluidos;
   end;
 end;
 
-procedure TfrmPrincipal.PageControlPrincipalChanging(Sender: TObject;
-  var AllowChange: Boolean);
+procedure TfrmPrincipal.PageControlPrincipalChanging(Sender: TObject; var AllowChange: Boolean);
 begin
   if PageControlPrincipal.TabIndex = Integer(abaNovoPedido) then
   begin
@@ -640,9 +585,11 @@ begin
     begin
       if Application.MessageBox('Deseja cancelar o pedido?', 'Atenção', 52) = mrYes then
       begin
-        FPedidoItemController.RemoverPedidos('A');
-        FPedidoController.Remover({FPedido.CodigoCliente,} 'A');
-        FConexao.DataSource.DataSet.Close;
+        FPedidoItemController
+          .RemoverPedidos('A');
+        FPedidoController
+          .Remover('A');
+        FConexaoDM.DataSource.DataSet.Close;
         desabilitarAcoes;
       end
       else
@@ -688,13 +635,7 @@ begin
     { montar e inserir o pedido na tabela correspondente (pedido) }
     FNumPedido := FPedidoController.NovoCodigoPedido;
 
-    FPedidoController
-      .Salvar(
-        FNumPedido,
-        edtCodClientePedido.Text,
-        '0',
-        now
-      );
+    FPedidoController.Salvar(FNumPedido, edtCodClientePedido.Text, '0', now);
 
     { habilitar os botões/edits de ação do pedido }
     habilitarCampos;
@@ -739,25 +680,21 @@ begin
     Exit;
   end;
 
-  if Application.MessageBox(
-    PWideChar('Deseja remover a entrada ' + inttostr(FNumEntrada) + '?'), 'Atenção', 52) = mrYes
-  then
+  if Application.MessageBox(PWideChar('Deseja remover a entrada ' + inttostr(FNumEntrada) + '?'), 'Atenção', 52) = mrYes then
   begin
     FPedidoItemController
-      .RemoverEntrada(
-        FNumPedido,
-        FNumEntrada
-      );
+      .RemoverEntrada(FNumPedido, FNumEntrada);
 
     FPedidoController
       .AtualizarTotalPedido(
-        FPedidoController.RetornaTotalPedido(FNumPedido),
-        FNumPedido
-      );
+        FPedidoController
+          .RetornaTotalPedido(FNumPedido),
+          FNumPedido
+        );
 
     FNumEntrada := 0;
-    edtTotalPedido.Text         := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FNumPedido));
-    FConexao.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
+    edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FNumPedido));
+    FConexaoDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
     AtualizaGridPedido;
   end;
 end;
@@ -773,18 +710,17 @@ begin
   edtTotalPedido.Clear;
   edtQuantidade.Clear;
 
-  btnConfirmarPedido.Enabled := False;
-  btnRecuProdPesq.Enabled    := False;
-  btnAddProdPesq.Enabled     := False;
-  btnCancelarPedido.Enabled  := False;
-  btnRemoverEntrada.Enabled  := False;
-  btnAttEntrada.Enabled      := False;
-
+  btnConfirmarPedido.Enabled  := False;
+  btnRecuProdPesq.Enabled     := False;
+  btnAddProdPesq.Enabled      := False;
+  btnCancelarPedido.Enabled   := False;
+  btnRemoverEntrada.Enabled   := False;
+  btnAttEntrada.Enabled       := False;
   edtCodProdutoPesq.Enabled   := False;
   edtQuantidade.Enabled       := False;
   edtValorProdutoPesq.Enabled := False;
 
-  btnIniciarPedido.Enabled   := True;
+  btnIniciarPedido.Enabled := True;
 end;
 
 procedure TfrmPrincipal.edtCodProdutoPesqExit(Sender: TObject);
@@ -809,8 +745,7 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.edtCodProdutoPesqKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TfrmPrincipal.edtCodProdutoPesqKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if (Key = VK_RETURN) then
   begin
@@ -825,8 +760,7 @@ begin
   edtQuantidade.Text := '1';
 end;
 
-procedure TfrmPrincipal.edtQuantidadeKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TfrmPrincipal.edtQuantidadeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_RETURN then
     btnAddProdPesq.SetFocus;
@@ -839,7 +773,7 @@ begin
     { lógica para remover os itens dos pedidos antes do pedido }
     FPedidoItemController.RemoverPedidos( {StrToInt(FNumPedido)} 'A');
     FPedidoController.Remover({FPedido.CodigoCliente,} 'A');
-    FConexao.DataSource.DataSet.Close;
+    FConexaoDM.DataSource.DataSet.Close;
     FNumPedido := 0;
   end;
 
@@ -851,13 +785,11 @@ begin
   if Application.MessageBox('Deseja confirmar o pedido?', 'Atenção', 52) = mrYes then
   begin
     { lógica para alterar o status dos itens dos pedidos de depois do pedido }
-    FPedidoItemController
-      .ConfirmaPedidoItem(FNumPedido);
+    FPedidoItemController.ConfirmaPedidoItem(FNumPedido);
 
-    FPedidoController
-      .ConfirmaPedido(FNumPedido);
+    FPedidoController.ConfirmaPedido(FNumPedido);
 
-    FConexao.DataSource.DataSet.Close;
+    FConexaoDM.DataSource.DataSet.Close;
     FNumPedido := 0;
   end;
 
@@ -869,22 +801,14 @@ begin
   try
     { adicionar o pedido recuperado à tabela de pedido item com os dados do cliente }
     FPedidoItemController
-      .AdicionarItem(
-        FNumPedido,
-        edtCodProdutoPesq.Text,
-        edtQuantidade.Text,
-        edtValorProdutoPesq.Text,
-        '0'
-      );
+      .AdicionarItem(FNumPedido, edtCodProdutoPesq.Text, edtQuantidade.Text, edtValorProdutoPesq.Text, '0');
 
-    FPedidoController.AtualizarTotalPedido(
-      FPedidoController.RetornaTotalPedido(FNumPedido),
-      FNumPedido
-    );
+    FPedidoController
+      .AtualizarTotalPedido(FPedidoController.RetornaTotalPedido(FNumPedido), FNumPedido);
 
     edtQuantidade.Clear;
-    edtTotalPedido.Text := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FNumPedido));
-    FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
+    edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FNumPedido));
+    FConexaoDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
 
     AtualizaGridPedido;
   finally
@@ -903,20 +827,19 @@ begin
     Abort;
   end;
 
-  FPedidoItemController.AtualizarEntrada(
-    StrToCurr(edtValorProdutoPesq.Text),
-    StrToInt(edtQuantidade.Text),
-    FNumPedido,
-    FNumEntrada
-  );
+  FPedidoItemController.AtualizarEntrada(StrToCurr(edtValorProdutoPesq.Text), StrToInt(edtQuantidade.Text), FNumPedido, FNumEntrada);
 
-  FPedidoController.AtualizarTotalPedido(
-    FPedidoController.RetornaTotalPedido(FNumPedido),
-    FNumPedido
-  );
+  FPedidoController
+    .AtualizarTotalPedido(
+      FPedidoController
+        .RetornaTotalPedido(
+          FNumPedido
+        ),
+        FNumPedido
+      );
 
   { apos atualizar a entrada }
-  FConexao.DataSource.DataSet  := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
+  FConexaoDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
   AtualizaGridPedido;
   btnAddProdPesq.Enabled := True;
 
@@ -929,17 +852,16 @@ begin
   edtQuantidade.Clear;
 end;
 
-
 procedure TfrmPrincipal.AtualizaGridCliente;
 begin
   dbgrdCliente.Columns[0].Title.Caption := 'Código';
-  dbgrdCliente.Columns[0].Width := 100;    
+  dbgrdCliente.Columns[0].Width := 100;
   dbgrdCliente.Columns[1].Title.Caption := 'Cliente';
   dbgrdCliente.Columns[1].Width := 300;
   dbgrdCliente.Columns[2].Title.Caption := 'Cidade';
   dbgrdCliente.Columns[2].Width := 220;
   dbgrdCliente.Columns[3].Title.Caption := 'UF';
-  dbgrdCliente.Columns[3].Width := 110; 
+  dbgrdCliente.Columns[3].Width := 110;
 end;
 
 procedure TfrmPrincipal.AtualizaGridOperador;

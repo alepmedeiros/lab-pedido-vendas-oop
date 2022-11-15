@@ -1,4 +1,4 @@
-﻿unit DM.Conexao;
+﻿unit DataModule;
 
 interface
 
@@ -31,14 +31,14 @@ uses
   FireDAC.Phys.IBWrapper;
 
 type
-  TDataModuleConexao = class(TDataModule)
+  TDataModuleUnit = class(TDataModule)
     FDConexao: TFDConnection;
     DataSource: TDataSource;
     FDMemTable: TFDMemTable;
     FDMemTableAux: TFDMemTable;
     DataSourceAux: TDataSource;
     FDQuery: TFDQuery;
-    FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
+    FDPhysSQLiteDriverLink: TFDPhysSQLiteDriverLink;
 
   private
     FBancoCaminho: string;
@@ -46,7 +46,7 @@ type
     FUserName: string;
 
   public
-    class function New: TDataModuleConexao;
+    class function New: TDataModuleUnit;
     procedure ConfigurarConn;
     procedure GravarIni;
 
@@ -58,7 +58,7 @@ type
   end;
 
 var
-  DataModuleConexao: TDataModuleConexao;
+  DataModuleUnit: TDataModuleUnit;
 
 const
   CaminhoBanco = 'Z:\Bruno\Documentos\Meus Projetos\lab-pedido-vendas-oop\db\lab_pedido_loja.db';
@@ -72,7 +72,7 @@ uses
 
 {$R *.dfm}
 
-procedure TDataModuleConexao.GravarIni;
+procedure TDataModuleUnit.GravarIni;
 var
   LArquivoIni : string;
   LIni        : TIniFile;
@@ -93,7 +93,7 @@ begin
   end;
 end;
 
-function TDataModuleConexao.LerIni: Boolean;
+function TDataModuleUnit.LerIni: Boolean;
 var
   LArquivoIni : string;
   LIni        : TIniFile;
@@ -120,7 +120,7 @@ begin
   end;
 end;
 
-procedure TDataModuleConexao.ConfigurarConn;
+procedure TDataModuleUnit.ConfigurarConn;
 begin
   if not FDConexao.Connected then
   begin
@@ -138,7 +138,7 @@ begin
   end;
 end;
 
-class function TDataModuleConexao.New: TDataModuleConexao;
+class function TDataModuleUnit.New: TDataModuleUnit;
 begin
   Result := Self.Create(nil);
 end;

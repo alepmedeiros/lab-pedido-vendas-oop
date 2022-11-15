@@ -1,4 +1,4 @@
-object DataModuleConexao: TDataModuleConexao
+object DataModuleUnit: TDataModuleUnit
   OldCreateOrder = True
   Height = 480
   Width = 640
@@ -51,7 +51,7 @@ object DataModuleConexao: TDataModuleConexao
     Left = 56
     Top = 160
   end
-  object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
+  object FDPhysSQLiteDriverLink: TFDPhysSQLiteDriverLink
     Left = 328
     Top = 112
   end

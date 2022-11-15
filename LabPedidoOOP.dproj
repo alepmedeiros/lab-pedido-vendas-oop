@@ -120,8 +120,8 @@
         <DCCReference Include="src\model\produto\Model.Interfaces.Produto.pas"/>
         <DCCReference Include="src\model\produto\Model.Produto.pas"/>
         <DCCReference Include="src\controller\operador\Operador.Controller.Interfaces.pas"/>
-        <DCCReference Include="src\dao\DM.Conexao.pas">
-            <Form>DataModuleConexao</Form>
+        <DCCReference Include="src\dao\DataModule.pas">
+            <Form>DataModuleUnit</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="src\dao\operador\Operador.DAO.pas"/>
@@ -140,6 +140,7 @@
         <DCCReference Include="src\controller\pedido_item\PedidoItem.Controller.Interfaces.pas"/>
         <DCCReference Include="src\controller\pedido_item\PedidoItem.Controller.pas"/>
         <DCCReference Include="src\dao\Conexao.Banco.pas"/>
+        <DCCReference Include="src\dao\Conexao.Banco.Control.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

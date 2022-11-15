@@ -7,17 +7,22 @@ uses
   System.SysUtils,
   Cliente.DAO.Interfaces,
   Model.Cliente,
-  DM.Conexao,
+  DataModule,
   FireDAC.Comp.Client,
-  Data.DB;
+  Data.DB,
+  Conexao.Banco.Control;
 
 type
   TClienteDAO = class(TInterfacedObject, iClienteDAO)
+  FDMemTable: TFDMemTable;
   constructor Create;
   destructor Destroy; override;
   private
-    FConexao  : TDataModuleConexao;
+    FDM  : TDataModuleUnit;
     FCliente  : TClienteModel;
+    FQuery    : TFDQuery;
+
+    procedure RecuperaInstanciaQuery;
 
   public
     procedure Salvar( aValue : TClienteModel ); overload;
@@ -37,65 +42,95 @@ implementation
 
 constructor TClienteDAO.Create;
 begin
-  Self.FConexao := TDataModuleConexao.New;
-  Self.FCliente := TClienteModel.Create;
+  Self.FDM   := TDataModuleUnit.New;
+  Self.FCliente   := TClienteModel.Create;
+  Self.FDMemTable := TFDMemTable.Create(nil);
 end;
 
 destructor TClienteDAO.Destroy;
 begin
-  FConexao.Free;
+  FDMemTable.Free;
   FCliente.Free;
+  FDM.Free;
   inherited;
+end;
+
+procedure TClienteDAO.RecuperaInstanciaQuery;
+begin
+  FQuery := TConexaoControl.getInstancia().Conexao.CriarQuery;
 end;
 
 procedure TClienteDAO.Editar(aValue: TClienteModel);
 begin
-  FConexao.FDConexao.ExecSQL(
+  try
+  FQuery.ExecSQL(
     'UPDATE cliente SET nome = :nome, cidade = :cidade, uf = :uf WHERE codigo = :codigo',
     [aValue.Nome, aValue.Cidade, aValue.UF, aValue.Codigo]
   );
+  except
+    on E: Exception do  
+      raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
+  end;
 end;
 
 function TClienteDAO.RecuperaPorCodigo(aValue: integer; aColuna: string): string;
+var
+  LColuna : string;
 begin
-  Result := FConexao.FDConexao.ExecSQLScalar(
-    'SELECT ' + aColuna + ' FROM cliente o WHERE o.codigo = :codigo',
-    [InttoStr(aValue)]
-  );
+  try
+    try
+      LColuna := FQuery.Connection.ExecSQLScalar(
+        'SELECT ' + aColuna + ' FROM cliente o WHERE o.codigo = :codigo',
+        [InttoStr(aValue)]
+      );
+    except
+      on E: Exception do  
+        raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
+    end;
+  finally
+    Result := LColuna;
+  end;
 end;
 
 function TClienteDAO.RecuperaTodos: TFDMemTable;
 begin
-  {
-  FConexao.FDQuery.SQL.Clear;
-  FConexao.FDQuery.Open(
-    'SELECT * FROM cliente ORDER BY codigo'
-  );
-
-  FConexao.FDMemTable.Data := FConexao.FDQuery.Data;
-  Result := FConexao.FDMemTable;
-  }
-
-  FConexao.FDConexao.ExecSQL(
-    'SELECT * FROM cliente c ORDER BY c.codigo',
-    TDataSet(FConexao.FDMemTable)
-  );
-
-  Result := FConexao.FDMemTable;
+  RecuperaInstanciaQuery;
+  try
+    try
+      FQuery.SQL.Clear;
+      FQuery.Open(
+        'SELECT * FROM cliente c ORDER BY c.codigo'
+      );
+      FDM.FDMemTable.Data := FQuery.data;
+    except
+      on E: Exception do
+        raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
+    end;
+  finally
+    Result := FDM.FDMemTable;
+  end;
 end;
 
 procedure TClienteDAO.Remover(aValue: integer);
 begin
-  FConexao.FDConexao.ExecSQL(
-    'DELETE FROM cliente WHERE codigo = :codigo',
-    [aValue]
-  );
+  try
+    if VerificaSeExiste(aValue) then
+    begin
+      FQuery.Connection.ExecSQL(
+        'DELETE FROM cliente WHERE codigo = :codigo',
+        [aValue]
+      );
+    end
+  except
+    on E: Exception do
+      raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
+  end;
 end;
 
 procedure TClienteDAO.Salvar(aNome, aCidade, aUF: string);
 begin
   try
-    FConexao.FDConexao.ExecSQL(
+    FQuery.ExecSQL(
       'INSERT INTO cliente (nome, cidade, uf) VALUES (:nome, :cidade, :uf)',
       [aNome, aCidade, aUF]
     );  
@@ -110,7 +145,7 @@ end;
 procedure TClienteDAO.Salvar(aValue: TClienteModel);
 begin
   try
-    FConexao.FDConexao.ExecSQL(
+    FQuery.ExecSQL(
       'INSERT INTO cliente (nome, cidade, uf) VALUES (:nome, :cidade, :uf)',
       [aValue.Nome, aValue.Cidade, aValue.UF]
     );
@@ -124,14 +159,19 @@ function TClienteDAO.VerificaSeExiste(aValue: integer): Boolean;
 var
   LRetorno : Integer;
 begin
-  Result := false;
-  LRetorno := FConexao.FDConexao.ExecSQLScalar(
-    'SELECT * FROM cliente o WHERE o.codigo = :codigo',
-    [InttoStr(aValue)]
-  );
+  Result := False;
 
-  if LRetorno > 0 then
-    Result := True;
+  try
+    LRetorno := FQuery.Connection.ExecSQLScalar(
+      'SELECT * FROM cliente o WHERE o.codigo = :codigo',
+      [InttoStr(aValue)]
+    );
+  except
+    on E: Exception do
+      raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
+  end;
+
+  if LRetorno > 0 then Result := True;
 end;
 
 end.

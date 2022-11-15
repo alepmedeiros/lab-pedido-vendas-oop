@@ -6,7 +6,7 @@ uses
   Pedido.Controller.Interfaces,
   Model.Interfaces.Pedido,
   Model.Pedido,
-  DM.Conexao,
+  DataModule,
   Firedac.Comp.Client,
   Data.DB,
   Pedido.DAO;

@@ -6,7 +6,7 @@ uses
   System.SysUtils,
   Produto.DAO.Interfaces,
   Model.Produto,
-  DM.Conexao,
+  DataModule,
   FireDAC.Comp.Client,
   Data.DB;
 
@@ -16,7 +16,7 @@ type
   destructor Destroy; override;
 
   private
-    FConexao : TDataModuleConexao;
+    FConexao : TDataModuleUnit;
     FProduto : TProdutoModel;
 
   public
@@ -35,7 +35,7 @@ implementation
 
 constructor TProdutoDAO.Create;
 begin
-  Self.FConexao := TDataModuleConexao.New;
+  Self.FConexao := TDataModuleUnit.New;
   Self.FProduto := TProdutoModel.Create;
 end;
 
