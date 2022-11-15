@@ -47,7 +47,7 @@ type
 
   public
     class function New: TDataModuleUnit;
-    procedure ConfigurarConn;
+//    procedure ConfigurarConn;
     procedure GravarIni;
 
     function LerIni: Boolean;
@@ -120,23 +120,23 @@ begin
   end;
 end;
 
-procedure TDataModuleUnit.ConfigurarConn;
-begin
-  if not FDConexao.Connected then
-  begin
-    FDConexao.DriverName      := FDriverName;
-    FDConexao.Params.Database := FBancoCaminho;
-    FDConexao.Params.UserName := FUserName;
-    try
-      FDConexao.Connected := True;
-    except
-      on E:Exception do
-      begin
-        raise Exception.Create('Error: ' + sLineBreak + E.Message);
-      end;
-    end;
-  end;
-end;
+//procedure TDataModuleUnit.ConfigurarConn;
+//begin
+//  if not FDConexao.Connected then
+//  begin
+//    FDConexao.DriverName      := FDriverName;
+//    FDConexao.Params.Database := FBancoCaminho;
+//    FDConexao.Params.UserName := FUserName;
+//    try
+//      FDConexao.Connected := True;
+//    except
+//      on E:Exception do
+//      begin
+//        raise Exception.Create('Error: ' + sLineBreak + E.Message);
+//      end;
+//    end;
+//  end;
+//end;
 
 class function TDataModuleUnit.New: TDataModuleUnit;
 begin

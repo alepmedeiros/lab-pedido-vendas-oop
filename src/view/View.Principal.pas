@@ -153,7 +153,7 @@ type
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 
   private
-    FConexaoDM: TDataModuleUnit;
+    FDM: TDataModuleUnit;
     FConexao: TConexaoControl;
 
     FOperadorController   : TOperadorController;
@@ -196,7 +196,7 @@ end;
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
   ConectandoBancoDeDados; { conexao nova, em classe }
-  ConfiguracaoInicial; { conexao antiga, no data moduloe }
+  //ConfiguracaoInicial; { conexao antiga, no data moduloe }
 
   FNumPedido := 0;
 
@@ -210,17 +210,30 @@ end;
 procedure TfrmPrincipal.ConectandoBancoDeDados;
 begin
   { exemplo que recuperar instância de conexão }
+  FDM      := TDataModuleUnit.New;
   FConexao := TConexaoControl.getInstancia;
-  ShowMessage('Dados da conexão: ' + sLineBreak + sLineBreak + 'Driver Name: ' + FConexao.getInstancia.Conexao.getConexao.DriverName + sLineBreak + 'Driver ID: ' + FConexao.getInstancia.Conexao.getConexao.Params.DriverID + sLineBreak + 'Database User: ' + FConexao.getInstancia.Conexao.getConexao.Params.UserName + sLineBreak + 'Database SQLite: ' + FConexao.getInstancia.Conexao.getConexao.Params.Database);
+
+  with FConexao do
+  begin
+    ShowMessage(
+      'Dados da conexão: ' + sLineBreak + sLineBreak +
+      'Driver Name: ' + getInstancia.Conexao.getConexao.DriverName + sLineBreak +
+      'Driver ID: ' + getInstancia.Conexao.getConexao.Params.DriverID + sLineBreak +
+      'Database User: ' + getInstancia.Conexao.getConexao.Params.UserName + sLineBreak +
+      'Database SQLite: ' + getInstancia.Conexao.getConexao.Params.Database
+    );
+
+    { Adicionar leitura e gravação do arquivo .INI. }
+  end;
 end;
 
 procedure TfrmPrincipal.ConfiguracaoInicial;
 begin
-  FConexaoDM := TDataModuleUnit.New;
+  FDM := TDataModuleUnit.New;
 
-  with FConexaoDM do
+  with FDM do
   begin
-    if not FConexaoDM.LerIni then
+    if not FDM.LerIni then
     begin
       showmessage('Nenhum arquivo .INI configurado.' + sLineBreak + 'Gravando .INI com dados padrão.');
       try
@@ -232,7 +245,7 @@ begin
     end;
 
     try
-      ConfigurarConn;
+      //ConfigurarConn;
     except
       on E: Exception do
         raise Exception.Create('Error: ' + E.Message);
@@ -347,15 +360,15 @@ end;
 
 procedure TfrmPrincipal.btnRecTodosOperadoresClick(Sender: TObject);
 begin
-  FConexaoDM.DataSource.DataSet.Close;
-  FConexaoDM.DataSource.DataSet := FOperadorController.RecuperaTodos;
+  FDM.DataSource.DataSet.Close;
+  FDM.DataSource.DataSet := FOperadorController.RecuperaTodos;
   AtualizaGridOperador;
 end;
 
 procedure TfrmPrincipal.btnRecTodosProdutosClick(Sender: TObject);
 begin
-  FConexaoDM.DataSource.DataSet.Close;
-  FConexaoDM.DataSource.DataSet := FProdutoController.RecuperaTodos;
+  FDM.DataSource.DataSet.Close;
+  FDM.DataSource.DataSet := FProdutoController.RecuperaTodos;
   AtualizaGridProduto;
 end;
 
@@ -399,30 +412,30 @@ end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosCellClick(Column: TColumn);
 begin
-  FConexaoDM.DataSourceAux.DataSet.Close;
-  FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
+  FDM.DataSourceAux.DataSet.Close;
+  FDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  FConexaoDM.DataSourceAux.DataSet.Close;
-  FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
+  FDM.DataSourceAux.DataSet.Close;
+  FDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  FConexaoDM.DataSourceAux.DataSet.Close;
-  FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
+  FDM.DataSourceAux.DataSet.Close;
+  FDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
-  FConexaoDM.DataSourceAux.DataSet.Close;
-  FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
+  FDM.DataSourceAux.DataSet.Close;
+  FDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
 
@@ -438,8 +451,8 @@ end;
 
 procedure TfrmPrincipal.btnRecTodosClienteClick(Sender: TObject);
 begin
-  FConexaoDM.DataSource.DataSet.Close;
-  FConexaoDM.DataSource.DataSet := FClienteController.RecuperaTodos;
+  FDM.DataSource.DataSet.Close;
+  FDM.DataSource.DataSet := FClienteController.RecuperaTodos;
   AtualizaGridCliente;
 end;
 
@@ -519,10 +532,10 @@ begin
     FPedidoController
       .Remover(dbgrdPedidosConcluidos.Fields[0].AsInteger);
 
-    FConexaoDM.DataSource.DataSet.Close;
-    FConexaoDM.DataSource.DataSet := FPedidoController.RecuperaTodos;
+    FDM.DataSource.DataSet.Close;
+    FDM.DataSource.DataSet := FPedidoController.RecuperaTodos;
     AtualizaGridPedidosConcluidos;
-    FConexaoDM.DataSourceAux.DataSet.Close;
+    FDM.DataSourceAux.DataSet.Close;
   end;
 end;
 
@@ -536,11 +549,11 @@ end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
-  if not FConexaoDM.FDConexao.Connected then
-  begin
-    ShowMessage('Não conectado!');
-    Application.Terminate;
-  end;
+//  if not FConexaoDM.FDConexao.Connected then
+//  begin
+//    ShowMessage('Não conectado!');
+//    Application.Terminate;
+//  end;
 
   PageControlPrincipal.ActivePageIndex := 0;
 
@@ -552,21 +565,21 @@ end;
 
 procedure TfrmPrincipal.PageControlPrincipalChange(Sender: TObject);
 begin
-  FConexaoDM.DataSource.DataSet.Close; { limpa o dataset ao mudar de aba. }
+  FDM.DataSource.DataSet.Close; { limpa o dataset ao mudar de aba. }
 
   if PageControlPrincipal.TabIndex = Integer(abaCliente) then
   begin
-    FConexaoDM.DataSource.DataSet := FClienteController.RecuperaTodos;
+    FDM.DataSource.DataSet := FClienteController.RecuperaTodos;
     AtualizaGridCliente;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaOperadores) then
   begin
-    FConexaoDM.DataSource.DataSet := FOperadorController.RecuperaTodos;
+    FDM.DataSource.DataSet := FOperadorController.RecuperaTodos;
     AtualizaGridOperador;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaProdutos) then
   begin
-    FConexaoDM.DataSource.DataSet := FProdutoController.RecuperaTodos;
+    FDM.DataSource.DataSet := FProdutoController.RecuperaTodos;
     AtualizaGridProduto;
   end
   else if PageControlPrincipal.TabIndex = Integer(abaNovoPedido) then
@@ -584,7 +597,7 @@ begin
   else if PageControlPrincipal.TabIndex = Integer(abaGerenciarPedido) then
   begin
     FNumPedido := 0;
-    FConexaoDM.DataSource.DataSet := FPedidoController.RecuperaTodos;
+    FDM.DataSource.DataSet := FPedidoController.RecuperaTodos;
     AtualizaGridPedidosConcluidos;
   end;
 end;
@@ -601,7 +614,7 @@ begin
           .RemoverPedidos('A');
         FPedidoController
           .Remover('A');
-        FConexaoDM.DataSource.DataSet.Close;
+        FDM.DataSource.DataSet.Close;
         desabilitarAcoes;
       end
       else
@@ -706,7 +719,7 @@ begin
 
     FNumEntrada := 0;
     edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FNumPedido));
-    FConexaoDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
+    FDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
     AtualizaGridPedido;
   end;
 end;
@@ -783,9 +796,9 @@ begin
   if Application.MessageBox('Deseja cancelar o pedido?', 'Atenção', 52) = mrYes then
   begin
     { lógica para remover os itens dos pedidos antes do pedido }
-    FPedidoItemController.RemoverPedidos( {StrToInt(FNumPedido)} 'A');
+    FPedidoItemController.RemoverPedidos('A');
     FPedidoController.Remover({FPedido.CodigoCliente,} 'A');
-    FConexaoDM.DataSource.DataSet.Close;
+    FDM.DataSource.DataSet.Close;
     FNumPedido := 0;
   end;
 
@@ -801,7 +814,7 @@ begin
 
     FPedidoController.ConfirmaPedido(FNumPedido);
 
-    FConexaoDM.DataSource.DataSet.Close;
+    FDM.DataSource.DataSet.Close;
     FNumPedido := 0;
   end;
 
@@ -820,7 +833,8 @@ begin
 
     edtQuantidade.Clear;
     edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FNumPedido));
-    FConexaoDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
+    FDM.DataSource.DataSet.Close;
+    FDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
 
     AtualizaGridPedido;
   finally
@@ -851,7 +865,7 @@ begin
       );
 
   { apos atualizar a entrada }
-  FConexaoDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
+  FDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
   AtualizaGridPedido;
   btnAddProdPesq.Enabled := True;
 

@@ -14,7 +14,7 @@ type
     procedure AdicionarItem( aNumPedido, aNumItemPedido, aQuantidade, aValorUnitario, aValorTotal : string ); overload;
 
     procedure RemoverPedidos( aValue: integer ); overload;
-    procedure RemoverPedidos(aValue: string); overload;
+    procedure RemoverPedidos( aValue: string ); overload;
 
     procedure RemoverEntrada( aCodPedido, aCodEntrada: integer);
     procedure ConfirmaPedidoItem(aNumeroPedido: Integer);
