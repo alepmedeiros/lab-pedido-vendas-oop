@@ -1,4 +1,5 @@
 object DataModuleConexao: TDataModuleConexao
+  OldCreateOrder = True
   Height = 480
   Width = 640
   object FDConexao: TFDConnection
@@ -7,8 +8,8 @@ object DataModuleConexao: TDataModuleConexao
       'LockingMode=Normal'
       'User_Name=silvab'
       
-        'Database=C:\Users\Bruno Silva\Projetos\lab-pedido-vendas-oop\db\' +
-        'lab_pedido_loja.db'
+        'Database=Z:\Bruno\Documentos\Meus Projetos\lab-pedido-vendas-oop' +
+        '\db\lab_pedido_loja.db'
       'DriverID=SQLite')
     Left = 56
     Top = 88
@@ -49,5 +50,9 @@ object DataModuleConexao: TDataModuleConexao
     Connection = FDConexao
     Left = 56
     Top = 160
+  end
+  object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
+    Left = 328
+    Top = 112
   end
 end

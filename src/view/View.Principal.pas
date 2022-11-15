@@ -177,6 +177,7 @@ type
     procedure AtualizaGridOperador;
     procedure AtualizaGridProduto;
     procedure AtualizaGridPedidosConcluidos;
+    procedure ConectandoBancoDeDados;
 
   public
   end;
@@ -186,13 +187,20 @@ var
 
 implementation
 
+uses
+  Conexao.Banco;
+
 {$R *.dfm}
 
 procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   if FPedidoController.PedidoEmAndamento then
   begin
-    if Application.MessageBox('Existe ao menos um pedido em andamento. Deseja cancelar o pedido?', 'Atenção', 52) = mrYes then
+    if Application.MessageBox(
+      'Existe ao menos um pedido em andamento. Deseja cancelar o pedido?',
+      'Atenção',
+      52) = mrYes
+    then
     begin
       FPedidoItemController.RemoverPedidos('A');
       FPedidoController.Remover('A');
@@ -203,7 +211,8 @@ end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
-  ConfiguracaoInicial;
+  ConectandoBancoDeDados; { conexao nova, em classe }
+  ConfiguracaoInicial; { conexao antiga, no data moduloe }
 
   FNumPedido := 0;
 
@@ -212,6 +221,21 @@ begin
   FProdutoController    := TProdutoController.Create;
   FPedidoController     := TPedidoController.Create;
   FPedidoItemController := TPedidoItemController.Create;
+end;
+
+procedure TfrmPrincipal.ConectandoBancoDeDados;
+var
+  LConexao : TConexao;
+begin
+  LConexao := TConexao.Create;
+  LConexao.getConexao.Connected := True;
+
+  try
+    if LConexao.getConexao.Connected then
+      ShowMessage('Conectado ao banco de dados com ' + LConexao.getConexao.DriverName + '!');
+  finally
+    FreeAndNil(LConexao);
+  end;
 end;
 
 procedure TfrmPrincipal.ConfiguracaoInicial;
@@ -637,7 +661,6 @@ end;
 procedure TfrmPrincipal.btnIniciarPedidoClick(Sender: TObject);
 var
   lCodCliente: string;
-  tstBool : Boolean;
 
   procedure habilitarCampos;
   begin
@@ -736,8 +759,6 @@ begin
     edtTotalPedido.Text         := FormatFloat('R$ ###,##0.00',FPedidoController.RetornaTotalPedido(FNumPedido));
     FConexao.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
     AtualizaGridPedido;
-
-
   end;
 end;
 
@@ -946,7 +967,7 @@ begin
   dbgrdPedido.Columns[1].Title.Caption := 'Cod. Prod.';
   dbgrdPedido.Columns[1].Width := 060;
   dbgrdPedido.Columns[2].Title.Caption := 'Descrição';
-  dbgrdPedido.Columns[2].Width := 320;
+  dbgrdPedido.Columns[2].Width := 300;
   dbgrdPedido.Columns[3].Title.Caption := 'Quantidade';
   dbgrdPedido.Columns[3].Width := 100;
   dbgrdPedido.Columns[4].Title.Caption := 'Val Uni.';

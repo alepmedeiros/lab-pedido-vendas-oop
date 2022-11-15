@@ -33,7 +33,8 @@ uses
   PedidoItem.DAO.Interfaces in 'src\dao\pedido_item\PedidoItem.DAO.Interfaces.pas',
   PedidoItem.DAO in 'src\dao\pedido_item\PedidoItem.DAO.pas',
   PedidoItem.Controller.Interfaces in 'src\controller\pedido_item\PedidoItem.Controller.Interfaces.pas',
-  PedidoItem.Controller in 'src\controller\pedido_item\PedidoItem.Controller.pas';
+  PedidoItem.Controller in 'src\controller\pedido_item\PedidoItem.Controller.pas',
+  Conexao.Banco in 'src\dao\Conexao.Banco.pas';
 
 {$R *.res}
 

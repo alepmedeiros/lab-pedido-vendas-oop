@@ -38,6 +38,7 @@ type
     FDMemTableAux: TFDMemTable;
     DataSourceAux: TDataSource;
     FDQuery: TFDQuery;
+    FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
 
   private
     FBancoCaminho: string;

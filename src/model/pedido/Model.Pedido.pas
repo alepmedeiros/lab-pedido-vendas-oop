@@ -8,7 +8,7 @@ uses
 type
   TPedidoModel = class(TInterfacedObject, iPedido)
   constructor Create;
-  destructor Destroy; overload;
+  destructor Destroy; override;
   class function New: iPedido;
 
   private
