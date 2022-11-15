@@ -263,6 +263,7 @@ begin
       .Salvar(edtOperador.Text);
   finally
     btnRecTodosOperadoresClick(self);
+    edtCodigoOperador.Clear;
     edtOperador.Clear;
     edtOperador.SetFocus;
   end;
@@ -346,6 +347,7 @@ end;
 
 procedure TfrmPrincipal.btnRecTodosOperadoresClick(Sender: TObject);
 begin
+  FConexaoDM.DataSource.DataSet.Close;
   FConexaoDM.DataSource.DataSet := FOperadorController.RecuperaTodos;
   AtualizaGridOperador;
 end;
@@ -457,6 +459,7 @@ begin
     FOperadorController
       .Remover(StrToInt(edtCodigoOperador.Text));
 
+  edtCodigoOperador.SetFocus;
   edtCodigoOperador.Clear;
   edtOperador.Clear;
   btnRecTodosOperadoresClick(self);
@@ -491,6 +494,7 @@ begin
   FOperadorController
     .Editar(edtCodigoOperador.Text, edtOperador.Text);
 
+  edtCodigoOperador.SetFocus;
   edtCodigoOperador.Clear;
   edtOperador.Clear;
 

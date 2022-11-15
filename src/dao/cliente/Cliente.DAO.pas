@@ -64,10 +64,10 @@ end;
 procedure TClienteDAO.Editar(aValue: TClienteModel);
 begin
   try
-  FQuery.ExecSQL(
-    'UPDATE cliente SET nome = :nome, cidade = :cidade, uf = :uf WHERE codigo = :codigo',
-    [aValue.Nome, aValue.Cidade, aValue.UF, aValue.Codigo]
-  );
+    FQuery.ExecSQL(
+      'UPDATE cliente SET nome = :nome, cidade = :cidade, uf = :uf WHERE codigo = :codigo',
+      [aValue.Nome, aValue.Cidade, aValue.UF, aValue.Codigo]
+    );
   except
     on E: Exception do
       raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
@@ -117,7 +117,7 @@ begin
   try
     if VerificaSeExiste(aValue) then
     begin
-      FQuery.Connection.ExecSQL(
+      FQuery.ExecSQL(
         'DELETE FROM cliente WHERE codigo = :codigo',
         [aValue]
       );
@@ -137,9 +137,7 @@ begin
     );
   except
     on E: Exception do
-    begin
-      ShowMessage('Erro: ' + E.Message );
-    end;
+      raise Exception.Create('Ops! Algo aconteceu: ' + E.Message);
   end;
 end;
 
