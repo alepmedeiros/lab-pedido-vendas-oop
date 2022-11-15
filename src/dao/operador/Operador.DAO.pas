@@ -63,6 +63,8 @@ end;
 
 procedure TOperadorDAO.Editar(aValue: TOperadorModel);
 begin
+  RecuperaInstanciaQuery;
+
   try
     FQuery.ExecSQL(
       'UPDATE operador SET nome = :nome WHERE codigo = :codigo',
@@ -78,6 +80,8 @@ function TOperadorDAO.RecuperaPorCodigo(aValue: integer; aColuna: string): strin
 var
   LColuna : string;
 begin
+  RecuperaInstanciaQuery;
+
   try
     try
       LColuna := FDM.FDConexao.ExecSQLScalar(
@@ -96,6 +100,7 @@ end;
 function TOperadorDAO.RecuperaTodos : TFDMemTable;
 begin
   RecuperaInstanciaQuery;
+
   try
     try
       FQuery.SQL.Clear;
@@ -114,6 +119,8 @@ end;
 
 procedure TOperadorDAO.Remover(aValue: integer);
 begin
+  RecuperaInstanciaQuery;
+
   try
     if VerificaSeExiste(aValue) then
     begin
@@ -130,6 +137,8 @@ end;
 
 procedure TOperadorDAO.Salvar(aValue: TOperadorModel);
 begin
+  RecuperaInstanciaQuery;
+
   try
     FQuery.ExecSQL(
       'INSERT INTO operador (nome) VALUES (:nome)',
@@ -147,8 +156,10 @@ var
 begin
   Result := False;
 
+  RecuperaInstanciaQuery;
+
   try
-    LRetorno := FDM.FDConexao.ExecSQLScalar(
+    LRetorno := FQuery.Connection.ExecSQLScalar(
       'SELECT * FROM operador o WHERE o.codigo = :codigo',
       [InttoStr(aValue)]
     );

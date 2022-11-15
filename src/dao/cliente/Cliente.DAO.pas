@@ -78,6 +78,8 @@ function TClienteDAO.RecuperaPorCodigo(aValue: integer; aColuna: string): string
 var
   LColuna : string;
 begin
+  RecuperaInstanciaQuery;
+
   try
     try
       LColuna := FQuery.Connection.ExecSQLScalar(
@@ -96,6 +98,7 @@ end;
 function TClienteDAO.RecuperaTodos: TFDMemTable;
 begin
   RecuperaInstanciaQuery;
+
   try
     try
       FQuery.SQL.Clear;
@@ -114,6 +117,8 @@ end;
 
 procedure TClienteDAO.Remover(aValue: integer);
 begin
+  RecuperaInstanciaQuery;
+
   try
     if VerificaSeExiste(aValue) then
     begin
@@ -130,6 +135,8 @@ end;
 
 procedure TClienteDAO.Salvar(aNome, aCidade, aUF: string);
 begin
+  RecuperaInstanciaQuery;
+
   try
     FQuery.ExecSQL(
       'INSERT INTO cliente (nome, cidade, uf) VALUES (:nome, :cidade, :uf)',
@@ -143,6 +150,8 @@ end;
 
 procedure TClienteDAO.Salvar(aValue: TClienteModel);
 begin
+  RecuperaInstanciaQuery;
+
   try
     FQuery.ExecSQL(
       'INSERT INTO cliente (nome, cidade, uf) VALUES (:nome, :cidade, :uf)',
@@ -159,6 +168,8 @@ var
   LRetorno : Integer;
 begin
   Result := False;
+
+  RecuperaInstanciaQuery;
 
   try
     LRetorno := FQuery.Connection.ExecSQLScalar(

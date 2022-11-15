@@ -53,6 +53,8 @@ CREATE TABLE produto (
     preco_venda DECIMAL (18, 2) NOT NULL
 );
 
+ALTER TABLE produto ADD COLUMN ativo boolean DEFAULT TRUE;
+
 -- Table: estoque produto
 -- DROP TABLE IF EXISTS estoque_produto 
 

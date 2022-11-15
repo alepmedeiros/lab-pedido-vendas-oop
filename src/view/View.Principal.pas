@@ -399,18 +399,21 @@ end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosCellClick(Column: TColumn);
 begin
+  FConexaoDM.DataSourceAux.DataSet.Close;
   FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
+  FConexaoDM.DataSourceAux.DataSet.Close;
   FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
 
 procedure TfrmPrincipal.dbgrdPedidosConcluidosKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
+  FConexaoDM.DataSourceAux.DataSet.Close;
   FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
@@ -418,6 +421,7 @@ end;
 procedure TfrmPrincipal.dbgrdPedidosConcluidosMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
+  FConexaoDM.DataSourceAux.DataSet.Close;
   FConexaoDM.DataSourceAux.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(dbgrdPedidosConcluidos.Fields[0].AsInteger);
   AtualizaPedidoItemConcluidos;
 end;
@@ -514,6 +518,8 @@ begin
   begin
     FPedidoController
       .Remover(dbgrdPedidosConcluidos.Fields[0].AsInteger);
+
+    FConexaoDM.DataSource.DataSet.Close;
     FConexaoDM.DataSource.DataSet := FPedidoController.RecuperaTodos;
     AtualizaGridPedidosConcluidos;
     FConexaoDM.DataSourceAux.DataSet.Close;
