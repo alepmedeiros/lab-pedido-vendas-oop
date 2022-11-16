@@ -30,24 +30,22 @@ uses
   FireDAC.Comp.Script,
   FireDAC.Comp.DataSet,
   FireDAC.Phys.IBWrapper,
-  Data.DB;
+  Data.DB,
+  Vcl.Forms;
 
 type
   TConexao = class
   private
     FConexao: TFDConnection;
-    FPortaConexao: string;
+
     FDriverConexao: string;
     FCaminhoBancoDeDados: string;
     FSenhaUsuario: string;
     FNomeUsuario: string;
 
     procedure ConfigurarConexao;
-    procedure SetDataBasePath(const Value: string);
-    procedure SetDriverID(const Value: string);
-    procedure SetPassword(const Value: string);
-    procedure SetPort(const Value: string);
-    procedure SetUsername(const Value: string);
+    procedure LerIni;
+    procedure GravarIni;
 
   public
     constructor Create;
@@ -55,12 +53,6 @@ type
 
     function getConexao: TFDConnection;
     function CriarQuery: TFDQuery;
-
-    property DataBasePath : string read FCaminhoBancoDeDados write SetDataBasePath;
-    property DriverID : string read FDriverConexao write SetDriverID;
-    property Username : string read FNomeUsuario write SetUsername;
-    property Password : string read FSenhaUsuario write SetPassword;
-    property Port : string read FPortaConexao write SetPort;
 
   end;
 
@@ -71,7 +63,7 @@ implementation
 constructor TConexao.Create;
 begin
   FConexao := TFDConnection.Create(nil);
-
+  LerIni;
   self.ConfigurarConexao;
 end;
 
@@ -97,40 +89,15 @@ begin
   Result := FConexao;
 end;
 
-procedure TConexao.SetDataBasePath(const Value: string);
-begin
-  FCaminhoBancoDeDados := Value;
-end;
-
-procedure TConexao.SetDriverID(const Value: string);
-begin
-  FDriverConexao := Value;
-end;
-
-procedure TConexao.SetPassword(const Value: string);
-begin
-  FSenhaUsuario := Value;
-end;
-
-procedure TConexao.SetPort(const Value: string);
-begin
-  FPortaConexao := Value;
-end;
-
-procedure TConexao.SetUsername(const Value: string);
-begin
-  FNomeUsuario := Value;
-end;
-
 procedure TConexao.ConfigurarConexao;
 begin
   if not FConexao.Connected then
   begin
-    FConexao.DriverName      := 'SQLite';
-    FConexao.Params.DriverID := 'SQLite';
-    FConexao.Params.Database := 'Z:\Bruno\Documentos\Meus Projetos\lab-pedido-vendas-oop\db\lab_pedido_loja.db';
-    FConexao.Params.UserName := 'silv4b';
-    FConexao.Params.Password := '';
+    FConexao.DriverName      := FDriverConexao;
+    FConexao.Params.DriverID := FDriverConexao;
+    FConexao.Params.Database := FCaminhoBancoDeDados;
+    FConexao.Params.UserName := FNomeUsuario;
+    FConexao.Params.Password := FSenhaUsuario;
     FConexao.LoginPrompt     := False;
     try
       FConexao.Connected := True;
@@ -150,6 +117,56 @@ begin
   LQuery            := TFDQuery.Create(nil);
   LQuery.Connection := FConexao;
   Result            := LQuery;
+end;
+
+procedure TConexao.LerIni;
+var
+  LArquivoIni : string;
+  LIni        : TIniFile;
+begin
+  LArquivoIni := ChangeFileExt(Application.ExeName, '.ini');
+  LArquivoIni := StringReplace(LArquivoIni, 'Win32\Debug\', '', [rfReplaceAll, rfIgnoreCase]);
+  LIni        := TIniFile.Create(LArquivoIni);
+
+  if not FileExists(LArquivoIni) then
+  begin
+    GravarIni;
+    Application.Terminate;
+  end
+  else
+  begin
+    try
+      with LIni do
+      begin
+        FDriverConexao       := LIni.ReadString('Configuracao','driverName', '');
+        FCaminhoBancoDeDados := LIni.ReadString('Configuracao','dbFilePath', '');
+        FNomeUsuario         := LIni.ReadString('Acesso','userName',         '');
+      end;
+    finally
+      LIni.free;
+    end;
+  end;
+end;
+
+procedure TConexao.GravarIni;
+var
+  LArquivoIni : string;
+  LIni        : TIniFile;
+begin
+  LArquivoIni := ChangeFileExt(Application.ExeName, '.ini');
+  LArquivoIni := StringReplace(LArquivoIni, 'Win32\Debug\', '', [rfReplaceAll, rfIgnoreCase]);
+  LIni        := TIniFile.Create(LArquivoIni);
+
+  try
+    with LIni do
+    begin
+      WriteString('Configuracao','driverName', '<driver de conexao>');
+      WriteString('Configuracao','dbFilePath', '<caminho do banco de dados>');
+      WriteString('Acesso','userName',         '<nome do user padrao>');
+    end;
+  finally
+    LIni.free;
+  end;
 end;
 
 end.

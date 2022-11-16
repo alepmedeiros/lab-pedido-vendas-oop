@@ -12,12 +12,15 @@ type
   TConexaoControl = class
     private
       FConexao : TConexao;
+
       class var FInstancia : TConexaoControl;
 
     public
       constructor Create;
       destructor Destroy; override;
+
       class function getInstancia : TConexaoControl;
+
       property Conexao : TConexao read FConexao write FConexao;
   end;
 

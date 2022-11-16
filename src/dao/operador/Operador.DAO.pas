@@ -84,7 +84,7 @@ begin
 
   try
     try
-      LColuna := FDM.FDConexao.ExecSQLScalar(
+      LColuna := FQuery.Connection.ExecSQLScalar(
         'SELECT ' + aColuna + ' FROM operador o WHERE o.codigo = :codigo',
         [InttoStr(aValue)]
       );

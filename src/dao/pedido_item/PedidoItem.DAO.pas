@@ -254,8 +254,6 @@ begin
   finally
     Result := FDM.FDMemTable;
   end;
-
-  Result := FDM.FDMemTable;
 end;
 
 procedure TPedidoItemDAO.RemoverEntrada(aCodPedido, aCodEntrada: integer);

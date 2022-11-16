@@ -168,7 +168,6 @@ type
     procedure desabilitarAcoes;
     procedure AtualizaGridPedido;
     procedure AtualizaPedidoItemConcluidos;
-    procedure ConfiguracaoInicial;
     procedure AtualizaGridCliente;
     procedure AtualizaGridOperador;
     procedure AtualizaGridProduto;
@@ -196,7 +195,6 @@ end;
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
   ConectandoBancoDeDados; { conexao nova, em classe }
-  //ConfiguracaoInicial; { conexao antiga, no data moduloe }
 
   FNumPedido := 0;
 
@@ -215,6 +213,13 @@ begin
 
   with FConexao do
   begin
+
+    if not Conexao.getConexao.Connected then
+    begin
+      ShowMessage('Não conectado!');
+      Application.Terminate;
+    end;
+
     ShowMessage(
       'Dados da conexão: ' + sLineBreak + sLineBreak +
       'Driver Name: ' + getInstancia.Conexao.getConexao.DriverName + sLineBreak +
@@ -222,36 +227,7 @@ begin
       'Database User: ' + getInstancia.Conexao.getConexao.Params.UserName + sLineBreak +
       'Database SQLite: ' + getInstancia.Conexao.getConexao.Params.Database
     );
-
-    { Adicionar leitura e gravação do arquivo .INI. }
   end;
-end;
-
-procedure TfrmPrincipal.ConfiguracaoInicial;
-begin
-  FDM := TDataModuleUnit.New;
-
-  with FDM do
-  begin
-    if not FDM.LerIni then
-    begin
-      showmessage('Nenhum arquivo .INI configurado.' + sLineBreak + 'Gravando .INI com dados padrão.');
-      try
-        GravarIni;
-      finally
-        ShowMessage('Arquivo .INI criado com sucesso. Verifique-o, configure-o e reinicie a aplicação.');
-        Application.Terminate;
-      end;
-    end;
-
-    try
-      //ConfigurarConn;
-    except
-      on E: Exception do
-        raise Exception.Create('Error: ' + E.Message);
-    end;
-  end;
-
 end;
 
 procedure TfrmPrincipal.btnCadClienteClick(Sender: TObject);
@@ -549,12 +525,6 @@ end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
-//  if not FConexaoDM.FDConexao.Connected then
-//  begin
-//    ShowMessage('Não conectado!');
-//    Application.Terminate;
-//  end;
-
   PageControlPrincipal.ActivePageIndex := 0;
 
   if edtCodCliente.CanFocus then
