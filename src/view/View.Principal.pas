@@ -677,6 +677,8 @@ begin
 
   if Application.MessageBox(PWideChar('Deseja remover a entrada ' + inttostr(FNumEntrada) + '?'), 'Atenção', 52) = mrYes then
   begin
+    FDM.DataSource.DataSet.Close;
+    
     FPedidoItemController
       .RemoverEntrada(FNumPedido, FNumEntrada);
 
@@ -794,6 +796,8 @@ end;
 procedure TfrmPrincipal.btnAddProdPesqClick(Sender: TObject);
 begin
   try
+    FDM.DataSource.DataSet.Close;
+    
     { adicionar o pedido recuperado à tabela de pedido item com os dados do cliente }
     FPedidoItemController
       .AdicionarItem(FNumPedido, edtCodProdutoPesq.Text, edtQuantidade.Text, edtValorProdutoPesq.Text, '0');
@@ -803,9 +807,7 @@ begin
 
     edtQuantidade.Clear;
     edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FNumPedido));
-    FDM.DataSource.DataSet.Close;
     FDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
-
     AtualizaGridPedido;
   finally
     edtCodProdutoPesq.Clear;
@@ -823,30 +825,40 @@ begin
     Abort;
   end;
 
-  FPedidoItemController.AtualizarEntrada(StrToCurr(edtValorProdutoPesq.Text), StrToInt(edtQuantidade.Text), FNumPedido, FNumEntrada);
+  if Application.MessageBox(PWideChar('Deseja atualizar a entrada ' + inttostr(FNumEntrada) + '?'), 'Atenção', 52) = mrYes then
+  begin
+    FDM.DataSource.DataSet.Close;
 
-  FPedidoController
-    .AtualizarTotalPedido(
-      FPedidoController
-        .RetornaTotalPedido(
-          FNumPedido
-        ),
-        FNumPedido
-      );
+    FPedidoItemController
+      .AtualizarEntrada(
+        StrToCurr(
+          edtValorProdutoPesq.Text), StrToInt(edtQuantidade.Text), FNumPedido, FNumEntrada );
 
-  { apos atualizar a entrada }
-  FDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
-  AtualizaGridPedido;
-  btnAddProdPesq.Enabled := True;
+    FPedidoController
+      .AtualizarTotalPedido(
+        FPedidoController
+          .RetornaTotalPedido( FNumPedido ), FNumPedido );
 
-  edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FNumPedido));
+    { apos atualizar a entrada }
+    FDM.DataSource.DataSet.Close;
+    FDM.DataSource.DataSet := FPedidoItemController.RecuperaItemPedidoPorCodigo(FNumPedido);
+    AtualizaGridPedido;
+    
+    btnAddProdPesq.Enabled := True;
+    
+    { Recupera o total do pedido em andamento }
+    edtTotalPedido.Text := FormatFloat('R$ ###,##0.00', FPedidoController.RetornaTotalPedido(FNumPedido));
 
-  edtCodProdutoPesq.Clear;
-  edtCodProdutoPesq.SetFocus;
-  edtDescProdutoPesq.Clear;
-  edtValorProdutoPesq.Clear;
-  edtQuantidade.Clear;
+    {Limpa campos  }
+    edtCodProdutoPesq.Clear;
+    edtCodProdutoPesq.SetFocus;
+    edtDescProdutoPesq.Clear;
+    edtValorProdutoPesq.Clear;
+    edtQuantidade.Clear;
+  end;
 end;
+
+{ A soma das larguras de ser sempre 720 }
 
 procedure TfrmPrincipal.AtualizaGridCliente;
 begin
@@ -857,7 +869,7 @@ begin
   dbgrdCliente.Columns[2].Title.Caption := 'Cidade';
   dbgrdCliente.Columns[2].Width := 220;
   dbgrdCliente.Columns[3].Title.Caption := 'UF';
-  dbgrdCliente.Columns[3].Width := 110;
+  dbgrdCliente.Columns[3].Width := 100;
 end;
 
 procedure TfrmPrincipal.AtualizaGridOperador;
@@ -865,7 +877,7 @@ begin
   dbgrdOperador.Columns[0].Title.Caption := 'Código';
   dbgrdOperador.Columns[0].Width := 100;
   dbgrdOperador.Columns[1].Title.Caption := 'Operador';
-  dbgrdOperador.Columns[1].Width := 400;
+  dbgrdOperador.Columns[1].Width := 620;
 end;
 
 procedure TfrmPrincipal.AtualizaGridProduto;
@@ -873,7 +885,7 @@ begin
   dbgrdProdutos.Columns[0].Title.Caption := 'Código';
   dbgrdProdutos.Columns[0].Width := 100;
   dbgrdProdutos.Columns[1].Title.Caption := 'Descrição';
-  dbgrdProdutos.Columns[1].Width := 400;
+  dbgrdProdutos.Columns[1].Width := 490;
   dbgrdProdutos.Columns[2].Title.Caption := 'Valor Unitário';
   dbgrdProdutos.Columns[2].Width := 130;
 end;
@@ -899,7 +911,7 @@ begin
   dbgrdPedidosConcluidos.Columns[0].Title.Caption := 'Código';
   dbgrdPedidosConcluidos.Columns[0].Width := 100;
   dbgrdPedidosConcluidos.Columns[1].Title.Caption := 'Cliente';
-  dbgrdPedidosConcluidos.Columns[1].Width := 350;
+  dbgrdPedidosConcluidos.Columns[1].Width := 360;
   dbgrdPedidosConcluidos.Columns[2].Title.Caption := 'Data';
   dbgrdPedidosConcluidos.Columns[2].Width := 130;
   dbgrdPedidosConcluidos.Columns[3].Title.Caption := 'Valor Total';
@@ -913,9 +925,9 @@ begin
   dbgrdPedidoItemConcluidos.Columns[1].Title.Caption := 'Produto';
   dbgrdPedidoItemConcluidos.Columns[1].Width := 100;
   dbgrdPedidoItemConcluidos.Columns[2].Title.Caption := 'Descrição';
-  dbgrdPedidoItemConcluidos.Columns[2].Width := 220;
+  dbgrdPedidoItemConcluidos.Columns[2].Width := 230;
   dbgrdPedidoItemConcluidos.Columns[3].Title.Caption := 'Quantidade';
-  dbgrdPedidoItemConcluidos.Columns[3].Width := 100;
+  dbgrdPedidoItemConcluidos.Columns[3].Width := 090;
   dbgrdPedidoItemConcluidos.Columns[4].Title.Caption := 'Valor Uni.';
   dbgrdPedidoItemConcluidos.Columns[4].Width := 100;
   dbgrdPedidoItemConcluidos.Columns[5].Title.Caption := 'Valor Total';
