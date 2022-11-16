@@ -22,7 +22,7 @@ object frmPrincipal: TfrmPrincipal
     Top = 0
     Width = 815
     Height = 594
-    ActivePage = Clientes
+    ActivePage = Produtos
     Align = alClient
     TabOrder = 0
     OnChange = PageControlPrincipalChange

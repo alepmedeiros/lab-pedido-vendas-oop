@@ -100,7 +100,7 @@ begin
     try
       FQuery.SQL.Clear;
       FQuery.Open(
-        'SELECT p.codigo, p.descricao, PRINTF("R$ %.2f", preco_venda) as preco_venda FROM produto p ORDER BY codigo '
+        'SELECT p.codigo, p.descricao, PRINTF("R$ %.2f", preco_venda) as preco_venda FROM produto p WHERE p.ativo = TRUE ORDER BY codigo '
       );
       FDM.FDMemTable.Data := FQuery.Data;
     except
@@ -112,6 +112,7 @@ begin
   end;
 end;
 
+{ A lógica vai ser alterada para inavição e reativação de produtos }
 procedure TProdutoDAO.Remover(aValue: integer);
 begin
   RecuperaInstanciaQuery;
@@ -120,7 +121,8 @@ begin
     if VerificaSeExiste(aValue) then
     begin
       FQuery.ExecSQL(
-        'DELETE FROM produto WHERE codigo = :codigo',
+        'UPDATE produto SET ativo = FALSE WHERE codigo = :codigo',
+        //'DELETE FROM produto WHERE codigo = :codigo',
         [aValue]
       );
     end
