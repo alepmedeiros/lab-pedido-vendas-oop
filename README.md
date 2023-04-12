@@ -36,3 +36,6 @@ Este é um exemplo onde que deve ser aplicadas técnicas como Orientação de Ob
 4. Priorize o uso de SQL, mesmo em inserções e atualizações, isso é para manter o conhecimento em SQL.
 6. Iremos usar conceito de orientação a objetos, criando classes por exemplo. Nota: Seguir as melhores práticas é importante, no caso usando orientação a interface, é extremamente importante.
 7. Não usaremos componentes de terceiros, somente nativos do IDE.
+
+https://showdelphi.com.br/categoria/videos/curso-poo-oop-modulo-i/
+https://showdelphi.com.br/categoria/videos/curso-poo-modulo-ii/
