@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{6EB333A6-2EF6-4B29-A325-68A06F8136BA}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="D:\lixo\analise\teste\Project1.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\legendary-sales-orders\src\TesteTecnico_MVC.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\SimpleORM\SimpleORM.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\lab-pedido-vendas-oop - Copia\src\MVC_LIVE.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Project1">
+        <MSBuild Projects="D:\lixo\analise\teste\Project1.dproj"/>
+    </Target>
+    <Target Name="Project1:Clean">
+        <MSBuild Projects="D:\lixo\analise\teste\Project1.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Project1:Make">
+        <MSBuild Projects="D:\lixo\analise\teste\Project1.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TesteTecnico_MVC">
+        <MSBuild Projects="..\..\legendary-sales-orders\src\TesteTecnico_MVC.dproj"/>
+    </Target>
+    <Target Name="TesteTecnico_MVC:Clean">
+        <MSBuild Projects="..\..\legendary-sales-orders\src\TesteTecnico_MVC.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TesteTecnico_MVC:Make">
+        <MSBuild Projects="..\..\legendary-sales-orders\src\TesteTecnico_MVC.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SimpleORM">
+        <MSBuild Projects="..\..\SimpleORM\SimpleORM.dproj"/>
+    </Target>
+    <Target Name="SimpleORM:Clean">
+        <MSBuild Projects="..\..\SimpleORM\SimpleORM.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SimpleORM:Make">
+        <MSBuild Projects="..\..\SimpleORM\SimpleORM.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MVC_LIVE">
+        <MSBuild Projects="..\..\lab-pedido-vendas-oop - Copia\src\MVC_LIVE.dproj"/>
+    </Target>
+    <Target Name="MVC_LIVE:Clean">
+        <MSBuild Projects="..\..\lab-pedido-vendas-oop - Copia\src\MVC_LIVE.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MVC_LIVE:Make">
+        <MSBuild Projects="..\..\lab-pedido-vendas-oop - Copia\src\MVC_LIVE.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Project1;TesteTecnico_MVC;SimpleORM;MVC_LIVE"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Project1:Clean;TesteTecnico_MVC:Clean;SimpleORM:Clean;MVC_LIVE:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Project1:Make;TesteTecnico_MVC:Make;SimpleORM:Make;MVC_LIVE:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
