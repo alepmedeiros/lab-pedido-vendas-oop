@@ -108,6 +108,10 @@
         <DCCReference Include="model\entity\impl\mvclive.model.entity.impl.pedidos.pas"/>
         <DCCReference Include="model\entity\impl\mvclive.model.entity.impl.pedidoitens.pas"/>
         <DCCReference Include="model\entity\impl\mvclive.model.entity.impl.entity.pas"/>
+        <DCCReference Include="model\connection\mvclive.model.connection.interfaces.pas"/>
+        <DCCReference Include="model\connection\impl\mvclive.model.connection.impl.firedac.pas"/>
+        <DCCReference Include="model\connection\impl\mvclive.model.connection.impl.query.pas"/>
+        <DCCReference Include="model\connection\impl\mvclive.model.connection.impl.configuration.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
