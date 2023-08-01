@@ -12,7 +12,13 @@ uses
   mvclive.model.connection.interfaces in 'model\connection\mvclive.model.connection.interfaces.pas',
   mvclive.model.connection.impl.firedac in 'model\connection\impl\mvclive.model.connection.impl.firedac.pas',
   mvclive.model.connection.impl.query in 'model\connection\impl\mvclive.model.connection.impl.query.pas',
-  mvclive.model.connection.impl.configuration in 'model\connection\impl\mvclive.model.connection.impl.configuration.pas';
+  mvclive.model.connection.impl.configuration in 'model\connection\impl\mvclive.model.connection.impl.configuration.pas',
+  mvclive.model.dao.interfaces in 'model\dao\mvclive.model.dao.interfaces.pas',
+  mvclive.model.dao.impl.daogenerico in 'model\dao\impl\mvclive.model.dao.impl.daogenerico.pas',
+  mvclive.utils.interfaces in 'utils\mvclive.utils.interfaces.pas',
+  mvclive.utils.impl.query in 'utils\impl\mvclive.utils.impl.query.pas',
+  mvclive.utils.impl.rtthelper in 'utils\impl\mvclive.utils.impl.rtthelper.pas',
+  mvclive.utils.impl.atributos in 'utils\impl\mvclive.utils.impl.atributos.pas';
 
 {$R *.res}
 

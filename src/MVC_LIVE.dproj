@@ -112,6 +112,12 @@
         <DCCReference Include="model\connection\impl\mvclive.model.connection.impl.firedac.pas"/>
         <DCCReference Include="model\connection\impl\mvclive.model.connection.impl.query.pas"/>
         <DCCReference Include="model\connection\impl\mvclive.model.connection.impl.configuration.pas"/>
+        <DCCReference Include="model\dao\mvclive.model.dao.interfaces.pas"/>
+        <DCCReference Include="model\dao\impl\mvclive.model.dao.impl.daogenerico.pas"/>
+        <DCCReference Include="utils\mvclive.utils.interfaces.pas"/>
+        <DCCReference Include="utils\impl\mvclive.utils.impl.query.pas"/>
+        <DCCReference Include="utils\impl\mvclive.utils.impl.rtthelper.pas"/>
+        <DCCReference Include="utils\impl\mvclive.utils.impl.atributos.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
