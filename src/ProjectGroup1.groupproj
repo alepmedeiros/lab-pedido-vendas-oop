@@ -6,9 +6,6 @@
         <Projects Include="MVC_LIVE.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="D:\lixo\analise\teste\Project1.dproj">
-            <Dependencies/>
-        </Projects>
         <Projects Include="..\..\legendary-sales-orders\src\TesteTecnico_MVC.dproj">
             <Dependencies/>
         </Projects>
@@ -32,15 +29,6 @@
     <Target Name="MVC_LIVE:Make">
         <MSBuild Projects="MVC_LIVE.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Project1">
-        <MSBuild Projects="D:\lixo\analise\teste\Project1.dproj"/>
-    </Target>
-    <Target Name="Project1:Clean">
-        <MSBuild Projects="D:\lixo\analise\teste\Project1.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Project1:Make">
-        <MSBuild Projects="D:\lixo\analise\teste\Project1.dproj" Targets="Make"/>
-    </Target>
     <Target Name="TesteTecnico_MVC">
         <MSBuild Projects="..\..\legendary-sales-orders\src\TesteTecnico_MVC.dproj"/>
     </Target>
@@ -60,13 +48,13 @@
         <MSBuild Projects="..\..\SimpleORM\SimpleORM.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="MVC_LIVE;Project1;TesteTecnico_MVC;SimpleORM"/>
+        <CallTarget Targets="MVC_LIVE;TesteTecnico_MVC;SimpleORM"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="MVC_LIVE:Clean;Project1:Clean;TesteTecnico_MVC:Clean;SimpleORM:Clean"/>
+        <CallTarget Targets="MVC_LIVE:Clean;TesteTecnico_MVC:Clean;SimpleORM:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="MVC_LIVE:Make;Project1:Make;TesteTecnico_MVC:Make;SimpleORM:Make"/>
+        <CallTarget Targets="MVC_LIVE:Make;TesteTecnico_MVC:Make;SimpleORM:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -3,14 +3,20 @@ unit mvclive.model.entity.impl.cliente;
 interface
 
 uses
+  mvclive.utils.attributes,
   mvclive.model.entity.interfaces;
 
 type
+  [Tabela('CLIENTE')]
   TCliente = class(TInterfacedObject, iCliente)
   private
+    [Campo('CODIGO')]
     FCodigo: Integer;
+    [Campo('NOME')]
     FNome: String;
+    [Campo('CIDADE')]
     FCidade: String;
+    [Campo('ESTADO')]
     FEstado: String;
   public
     class function New: iCliente;

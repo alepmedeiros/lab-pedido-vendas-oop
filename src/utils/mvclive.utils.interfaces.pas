@@ -13,6 +13,7 @@ type
     function Fields: String;
     function Params: String;
     function Update: String;
+    function Insert: String;
     function Where: String;
   end;
 
