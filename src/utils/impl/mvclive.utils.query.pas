@@ -69,7 +69,7 @@ begin
   Result := Self.Create(Parent);
 end;
 
-function TQuery.Params: String;
+  function TQuery.Params: String;
 var
   ctxRtti   : TRttiContext;
   typRtti   : TRttiType;
