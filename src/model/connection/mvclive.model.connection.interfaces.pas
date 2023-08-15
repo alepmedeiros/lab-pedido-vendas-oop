@@ -20,17 +20,17 @@ type
 
   iConfiguracao = interface
     function GetProtocolo: String;
-    function SetServidor(Value: String): iConfiguracao;
+    function SetServidor(const Value: String): iConfiguracao;
     function GetServidor: String;
-    function SetPorta(Value: Integer): iConfiguracao;
+    function SetPorta(const Value: Integer): iConfiguracao;
     function GetPorta: Integer;
-    function SetUsuario(Value: String): iConfiguracao;
+    function SetUsuario(const Value: String): iConfiguracao;
     function GetUsuario: String;
-    function SetSenha(Value: String): iConfiguracao;
+    function SetSenha(const Value: String): iConfiguracao;
     function GetSenha: String;
-    function SetCaminho(Value: String): iConfiguracao;
+    function SetCaminho(const Value: String): iConfiguracao;
     function GetCaminho: String;
-    function SetDriverName(Value: String): iConfiguracao;
+    function SetDriverName(const Value: String): iConfiguracao;
     function GetDriverName: String;
   end;
 

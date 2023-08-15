@@ -8,7 +8,7 @@ uses
   mvclive.model.connection.interfaces;
 
 type
-  TConfiguration = class(TInterfacedObject, iConfiguration)
+  TConfiguration = class(TInterfacedObject, iConfiguracao)
   const
     SECTION = 'CONFIG';
     CAMINHO = 'CAMINHO';
@@ -23,19 +23,19 @@ type
     constructor Create(FileName: String);
     destructor Destroy; override;
   public
-    class function New(FileName: String): iConfiguration;
+    class function New(FileName: String): iConfiguracao;
     function GetProtocolo: String;
-    function SetServidor(const Value: String): iConfiguration;
+    function SetServidor(const Value: String): iConfiguracao;
     function GetServidor: String;
-    function SetPorta(const Value: Integer): iConfiguration;
+    function SetPorta(const Value: Integer): iConfiguracao;
     function GetPorta: Integer;
-    function SetUsuario(const Value: String): iConfiguration;
+    function SetUsuario(const Value: String): iConfiguracao;
     function GetUsuario: String;
-    function SetSenha(const Value: String): iConfiguration;
+    function SetSenha(const Value: String): iConfiguracao;
     function GetSenha: String;
-    function SetCaminho(const Value: String): iConfiguration;
+    function SetCaminho(const Value: String): iConfiguracao;
     function GetCaminho: String;
-    function SetDriverName(const Value: String): iConfiguration;
+    function SetDriverName(const Value: String): iConfiguracao;
     function GetDriverName: String;
   end;
 
@@ -91,42 +91,42 @@ begin
   Result := FArq.ReadString(SECTION, USUARIO, '');
 end;
 
-class function TConfiguration.New(FileName: String): iConfiguration;
+class function TConfiguration.New(FileName: String): iConfiguracao;
 begin
   Result := Self.Create(FileName);
 end;
 
-function TConfiguration.SetCaminho(const Value: String): iConfiguration;
+function TConfiguration.SetCaminho(const Value: String): iConfiguracao;
 begin
   Result := Self;
   FArq.WriteString(SECTION, CAMINHO, Value);
 end;
 
-function TConfiguration.SetDriverName(const Value: String): iConfiguration;
+function TConfiguration.SetDriverName(const Value: String): iConfiguracao;
 begin
   Result := Self;
   FArq.WriteString(SECTION, DRIVERNAME, Value);
 end;
 
-function TConfiguration.SetPorta(const Value: Integer): iConfiguration;
+function TConfiguration.SetPorta(const Value: Integer): iConfiguracao;
 begin
   Result := Self;
   FArq.WriteInteger(SECTION, PORTA, Value);
 end;
 
-function TConfiguration.SetSenha(const Value: String): iConfiguration;
+function TConfiguration.SetSenha(const Value: String): iConfiguracao;
 begin
   Result := Self;
   FArq.WriteString(SECTION, SENHA, Value);
 end;
 
-function TConfiguration.SetServidor(const Value: String): iConfiguration;
+function TConfiguration.SetServidor(const Value: String): iConfiguracao;
 begin
   Result := Self;
   FArq.WriteString(SECTION, SERVIDOR, Value);
 end;
 
-function TConfiguration.SetUsuario(const Value: String): iConfiguration;
+function TConfiguration.SetUsuario(const Value: String): iConfiguracao;
 begin
   Result := Self;
   FArq.WriteString(SECTION, USUARIO, Value);

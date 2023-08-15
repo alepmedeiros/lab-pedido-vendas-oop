@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils,
-  mvclive.utils.attributes,
+  mvclive.utils.impl.atributos,
   mvclive.model.entity.interfaces;
 
 type

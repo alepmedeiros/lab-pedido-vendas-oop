@@ -29,15 +29,15 @@ uses
   mvclive.model.connection.interfaces;
 
 type
-  TConnectionFiredac = class(TInterfacedObject, iConnection)
+  TConnectionFiredac = class(TInterfacedObject, iConexao)
   private
     FConn: TFDConnection;
-    FConf: iConfiguration;
+    FConf: iConfiguracao;
 
     constructor Create;
     destructor Destroy; override;
   public
-    class function New: iConnection;
+    class function New: iConexao;
     function Connection: TCustomConnection;
   end;
 
@@ -74,7 +74,7 @@ begin
   inherited;
 end;
 
-class function TConnectionFiredac.New: iConnection;
+class function TConnectionFiredac.New: iConexao;
 begin
   Result := Self.Create;
 end;

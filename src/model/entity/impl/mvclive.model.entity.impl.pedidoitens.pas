@@ -3,7 +3,7 @@ unit mvclive.model.entity.impl.pedidoitens;
 interface
 
 uses
-  mvclive.utils.attributes,
+  mvclive.utils.impl.atributos,
   mvclive.model.entity.interfaces;
 
 type

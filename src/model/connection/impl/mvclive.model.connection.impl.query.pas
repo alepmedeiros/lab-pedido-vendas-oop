@@ -3,6 +3,7 @@ unit mvclive.model.connection.impl.query;
 interface
 
 uses
+  System.Generics.Collections,
   Data.DB,
   mvclive.model.connection.interfaces,
   FireDAC.Comp.Client;
@@ -15,17 +16,19 @@ type
     procedure PreencheQuery(Value: String);
     procedure PreencheParams(Value: Array of Variant);
 
-    constructor Create(Conn: iConnection);
+    constructor Create(Conn: iConexao);
     destructor Destroy; override;
   public
-    class function New(Conn: iConnection): iQuery;
-    procedure Query(const Statement: String; Params: Array of Variant); overload;
-    function Query(const Statement: Variant; Params: Array of Variant): TDataSet; overload;
+    class function New(Conn: iConexao): iQuery;
+    procedure Query(const Statement: String; const Params: Array of Variant); overload;
+    function OneAll(const Statement: Variant; const Params: Array of Variant): TDataSet; overload;
+    procedure Query(const Statement: String; const Params: TDictionary<String, Variant>); overload;
+    function OneAll(const Statement: String; const Params: TDictionary<String, Variant>): TDataSet; overload;
   end;
 
 implementation
 
-constructor TQuery.Create(Conn: iConnection);
+constructor TQuery.Create(Conn: iConexao);
 begin
   FQuery:= TFDQuery.Create(nil);
   FQuery.Connection := TFDConnection(Conn.Connection);
@@ -37,9 +40,21 @@ begin
   inherited;
 end;
 
-class function TQuery.New(Conn: iConnection): iQuery;
+class function TQuery.New(Conn: iConexao): iQuery;
 begin
   Result := Self.Create(Conn);
+end;
+
+function TQuery.OneAll(const Statement: String;
+  const Params: TDictionary<String, Variant>): TDataSet;
+begin
+  FQuery.SQL.Add(Statement);
+  for var I in Params.Keys do
+    if not (FQuery.Params.FindParam(I) = nil) then
+      FQuery.ParamByName(I).Value := Params.Items[I];
+
+  FQuery.Open();
+  Result := FQuery;
 end;
 
 procedure TQuery.PreencheParams(Value: array of Variant);
@@ -58,8 +73,18 @@ begin
   FQuery.SQL.Add(Value);
 end;
 
-function TQuery.Query(const Statement: Variant;
-  Params: array of Variant): TDataSet;
+procedure TQuery.Query(const Statement: String;
+  const Params: TDictionary<String, Variant>);
+begin
+  FQuery.SQL.Add(Statement);
+  for var I in Params.Keys do
+    if not (FQuery.Params.FindParam(I) = nil) then
+      FQuery.ParamByName(I).Value := Params.Items[I];
+
+  FQuery.ExecSQL;
+end;
+
+function TQuery.OneAll(const Statement: Variant; const Params: Array of Variant): TDataSet;
 begin
   PreencheQuery(Statement);
   PreencheParams(Params);
@@ -68,7 +93,7 @@ begin
   Result := FQuery;
 end;
 
-procedure TQuery.Query(const Statement: String; Params: array of Variant);
+procedure TQuery.Query(const Statement: String; const Params: Array of Variant);
 begin
   PreencheQuery(Statement);
   PreencheParams(Params);
