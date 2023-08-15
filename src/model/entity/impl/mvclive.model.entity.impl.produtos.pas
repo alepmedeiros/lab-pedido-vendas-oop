@@ -3,13 +3,18 @@ unit mvclive.model.entity.impl.produtos;
 interface
 
 uses
+  mvclive.utils.attributes,
   mvclive.model.entity.interfaces;
 
 type
+  [Tabela('PRODUTOS')]
   TProdutos = class(TInterfacedObject, iProdutos)
   private
+    [Campo('CODIGO'), PK]
     FCodigo: Integer;
+    [Campo('DESCRICAO')]
     FDescricao: String;
+    [Campo('PRECOVENDA'), PK]
     FPrecoVenda: Currency;
   public
     class function New: iProdutos;

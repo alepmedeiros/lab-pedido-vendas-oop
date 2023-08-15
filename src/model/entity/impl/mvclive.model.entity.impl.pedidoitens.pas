@@ -3,16 +3,24 @@ unit mvclive.model.entity.impl.pedidoitens;
 interface
 
 uses
+  mvclive.utils.attributes,
   mvclive.model.entity.interfaces;
 
 type
+  [Tabela('ITENSPEDIDO')]
   TPedidoItens = class(TInterfacedObject, iPedidoItens)
   private
+    [Campo('CODIGO'), PK]
     FId: Integer;
+    [Campo('NUMERO_PEDIDO'), FK]
     FNumeroPedido: Integer;
+    [Campo('CODIGO_PRODUTO'), FK]
     FCodigoProduto: Integer;
+    [Campo('QUANTIDADE')]
     FQuantidade: Integer;
+    [Campo('VALORUNITARIO')]
     FValorUnitario: Currency;
+    [Campo('VALORTOTAL')]
     FValorTotal: Currency;
   public
     class function New: iPedidoItens;

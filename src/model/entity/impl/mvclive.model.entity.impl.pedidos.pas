@@ -4,14 +4,20 @@ interface
 
 uses
   System.SysUtils,
+  mvclive.utils.attributes,
   mvclive.model.entity.interfaces;
 
 type
+  [Tablea('PEDIDOS')]
   TPedidos = class(TInterfacedObject, iPedidos)
   private
+    [Campo('NUMEROPEDIDO'), PK]
     FNumeroPedido: Integer;
+    [Campo('DATAEMISSAO')]
     FDataEmissao: TDateTime;
+    [Campo('CODIGO_CLIENTE'), FK]
     FCodigoCliente: Integer;
+    [Campo('VALORTOTAL')]
     FValorTotal: Currency;
   public
     class function New: iPedidos;
