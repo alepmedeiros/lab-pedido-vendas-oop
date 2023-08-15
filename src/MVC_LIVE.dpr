@@ -18,7 +18,8 @@ uses
   mvclive.utils.interfaces in 'utils\mvclive.utils.interfaces.pas',
   mvclive.utils.impl.query in 'utils\impl\mvclive.utils.impl.query.pas',
   mvclive.utils.impl.rtthelper in 'utils\impl\mvclive.utils.impl.rtthelper.pas',
-  mvclive.utils.impl.atributos in 'utils\impl\mvclive.utils.impl.atributos.pas';
+  mvclive.utils.impl.atributos in 'utils\impl\mvclive.utils.impl.atributos.pas',
+  mvclive.utils.impl.utils in 'utils\impl\mvclive.utils.impl.utils.pas';
 
 {$R *.res}
 

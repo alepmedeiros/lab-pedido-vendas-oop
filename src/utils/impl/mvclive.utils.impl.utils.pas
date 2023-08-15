@@ -20,7 +20,7 @@ type
 implementation
 
 uses
-  mvclive.utils.query;
+  mvclive.utils.impl.query;
 
 { TMyClass }
 
