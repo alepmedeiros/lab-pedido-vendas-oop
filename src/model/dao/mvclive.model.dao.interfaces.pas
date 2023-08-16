@@ -6,12 +6,12 @@ uses
   Data.DB;
 
 type
-  iDAO<T: IInterface> = interface
-    function Listar: iDAO<T>;
-    function ListarPorId(Id: Variant): iDAO<T>;
-    function Excluir: iDAO<T>;
-    function Atualizar: iDAO<T>;
-    function Inserir: iDAO<T>;
+  iDAO = interface
+    function Listar: iDAO;
+    function ListarPorId: iDAO;
+    function Excluir: iDAO;
+    function Atualizar: iDAO;
+    function Inserir: iDAO;
     function DataSet: TDataSet;
   end;
 

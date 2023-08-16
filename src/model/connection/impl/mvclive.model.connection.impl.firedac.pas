@@ -54,10 +54,11 @@ end;
 constructor TConnectionFiredac.Create;
 begin
   FConn:= TFDConnection.Create(nil);
-  FConf := TConfiguration.New(ExtractFilePath(ParamStr(0)));
+  FConf := TConfiguration.New(ExtractFilePath(ParamStr(0))+'conf.ini');
   try
     FConn.Params.Clear;
     FConn.Params.DriverID := FConf.GetDriverName;
+    FConn.Params.Database := FConf.GetCaminho;
     FConn.Params.UserName := FConf.GetUsuario;
     FConn.Params.Password := FConf.GetSenha;
 

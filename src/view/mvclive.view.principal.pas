@@ -11,8 +11,8 @@ uses
   Vcl.Graphics,
   Vcl.Controls,
   Vcl.Forms,
-  Vcl.Dialogs, Vcl.StdCtrls, mvclive.model.entity.impl.cliente,
-  mvclive.utils.impl.query;
+  Vcl.Dialogs,
+  Vcl.StdCtrls;
 
 type
   TForm1 = class(TForm)
@@ -30,13 +30,22 @@ var
 
 implementation
 
+uses
+  mvclive.controller.interfaces,
+  mvclive.controller.impl.controller;
+
 {$R *.dfm}
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-  var lCliente := TCliente.New;
+  var lController := TController.New;
 
-  Memo1.Lines.Add(TQuery.New(lCliente).Insert);
+  var lCliente := lController.entity.Cliente
+            .SetNome('Alessandro')
+            .SetCidade('Cabo frio')
+            .SetEstado('RJ');
+
+  lController.dao(lCliente).Inserir;
 end;
 
 end.

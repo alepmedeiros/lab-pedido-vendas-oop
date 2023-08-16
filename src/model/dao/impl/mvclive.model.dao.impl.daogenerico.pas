@@ -3,70 +3,90 @@ unit mvclive.model.dao.impl.daogenerico;
 interface
 
 uses
+  System.Generics.Collections,
   Data.DB,
-  mvclive.model.dao.interfaces;
+  mvclive.model.dao.interfaces,
+  mvclive.model.connection.interfaces;
 
 type
-  TDAO<T: IInterface> = class(TInterfacedObject, iDAO<T>)
+  TDAO = class(TInterfacedObject, iDAO)
   private
+    FParent: IInterface;
+
+    FConexao: iConexao;
+    FQuery: iQuery;
+    FDataSet: TDataSet;
+    FLista: TDictionary<String, Variant>;
   public
-    constructor Create;
+    constructor Create(Parent: IInterface);
     destructor Destroy; override;
-    class function New: iDAO<T>;
-    function Listar: iDAO<T>;
-    function ListarPorId(Id: Variant): iDAO<T>;
-    function Excluir: iDAO<T>;
-    function Atualizar: iDAO<T>;
-    function Inserir: iDAO<T>;
+    class function New(Parent: IInterface): iDAO;
+    function Listar: iDAO;
+    function ListarPorId: iDAO;
+    function Excluir: iDAO;
+    function Atualizar: iDAO;
+    function Inserir: iDAO;
     function DataSet: TDataSet;
   end;
 
 implementation
 
-function TDAO<T>.Atualizar: iDAO<T>;
-begin
+uses
+  mvclive.utils.impl.utils,
+  mvclive.model.connection.impl.firedac,
+  mvclive.model.connection.impl.query;
 
+function TDAO.Atualizar: iDAO;
+begin
+  Result := Self;
 end;
 
-constructor TDAO<T>.Create;
+constructor TDAO.Create(Parent: IInterface);
 begin
-
+  FParent := Parent;
+  FConexao := TConnectionFiredac.New;
+  FQuery := TQuery.New(FConexao);
+  FDataSet := TDataSet.Create(nil);
+  FLista:= TDictionary<String, Variant>.Create;
+  TUtils.New(FParent).Query.FieldParameter(FLista);
 end;
 
-function TDAO<T>.DataSet: TDataSet;
+function TDAO.DataSet: TDataSet;
 begin
-
+  Result := FDataSet;
 end;
 
-destructor TDAO<T>.Destroy;
+destructor TDAO.Destroy;
 begin
 
   inherited;
 end;
 
-function TDAO<T>.Excluir: iDAO<T>;
+function TDAO.Excluir: iDAO;
 begin
-
+  Result := Self;
 end;
 
-function TDAO<T>.Inserir: iDAO<T>;
+function TDAO.Inserir: iDAO;
 begin
-
+  Result := Self;
+  var lQuery := TUtils.New(FParent).Query.Insert;
+  FQuery.Query(lQuery, FLista);
 end;
 
-function TDAO<T>.Listar: iDAO<T>;
+function TDAO.Listar: iDAO;
 begin
-
+  Result := Self;
 end;
 
-function TDAO<T>.ListarPorId(Id: Variant): iDAO<T>;
+function TDAO.ListarPorId: iDAO;
 begin
-
+  Result := Self;
 end;
 
-class function TDAO<T>.New: iDAO<T>;
+class function TDAO.New(Parent: IInterface): iDAO;
 begin
-  Result := Self.Create;
+  Result := Self.Create(Parent);
 end;
 
 end.
