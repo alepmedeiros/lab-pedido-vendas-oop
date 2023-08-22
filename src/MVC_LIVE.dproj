@@ -125,6 +125,10 @@
         <DCCReference Include="utils\impl\mvclive.utils.impl.utils.pas"/>
         <DCCReference Include="controller\mvclive.controller.interfaces.pas"/>
         <DCCReference Include="controller\impl\mvclive.controller.impl.controller.pas"/>
+        <DCCReference Include="view\mvclive.view.cadastrocliente.pas">
+            <Form>FormCliente</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

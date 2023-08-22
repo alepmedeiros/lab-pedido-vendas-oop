@@ -276,8 +276,8 @@ begin
 
     for var I in lTipo.GetFields do
     begin
-      if not I.Tem<PK> then
-        Continue;
+//      if not I.Tem<PK> then
+//        Continue;
 
       Result := Result + I.GetAttribute<Campo>.Name + ' = :' + I.GetAttribute<Campo>.Name + ' AND ';
     end;

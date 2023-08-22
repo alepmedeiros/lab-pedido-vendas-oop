@@ -21,7 +21,8 @@ uses
   mvclive.utils.impl.atributos in 'utils\impl\mvclive.utils.impl.atributos.pas',
   mvclive.utils.impl.utils in 'utils\impl\mvclive.utils.impl.utils.pas',
   mvclive.controller.interfaces in 'controller\mvclive.controller.interfaces.pas',
-  mvclive.controller.impl.controller in 'controller\impl\mvclive.controller.impl.controller.pas';
+  mvclive.controller.impl.controller in 'controller\impl\mvclive.controller.impl.controller.pas',
+  mvclive.view.cadastrocliente in 'view\mvclive.view.cadastrocliente.pas' {FormCliente};
 
 {$R *.res}
 

@@ -9,10 +9,11 @@ type
   iDAO = interface
     function Listar: iDAO;
     function ListarPorId: iDAO;
+    function ListarPor: iDAO;
     function Excluir: iDAO;
     function Atualizar: iDAO;
     function Inserir: iDAO;
-    function DataSet: TDataSet;
+    function DataSource(Value: TDataSource): iDao;
   end;
 
 implementation
