@@ -46,6 +46,7 @@ type
     procedure btnMaisClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure btnLupaClick(Sender: TObject);
   private
     FController: iController;
   public
@@ -64,11 +65,29 @@ uses
   mvclive.controller.impl.controller,
   mvclive.view.cadastrocliente;
 
+procedure TForm1.btnLupaClick(Sender: TObject);
+begin
+    if not (edtCodigoCliente.Text = '') then
+    begin
+      var lDataSource := TDataSource.Create(nil);
+      try
+        FController.dao(FController.entity.Cliente.SetCodigo(StrToInt(edtCodigoCliente.Text)))
+          .ListarPorId.DataSource(lDataSource);
+        edtNomeCliente.Text := lDataSource.DataSet.FieldByName('NOME').AsString
+      finally
+        lDataSource.Free;
+      end;
+    end;
+    Exit;
+end;
+
 procedure TForm1.btnMaisClick(Sender: TObject);
 begin
   var lCliente := TFormCliente.Create(nil);
   try
     lCliente.ShowModal;
+    edtCodigoCliente.Text := lCliente.Codigo.ToString;
+    edtNomeCliente.Text := lCliente.Nome
   finally
     lCliente.Free;
   end;
