@@ -70,17 +70,21 @@ object Form1: TForm1
       Top = 33
       Width = 121
       Height = 29
+      BorderStyle = bsNone
       EditLabel.Width = 102
       EditLabel.Height = 21
       EditLabel.Caption = 'C'#243'digo Cliente'
       TabOrder = 0
       Text = ''
+      OnExit = edtCodigoClienteExit
+      OnKeyPress = edtCodigoClienteKeyPress
     end
     object edtNomeCliente: TLabeledEdit
       Left = 145
       Top = 33
       Width = 408
       Height = 29
+      BorderStyle = bsNone
       EditLabel.Width = 117
       EditLabel.Height = 21
       EditLabel.Caption = 'Nome do Cliente'
@@ -730,6 +734,7 @@ object Form1: TForm1
       Top = 97
       Width = 121
       Height = 29
+      BorderStyle = bsNone
       EditLabel.Width = 110
       EditLabel.Height = 21
       EditLabel.Caption = 'C'#243'digo Produto'
@@ -741,6 +746,7 @@ object Form1: TForm1
       Top = 97
       Width = 88
       Height = 29
+      BorderStyle = bsNone
       EditLabel.Width = 81
       EditLabel.Height = 21
       EditLabel.Caption = 'Quantidade'
@@ -752,6 +758,7 @@ object Form1: TForm1
       Top = 97
       Width = 121
       Height = 29
+      BorderStyle = bsNone
       EditLabel.Width = 96
       EditLabel.Height = 21
       EditLabel.Caption = 'Valor Unit'#225'rio'
@@ -1425,6 +1432,7 @@ object Form1: TForm1
       Width = 788
       Height = 391
       Align = alClient
+      BorderStyle = bsNone
       DataSource = DataSource1
       TabOrder = 0
       TitleFont.Charset = DEFAULT_CHARSET

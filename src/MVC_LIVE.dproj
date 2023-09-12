@@ -129,6 +129,10 @@
             <Form>FormCliente</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="view\mvclive.view.listacliente.pas">
+            <Form>FormClienteLista</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

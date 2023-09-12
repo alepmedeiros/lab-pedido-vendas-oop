@@ -12,8 +12,15 @@ uses
   Vcl.Controls,
   Vcl.Forms,
   Vcl.Dialogs,
-  Vcl.StdCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.Buttons,
-  Vcl.Imaging.pngimage, Vcl.ExtCtrls, Vcl.Mask, mvclive.controller.interfaces;
+  Vcl.StdCtrls,
+  Data.DB,
+  Vcl.Grids,
+  Vcl.DBGrids,
+  Vcl.Buttons,
+  Vcl.Imaging.pngimage,
+  Vcl.ExtCtrls,
+  Vcl.Mask,
+  mvclive.controller.interfaces;
 
 type
   TForm1 = class(TForm)
@@ -46,9 +53,13 @@ type
     procedure btnMaisClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure edtCodigoClienteKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCodigoClienteExit(Sender: TObject);
     procedure btnLupaClick(Sender: TObject);
   private
     FController: iController;
+
+    procedure SomenteNumeros(var aKey: Char);
   public
     { Public declarations }
   end;
@@ -58,32 +69,29 @@ var
 
 implementation
 
-
 {$R *.dfm}
 
 uses
   mvclive.controller.impl.controller,
-  mvclive.view.cadastrocliente;
+  mvclive.view.cadastrocliente,
+  mvclive.view.listacliente;
 
 procedure TForm1.btnLupaClick(Sender: TObject);
 begin
-    if not (edtCodigoCliente.Text = '') then
-    begin
-      var lDataSource := TDataSource.Create(nil);
-      try
-        FController.dao(FController.entity.Cliente.SetCodigo(StrToInt(edtCodigoCliente.Text)))
-          .ListarPorId.DataSource(lDataSource);
-        edtNomeCliente.Text := lDataSource.DataSet.FieldByName('NOME').AsString
-      finally
-        lDataSource.Free;
-      end;
-    end;
-    Exit;
+  var lPesquisa := TFormClienteLista.Create(nil);
+  try
+    lPesquisa.ShowModal;
+    edtCodigoCliente.Text := lPesquisa.Codigo.ToString;
+    edtNomeCliente.Text := lPesquisa.Nome;
+  finally
+    lPesquisa.Free;
+  end;
 end;
 
 procedure TForm1.btnMaisClick(Sender: TObject);
 begin
-  var lCliente := TFormCliente.Create(nil);
+  var
+  lCliente := TFormCliente.Create(nil);
   try
     lCliente.ShowModal;
     edtCodigoCliente.Text := lCliente.Codigo.ToString;
@@ -95,12 +103,39 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  FController.dao(FCOntroller.entity.Cliente).Listar.DataSource(DataSource1);
+  FController.dao(FController.entity.Cliente).Listar.DataSource(DataSource1);
+end;
+
+procedure TForm1.edtCodigoClienteExit(Sender: TObject);
+begin
+  if not(edtCodigoCliente.Text = '') then
+  begin
+    var
+    lDataSource := TDataSource.Create(nil);
+    try
+      FController.dao(FController.entity.Cliente.SetCodigo
+        (StrToInt(edtCodigoCliente.Text))).ListarPorId.DataSource(lDataSource);
+      edtNomeCliente.Text := lDataSource.DataSet.FieldByName('NOME').AsString
+    finally
+      lDataSource.Free;
+    end;
+  end;
+end;
+
+procedure TForm1.edtCodigoClienteKeyPress(Sender: TObject; var Key: Char);
+begin
+  SomenteNumeros(Key);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   FController := TController.NEw;
+end;
+
+procedure TForm1.SomenteNumeros(var aKey: Char);
+begin
+  if not(aKey in ['0' .. '9', #8]) then
+    aKey := #0;
 end;
 
 end.
