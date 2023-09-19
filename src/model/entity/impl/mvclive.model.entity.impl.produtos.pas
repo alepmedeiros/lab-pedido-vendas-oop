@@ -14,7 +14,7 @@ type
     FCodigo: Integer;
     [Campo('DESCRICAO')]
     FDescricao: String;
-    [Campo('PRECOVENDA'), PK]
+    [Campo('PRECOVENDA')]
     FPrecoVenda: Currency;
   public
     class function New: iProdutos;

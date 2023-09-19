@@ -26,7 +26,6 @@ type
   iPedidos = interface
     function SetNumeroPedido(const Value: Integer): iPedidos;
     function GetNumeroPedido: Integer;
-    function SetDataEmissao(Value: TDateTime): iPedidos;
     function GetDataEmissao: TDateTime;
     function SetCodigoCliente(const Value: Integer): iPedidos;
     function GetCodigoCliente: Integer;

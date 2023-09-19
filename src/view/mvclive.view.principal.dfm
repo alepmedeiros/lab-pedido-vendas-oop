@@ -729,7 +729,7 @@ object Form1: TForm1
         ExplicitHeight = 22
       end
     end
-    object LabeledEdit1: TLabeledEdit
+    object edtCodigoProduto: TLabeledEdit
       Left = 10
       Top = 97
       Width = 121
@@ -740,8 +740,10 @@ object Form1: TForm1
       EditLabel.Caption = 'C'#243'digo Produto'
       TabOrder = 4
       Text = ''
+      OnExit = edtCodigoProdutoExit
+      OnKeyPress = edtCodigoProdutoKeyPress
     end
-    object LabeledEdit2: TLabeledEdit
+    object edtQuantidade: TLabeledEdit
       Left = 137
       Top = 97
       Width = 88
@@ -753,7 +755,7 @@ object Form1: TForm1
       TabOrder = 5
       Text = ''
     end
-    object LabeledEdit3: TLabeledEdit
+    object edtValorUnitario: TLabeledEdit
       Left = 231
       Top = 97
       Width = 121
@@ -772,6 +774,7 @@ object Form1: TForm1
       Height = 40
       Caption = 'Confirmar'
       TabOrder = 7
+      OnClick = Button3Click
     end
     object Panel4: TPanel
       Left = 396
@@ -1443,7 +1446,60 @@ object Form1: TForm1
     end
   end
   object DataSource1: TDataSource
+    DataSet = ClientDataSet1
     Left = 368
     Top = 288
+  end
+  object ClientDataSet1: TClientDataSet
+    PersistDataPacket.Data = {
+      7F0000009619E0BD0100000018000000040000000000030000007F0006436F64
+      69676F04000100000000000944657363726963616F0100490000000100055749
+      44544802000200140008556E69746172696F0800040000000100075355425459
+      50450200490006004D6F6E6579000A7175616E74696461646504000100000000
+      000000}
+    Active = True
+    Aggregates = <>
+    FieldDefs = <
+      item
+        Name = 'Codigo'
+        DataType = ftInteger
+      end
+      item
+        Name = 'Descricao'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'Unitario'
+        DataType = ftCurrency
+      end
+      item
+        Name = 'quantidade'
+        DataType = ftInteger
+      end>
+    IndexDefs = <>
+    Params = <>
+    StoreDefs = True
+    AfterPost = ClientDataSet1AfterPost
+    OnCalcFields = ClientDataSet1CalcFields
+    Left = 464
+    Top = 233
+    object ClientDataSet1Codigo: TIntegerField
+      FieldName = 'Codigo'
+    end
+    object ClientDataSet1Descricao: TStringField
+      FieldName = 'Descricao'
+    end
+    object ClientDataSet1Unitario: TCurrencyField
+      FieldName = 'Unitario'
+    end
+    object ClientDataSet1quantidade: TIntegerField
+      FieldName = 'quantidade'
+    end
+    object ClientDataSet1Total: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'Total'
+      Calculated = True
+    end
   end
 end

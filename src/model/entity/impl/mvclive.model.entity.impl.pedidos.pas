@@ -23,7 +23,6 @@ type
     class function New: iPedidos;
     function SetNumeroPedido(const Value: Integer): iPedidos;
     function GetNumeroPedido: Integer;
-    function SetDataEmissao(Value: TDateTime): iPedidos;
     function GetDataEmissao: TDateTime;
     function SetCodigoCliente(const Value: Integer): iPedidos;
     function GetCodigoCliente: Integer;
@@ -40,6 +39,7 @@ end;
 
 function TPedidos.GetDataEmissao: TDateTime;
 begin
+  FDataEmissao := Now;
   Result := FDataEmissao;
 end;
 
@@ -61,13 +61,11 @@ end;
 function TPedidos.SetCodigoCliente(const Value: Integer): iPedidos;
 begin
   Result := Self;
-  FCodigoCliente := Value;
-end;
 
-function TPedidos.SetDataEmissao(Value: TDateTime): iPedidos;
-begin
-  Result := Self;
-  FDataEmissao := Value;
+  if not (Value > 0) then
+    raise Exception.Create('Pedido não pode ser realizado sem um cliente vinculado');
+
+  FCodigoCliente := Value;
 end;
 
 function TPedidos.SetNumeroPedido(const Value: Integer): iPedidos;

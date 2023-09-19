@@ -35,9 +35,7 @@ end;
 
 function TController.dao(Value: IInterface): iDAO;
 begin
-  if not Assigned(FDao) then
-    FDao := TDao.New(Value);
-  Result := FDao;
+  Result := TDao.New(Value);
 end;
 
 destructor TController.Destroy;
