@@ -47,8 +47,11 @@ uses
 procedure TFormCadastrarUsuario.Button2Click(Sender: TObject);
 begin
   try
-    var lUsuario := FController.entity.Usuarios.SetNome(Edit1.Text).SetSenha(Edit2.Text);
-    FController.dao(lUsuario).Inserir;
+    FController
+      .Usuairos
+        .SetNome(Edit1.Text)
+        .SetSenha(Edit2.Text)
+      .Build.Inserir;
     Self.Close;
   except
     raise Exception.Create('Erro ao tentar cadastrar um usuário');

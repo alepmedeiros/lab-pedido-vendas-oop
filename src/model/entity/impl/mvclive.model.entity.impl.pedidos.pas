@@ -8,8 +8,9 @@ uses
   mvclive.model.entity.interfaces;
 
 type
+
   [Tablea('PEDIDOS')]
-  TPedidos = class(TInterfacedObject, iPedidos)
+  TPedidosModel = class(TInterfacedObject, iPedidosModel)
   private
     [Campo('NUMEROPEDIDO'), PK]
     FNumeroPedido: Integer;
@@ -20,61 +21,62 @@ type
     [Campo('VALORTOTAL')]
     FValorTotal: Currency;
   public
-    class function New: iPedidos;
-    function SetNumeroPedido(const Value: Integer): iPedidos;
+    class function New: iPedidosModel;
+    function SetNumeroPedido(const Value: Integer): iPedidosModel;
     function GetNumeroPedido: Integer;
     function GetDataEmissao: TDateTime;
-    function SetCodigoCliente(const Value: Integer): iPedidos;
+    function SetCodigoCliente(const Value: Integer): iPedidosModel;
     function GetCodigoCliente: Integer;
-    function SetValorTotal(const Value: Currency): iPedidos;
+    function SetValorTotal(const Value: Currency): iPedidosModel;
     function GetValorTotal: Currency;
   end;
 
 implementation
 
-function TPedidos.GetCodigoCliente: Integer;
+function TPedidosModel.GetCodigoCliente: Integer;
 begin
   Result := FCodigoCliente;
 end;
 
-function TPedidos.GetDataEmissao: TDateTime;
+function TPedidosModel.GetDataEmissao: TDateTime;
 begin
   FDataEmissao := Now;
   Result := FDataEmissao;
 end;
 
-function TPedidos.GetNumeroPedido: Integer;
+function TPedidosModel.GetNumeroPedido: Integer;
 begin
   Result := FNumeroPedido;
 end;
 
-function TPedidos.GetValorTotal: Currency;
+function TPedidosModel.GetValorTotal: Currency;
 begin
   Result := FValorTotal;
 end;
 
-class function TPedidos.New: iPedidos;
+class function TPedidosModel.New: iPedidosModel;
 begin
   Result := Self.Create;
 end;
 
-function TPedidos.SetCodigoCliente(const Value: Integer): iPedidos;
+function TPedidosModel.SetCodigoCliente(const Value: Integer): iPedidosModel;
 begin
   Result := Self;
 
-  if not (Value > 0) then
-    raise Exception.Create('Pedido não pode ser realizado sem um cliente vinculado');
+  if not(Value > 0) then
+    raise Exception.Create
+      ('Pedido não pode ser realizado sem um cliente vinculado');
 
   FCodigoCliente := Value;
 end;
 
-function TPedidos.SetNumeroPedido(const Value: Integer): iPedidos;
+function TPedidosModel.SetNumeroPedido(const Value: Integer): iPedidosModel;
 begin
   Result := Self;
   FNumeroPedido := Value;
 end;
 
-function TPedidos.SetValorTotal(const Value: Currency): iPedidos;
+function TPedidosModel.SetValorTotal(const Value: Currency): iPedidosModel;
 begin
   Result := Self;
   FValorTotal := Value;

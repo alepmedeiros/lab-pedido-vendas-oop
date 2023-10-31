@@ -8,7 +8,7 @@ uses
 
 type
   [Tabela('CLIENTE')]
-  TCliente = class(TInterfacedObject, iCliente)
+  TClienteModel = class(TInterfacedObject, iClienteModel)
   private
     [Campo('CODIGO'), PK]
     FCodigo: Integer;
@@ -19,63 +19,63 @@ type
     [Campo('UF')]
     FEstado: String;
   public
-    class function New: iCliente;
-    function SetCodigo(const Value: Integer): iCliente;
+    class function New: iClienteModel;
+    function SetCodigo(const Value: Integer): iClienteModel;
     function GetCodigo: Integer;
-    function SetNome(const Value: String): iCliente;
+    function SetNome(const Value: String): iClienteModel;
     function GetNome: String;
-    function SetCidade(const Value: String): iCliente;
+    function SetCidade(const Value: String): iClienteModel;
     function GetCidade: String;
-    function SetEstado(const Value: String): iCliente;
+    function SetEstado(const Value: String): iClienteModel;
     function GetEstado: String;
   end;
 
 implementation
 
-function TCliente.GetCidade: String;
+function TClienteModel.GetCidade: String;
 begin
   Result := FCidade;
 end;
 
-function TCliente.GetCodigo: Integer;
+function TClienteModel.GetCodigo: Integer;
 begin
   Result := FCodigo;
 end;
 
-function TCliente.GetEstado: String;
+function TClienteModel.GetEstado: String;
 begin
   Result := FEstado;
 end;
 
-function TCliente.GetNome: String;
+function TClienteModel.GetNome: String;
 begin
   Result := FNome;
 end;
 
-class function TCliente.New: iCliente;
+class function TClienteModel.New: iClienteModel;
 begin
   Result := Self.Create;
 end;
 
-function TCliente.SetCidade(const Value: String): iCliente;
+function TClienteModel.SetCidade(const Value: String): iClienteModel;
 begin
   Result := Self;
   FCidade := Value;
 end;
 
-function TCliente.SetCodigo(const Value: Integer): iCliente;
+function TClienteModel.SetCodigo(const Value: Integer): iClienteModel;
 begin
   Result := Self;
   FCodigo := Value;
 end;
 
-function TCliente.SetEstado(const Value: String): iCliente;
+function TClienteModel.SetEstado(const Value: String): iClienteModel;
 begin
   Result := Self;
   FEstado := Value;
 end;
 
-function TCliente.SetNome(const Value: String): iCliente;
+function TClienteModel.SetNome(const Value: String): iClienteModel;
 begin
   Result := Self;
   FNome := Value;

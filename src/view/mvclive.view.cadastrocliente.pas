@@ -52,29 +52,29 @@ uses
 
 procedure TFormCliente.Button1Click(Sender: TObject);
 begin
-  var lCliente := FController.entity
-                    .Cliente
-                      .SetNome(edtNome.Text)
-                      .SetCidade(edtCidade.Text)
-                      .SetEstado(edtEstado.Text);
-
-  FController.dao(lCliente).Inserir;
-
-  var lDataSource := TDataSource.Create(nil);
-  try
-    FController.dao(lCliente).Listar.DataSource(lDataSource);
-
-    lDataSource.DataSet.Locate('NOME;CIDADE;UF', VarArrayOf([lCliente.GetNome,
-      lCliente.GetCidade, lCliente.GetEstado]),[]);
-    FCodigo := lDataSource.DataSet.FieldByName('CODIGO').AsInteger;
-    FNome := lDataSource.DataSet.FieldByName('NOME').AsString;
-
-    ShowMessage('Cliente Cadastrado com sucesso!!');
-    LimparCampos;
-    Self.Close;
-  finally
-    lDataSource.Free;
-  end;
+//  var lCliente := FController.entity
+//                    .Cliente
+//                      .SetNome(edtNome.Text)
+//                      .SetCidade(edtCidade.Text)
+//                      .SetEstado(edtEstado.Text);
+//
+//  FController.dao(lCliente).Inserir;
+//
+//  var lDataSource := TDataSource.Create(nil);
+//  try
+//    FController.dao(lCliente).Listar.DataSource(lDataSource);
+//
+//    lDataSource.DataSet.Locate('NOME;CIDADE;UF', VarArrayOf([lCliente.GetNome,
+//      lCliente.GetCidade, lCliente.GetEstado]),[]);
+//    FCodigo := lDataSource.DataSet.FieldByName('CODIGO').AsInteger;
+//    FNome := lDataSource.DataSet.FieldByName('NOME').AsString;
+//
+//    ShowMessage('Cliente Cadastrado com sucesso!!');
+//    LimparCampos;
+//    Self.Close;
+//  finally
+//    lDataSource.Free;
+//  end;
 end;
 
 procedure TFormCliente.FormCreate(Sender: TObject);

@@ -8,7 +8,7 @@ uses
 
 type
   [Tabela('PRODUTOS')]
-  TProdutos = class(TInterfacedObject, iProdutos)
+  TProdutosModel = class(TInterfacedObject, iProdutosModel)
   private
     [Campo('CODIGO'), PK]
     FCodigo: Integer;
@@ -17,50 +17,50 @@ type
     [Campo('PRECOVENDA')]
     FPrecoVenda: Currency;
   public
-    class function New: iProdutos;
-    function SetCodigo(const Value: Integer): iProdutos;
+    class function New: iProdutosModel;
+    function SetCodigo(const Value: Integer): iProdutosModel;
     function GetCodigo: Integer;
-    function SetDescricao(const Value: String): iProdutos;
+    function SetDescricao(const Value: String): iProdutosModel;
     function GetDescricao: String;
-    function SetPrecoVenda(const Value: Currency): iProdutos;
+    function SetPrecoVenda(const Value: Currency): iProdutosModel;
     function GetPrecoVenda: Currency;
   end;
 
 implementation
 
-function TProdutos.GetCodigo: Integer;
+function TProdutosModel.GetCodigo: Integer;
 begin
   Result := FCodigo;
 end;
 
-function TProdutos.GetDescricao: String;
+function TProdutosModel.GetDescricao: String;
 begin
   Result := FDescricao;
 end;
 
-function TProdutos.GetPrecoVenda: Currency;
+function TProdutosModel.GetPrecoVenda: Currency;
 begin
   Result := FPrecoVenda;
 end;
 
-class function TProdutos.New: iProdutos;
+class function TProdutosModel.New: iProdutosModel;
 begin
   Result := Self.Create;
 end;
 
-function TProdutos.SetCodigo(const Value: Integer): iProdutos;
+function TProdutosModel.SetCodigo(const Value: Integer): iProdutosModel;
 begin
   Result := Self;
   FCodigo := Value;
 end;
 
-function TProdutos.SetDescricao(const Value: String): iProdutos;
+function TProdutosModel.SetDescricao(const Value: String): iProdutosModel;
 begin
   Result := Self;
   FDescricao := Value;
 end;
 
-function TProdutos.SetPrecoVenda(const Value: Currency): iProdutos;
+function TProdutosModel.SetPrecoVenda(const Value: Currency): iProdutosModel;
 begin
   Result := Self;
   FPrecoVenda := Value;

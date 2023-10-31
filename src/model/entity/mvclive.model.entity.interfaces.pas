@@ -1,62 +1,70 @@
 unit mvclive.model.entity.interfaces;
+
 interface
+
 type
-  iUsuarios = interface
-    function SetCodigo(const Value: Integer): iUsuarios;
+  iUsuariosModel = interface
+    function SetCodigo(const Value: Integer): iUsuariosModel;
     function GetCodigo: Integer;
-    function SetNome(const Value: String): iUsuarios;
+    function SetNome(const Value: String): iUsuariosModel;
     function GetNome: String;
-    function SetSenha(const Value: String): iUsuarios;
+    function SetSenha(const Value: String): iUsuariosModel;
     function GetSenha: String;
-    function GetHashCode: String;
   end;
-  iCliente = interface
-    function SetCodigo(const Value: Integer): iCliente;
+
+  iClienteModel = interface
+    function SetCodigo(const Value: Integer): iClienteModel;
     function GetCodigo: Integer;
-    function SetNome(const Value: String): iCliente;
+    function SetNome(const Value: String): iClienteModel;
     function GetNome: String;
-    function SetCidade(const Value: String): iCliente;
+    function SetCidade(const Value: String): iClienteModel;
     function GetCidade: String;
-    function SetEstado(const Value: String): iCliente;
+    function SetEstado(const Value: String): iClienteModel;
     function GetEstado: String;
   end;
-  iProdutos = interface
-    function SetCodigo(const Value: Integer): iProdutos;
+
+  iProdutosModel = interface
+    function SetCodigo(const Value: Integer): iProdutosModel;
     function GetCodigo: Integer;
-    function SetDescricao(const Value: String): iProdutos;
+    function SetDescricao(const Value: String): iProdutosModel;
     function GetDescricao: String;
-    function SetPrecoVenda(const Value: Currency): iProdutos;
+    function SetPrecoVenda(const Value: Currency): iProdutosModel;
     function GetPrecoVenda: Currency;
   end;
-  iPedidos = interface
-    function SetNumeroPedido(const Value: Integer): iPedidos;
+
+  iPedidosModel = interface
+    function SetNumeroPedido(const Value: Integer): iPedidosModel;
     function GetNumeroPedido: Integer;
     function GetDataEmissao: TDateTime;
-    function SetCodigoCliente(const Value: Integer): iPedidos;
+    function SetCodigoCliente(const Value: Integer): iPedidosModel;
     function GetCodigoCliente: Integer;
-    function SetValorTotal(const Value: Currency): iPedidos;
+    function SetValorTotal(const Value: Currency): iPedidosModel;
     function GetValorTotal: Currency;
   end;
-  iPedidoItens = interface
-    function SetId(const Value: Integer): iPedidoItens;
+
+  iPedidoItensModel = interface
+    function SetId(const Value: Integer): iPedidoItensModel;
     function GetId: Integer;
-    function SetNumeroPedido(const Value: Integer): iPedidoItens;
+    function SetNumeroPedido(const Value: Integer): iPedidoItensModel;
     function GetNumeroPedido: Integer;
-    function SetCodigoProduto(const Value: Integer): iPedidoItens;
+    function SetCodigoProduto(const Value: Integer): iPedidoItensModel;
     function GetCodigoProduto: Integer;
-    function SetQuantidade(const Value: Integer): iPedidoItens;
+    function SetQuantidade(const Value: Integer): iPedidoItensModel;
     function GetQuantidade: Integer;
-    function SetValorUnitario(const Value: Currency): iPedidoItens;
+    function SetValorUnitario(const Value: Currency): iPedidoItensModel;
     function GetValorUnitario: Currency;
-    function SetValorTotal(const Value: Currency): iPedidoItens;
+    function SetValorTotal(const Value: Currency): iPedidoItensModel;
     function GetValorTotal: Currency;
   end;
-  iEntity = interface
-    function Cliente: iCliente;
-    function Produtos: iProdutos;
-    function Pedidos: iPedidos;
-    function PedidoItens: iPedidoItens;
-    function Usuarios: iUsuarios;
-  end;
+
+//  iEntity = interface
+//    function Cliente: iCliente;
+//    function Produtos: iProdutos;
+//    function Pedidos: iPedidos;
+//    function PedidoItens: iPedidoItens;
+//    function Usuarios: iUsuarios;
+//  end;
+
 implementation
+
 end.

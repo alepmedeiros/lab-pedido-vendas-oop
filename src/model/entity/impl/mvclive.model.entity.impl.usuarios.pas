@@ -9,7 +9,7 @@ uses
 type
 
   [Tabela('Usuarios')]
-  TUsuarios = class(TInterfacedObject, iUsuarios)
+  TUsuariosModel = class(TInterfacedObject, iUsuariosModel)
   private
     [Campo('CODIGO'), PK]
     FCodigo: Integer;
@@ -17,19 +17,16 @@ type
     FNome: String;
     [Campo('SENHA')]
     FSenha: String;
-    [Campo('HASHCODE')]
-    FHashCode: String;
 
     function GeraHasCode(Value: String): String;
   public
-    class function New: iUsuarios;
-    function SetCodigo(const Value: Integer): iUsuarios;
+    class function New: iUsuariosModel;
+    function SetCodigo(const Value: Integer): iUsuariosModel;
     function GetCodigo: Integer;
-    function SetNome(const Value: String): iUsuarios;
+    function SetNome(const Value: String): iUsuariosModel;
     function GetNome: String;
-    function SetSenha(const Value: String): iUsuarios;
+    function SetSenha(const Value: String): iUsuariosModel;
     function GetSenha: String;
-    function GetHashCode: String;
   end;
 
 implementation
@@ -39,7 +36,7 @@ uses
   IdHash,
   IdHashMessageDigest;
 
-function TUsuarios.GeraHasCode(Value: String): String;
+function TUsuariosModel.GeraHasCode(Value: String): String;
 var
   hashMessageDigest5: TIdHashMessageDigest5;
 begin
@@ -53,48 +50,42 @@ begin
   end;
 end;
 
-function TUsuarios.GetCodigo: Integer;
+function TUsuariosModel.GetCodigo: Integer;
 begin
   Result := FCodigo;
 end;
 
-function TUsuarios.GetHashCode: String;
-begin
-  Result := FHashCode;
-end;
-
-function TUsuarios.GetNome: String;
+function TUsuariosModel.GetNome: String;
 begin
   Result := FNome;
 end;
 
-function TUsuarios.GetSenha: String;
+function TUsuariosModel.GetSenha: String;
 begin
   Result := FSenha;
 end;
 
-class function TUsuarios.New: iUsuarios;
+class function TUsuariosModel.New: iUsuariosModel;
 begin
   Result := Self.Create;
 end;
 
-function TUsuarios.SetCodigo(const Value: Integer): iUsuarios;
+function TUsuariosModel.SetCodigo(const Value: Integer): iUsuariosModel;
 begin
   Result := Self;
   FCodigo := Value;
 end;
 
-function TUsuarios.SetNome(const Value: String): iUsuarios;
+function TUsuariosModel.SetNome(const Value: String): iUsuariosModel;
 begin
   Result := Self;
   FNome := Value;
 end;
 
-function TUsuarios.SetSenha(const Value: String): iUsuarios;
+function TUsuariosModel.SetSenha(const Value: String): iUsuariosModel;
 begin
   Result := Self;
-  FSenha := Value;
-  FHashCode := GeraHasCode(FSenha);
+  FSenha := GeraHasCode(FSenha);
 end;
 
 end.

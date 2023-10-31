@@ -158,7 +158,8 @@ begin
               Result := Result + I.GetAttribute<Campo>.Name + ', ';
 
           if I.GetValue(FParent).TypeInfo = TypeInfo(Currency) then
-            Result := Result + I.GetAttribute<Campo>.Name + ', ';
+            if not(I.GetValue(FParent).AsCurrency = 0) then
+              Result := Result + I.GetAttribute<Campo>.Name + ', ';
         end;
         tkLString,
         tkWString,
@@ -213,6 +214,7 @@ begin
               Result  := Result + ':' + I.GetAttribute<Campo>.Name + ', ';
 
           if I.GetValue(FParent).TypeInfo = TypeInfo(Currency) then
+            if not(I.GetValue(FParent).AsCurrency = 0) then
             Result  := Result + ':' + I.GetAttribute<Campo>.Name + ', ';
         end;
         tkLString,
@@ -276,10 +278,32 @@ begin
 
     for var I in lTipo.GetFields do
     begin
-      if not I.Tem<PK> then
-        Continue;
+      if not I.Tem<Campo> then
+        Break;
 
-      Result := Result + I.GetAttribute<Campo>.Name + ' = :' + I.GetAttribute<Campo>.Name + ' AND ';
+      case I.GetValue(FParent).TypeInfo.Kind of
+        tkInteger, tkInt64: begin
+          if not (I.GetValue(FParent).AsInteger <= 0) then
+            Result := Result + I.GetAttribute<Campo>.Name + ' = :' + I.GetAttribute<Campo>.Name + ' AND ';
+        end;
+        tkFloat: begin
+          if I.GetValue(FParent).TypeInfo = TypeInfo(TDateTime) then
+              Result := Result + I.GetAttribute<Campo>.Name + ' = :' + I.GetAttribute<Campo>.Name + ' AND ';
+
+          if I.GetValue(FParent).TypeInfo = TypeInfo(Currency) then
+            if not (I.GetValue(FParent).AsCurrency = 0) then
+              Result := Result + I.GetAttribute<Campo>.Name + ' = :' + I.GetAttribute<Campo>.Name + ' AND ';
+        end;
+        tkLString,
+        tkWString,
+        tkUString,
+        tkString: begin
+          if not I.GetValue(FParent).AsString.IsEmpty then
+            Result := Result + I.GetAttribute<Campo>.Name + ' = :' + I.GetAttribute<Campo>.Name + ' AND ';
+        end;
+        else
+          Result := Result + I.GetAttribute<Campo>.Name + ' = :' + I.GetAttribute<Campo>.Name + ' AND ';
+      end;
     end;
   finally
     Result := Copy(Result, 0, Length(Result) - 4) + ' ';

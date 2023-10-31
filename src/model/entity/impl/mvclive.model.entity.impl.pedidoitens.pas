@@ -8,7 +8,7 @@ uses
 
 type
   [Tabela('ITENSPEDIDO')]
-  TPedidoItens = class(TInterfacedObject, iPedidoItens)
+  TPedidoItensModel = class(TInterfacedObject, iPedidoItensModel)
   private
     [Campo('CODIGO'), PK]
     FId: Integer;
@@ -23,89 +23,89 @@ type
     [Campo('VALORTOTAL')]
     FValorTotal: Currency;
   public
-    class function New: iPedidoItens;
-    function SetId(const Value: Integer): iPedidoItens;
+    class function New: iPedidoItensModel;
+    function SetId(const Value: Integer): iPedidoItensModel;
     function GetId: Integer;
-    function SetNumeroPedido(const Value: Integer): iPedidoItens;
+    function SetNumeroPedido(const Value: Integer): iPedidoItensModel;
     function GetNumeroPedido: Integer;
-    function SetCodigoProduto(const Value: Integer): iPedidoItens;
+    function SetCodigoProduto(const Value: Integer): iPedidoItensModel;
     function GetCodigoProduto: Integer;
-    function SetQuantidade(const Value: Integer): iPedidoItens;
+    function SetQuantidade(const Value: Integer): iPedidoItensModel;
     function GetQuantidade: Integer;
-    function SetValorUnitario(const Value: Currency): iPedidoItens;
+    function SetValorUnitario(const Value: Currency): iPedidoItensModel;
     function GetValorUnitario: Currency;
-    function SetValorTotal(const Value: Currency): iPedidoItens;
+    function SetValorTotal(const Value: Currency): iPedidoItensModel;
     function GetValorTotal: Currency;
   end;
 
 implementation
 
-function TPedidoItens.GetCodigoProduto: Integer;
+function TPedidoItensModel.GetCodigoProduto: Integer;
 begin
   Result := FCodigoProduto;
 end;
 
-function TPedidoItens.GetId: Integer;
+function TPedidoItensModel.GetId: Integer;
 begin
   Result := FId;
 end;
 
-function TPedidoItens.GetNumeroPedido: Integer;
+function TPedidoItensModel.GetNumeroPedido: Integer;
 begin
   Result := FNumeroPedido;
 end;
 
-function TPedidoItens.GetQuantidade: Integer;
+function TPedidoItensModel.GetQuantidade: Integer;
 begin
   Result := FQuantidade;
 end;
 
-function TPedidoItens.GetValorTotal: Currency;
+function TPedidoItensModel.GetValorTotal: Currency;
 begin
   Result := FValorTotal;
 end;
 
-function TPedidoItens.GetValorUnitario: Currency;
+function TPedidoItensModel.GetValorUnitario: Currency;
 begin
   Result := FValorUnitario;
 end;
 
-class function TPedidoItens.New: iPedidoItens;
+class function TPedidoItensModel.New: iPedidoItensModel;
 begin
   Result := Self.Create;
 end;
 
-function TPedidoItens.SetCodigoProduto(const Value: Integer): iPedidoItens;
+function TPedidoItensModel.SetCodigoProduto(const Value: Integer): iPedidoItensModel;
 begin
   Result := Self;
   FCodigoProduto := Value;
 end;
 
-function TPedidoItens.SetId(const Value: Integer): iPedidoItens;
+function TPedidoItensModel.SetId(const Value: Integer): iPedidoItensModel;
 begin
   Result := Self;
   FId := Value;
 end;
 
-function TPedidoItens.SetNumeroPedido(const Value: Integer): iPedidoItens;
+function TPedidoItensModel.SetNumeroPedido(const Value: Integer): iPedidoItensModel;
 begin
   Result := Self;
   FNumeroPedido := Value;
 end;
 
-function TPedidoItens.SetQuantidade(const Value: Integer): iPedidoItens;
+function TPedidoItensModel.SetQuantidade(const Value: Integer): iPedidoItensModel;
 begin
   Result := Self;
   FQuantidade := Value;
 end;
 
-function TPedidoItens.SetValorTotal(const Value: Currency): iPedidoItens;
+function TPedidoItensModel.SetValorTotal(const Value: Currency): iPedidoItensModel;
 begin
   Result := Self;
   FValorTotal := Value;
 end;
 
-function TPedidoItens.SetValorUnitario(const Value: Currency): iPedidoItens;
+function TPedidoItensModel.SetValorUnitario(const Value: Currency): iPedidoItensModel;
 begin
   Result := Self;
   FValorUnitario := Value;

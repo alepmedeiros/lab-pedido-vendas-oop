@@ -13,7 +13,8 @@ uses
   Vcl.Forms,
   Vcl.Dialogs,
   Vcl.StdCtrls,
-  Vcl.ExtCtrls, mvclive.controller.interfaces;
+  Vcl.ExtCtrls,
+  mvclive.controller.interfaces;
 
 type
   TFormLogin = class(TForm)
@@ -29,10 +30,13 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     FController: iController;
+    FValido: Boolean;
+    FTipoUsuario: Integer;
   public
-    { Public declarations }
+    property TipoUsuario: Integer read FTipoUsuario write FTipoUsuario;
   end;
 
 var
@@ -47,23 +51,27 @@ uses
   mvclive.controller.impl.controller,
   mvclive.view.cadastrarusuario;
 
-{ TFormLogin }
-
 procedure TFormLogin.Button1Click(Sender: TObject);
 begin
-//  if not ((Edit1.Text = 'Alessandro') and (Edit2.Text = '123')) then
-//    Application.Terminate;
-  var lDataSet := TDataSource.Create(nil);
-  FController.dao(FController.entity.Usuarios).Listar.DataSource(lDataSet);
+  var lDataset := TDataSource.Create(nil);
   try
-    if not lDataSet.DataSet.Locate('NOME;HASHCODE',VarArrayOf([Edit1.Text, FController.entity.Usuarios.SetSenha(Edit2.Text).GetHashCode]),[]) then
+    FController
+      .Usuairos
+        .SetNome(Edit1.Text)
+        .SetSenha(Edit2.Text)
+      .Build.ListarPor.DataSource(lDataset);
+
+    if not lDataset.DataSet.IsEmpty then
     begin
-      ShowMessage('Usuário não encontrado');
+      FValido := True;
+      FTipoUsuario := lDataset.DataSet.Fields[3].AsInteger;
+      Self.Close;
       exit;
     end;
-    Self.Close
+
+    raise Exception.Create('Usuário não encontrado');
   finally
-    lDataSet.Free;
+    lDataset.Free;
   end;
 end;
 
@@ -80,9 +88,54 @@ begin
   end;
 end;
 
+procedure TFormLogin.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if not FValido then
+    Application.Terminate;
+end;
+
 procedure TFormLogin.FormCreate(Sender: TObject);
 begin
   FController := TController.NEw;
 end;
+
+//procedure TFormLogin.ValidarUsuario(aUser, aSenha: String);
+//var
+//  AuthorizationManager: TAuthorizationManager;
+//  AuthorizationStrategy: IAuthorizationStrategy;
+//  CurrentUserType: TUserType;
+//begin
+//  // Aqui você deve implementar a lógica de autenticação e determinar o tipo de usuário (CurrentUserType).
+//  // Por simplicidade, vou considerar um usuário "utAdmin" se o nome de usuário for "admin" e a senha for "admin".
+//  var lDataset := TDataSource.Create(nil);
+//  try
+//  FController
+//      .Usuairos
+//        .SetNome(aUser)
+//        .SetSenha(aSenha)
+//      .Build.ListarPor.DataSource(lDataset);
+//
+//    if lDataset.DataSet.IsEmpty then
+//      raise Exception.Create('Usuário não encontrado');
+//
+//    CurrentUserType := TUserType(lDataset.DataSet.Fields[3].AsInteger);
+//  finally
+//    lDataset.Free;
+//  end;
+//
+//  AuthorizationManager := TAuthorizationManager.Create;
+//
+//  AuthorizationStrategy := AuthorizationManager.GetAuthorizationStrategy(CurrentUserType);
+//
+//  if Assigned(AuthorizationStrategy) and AuthorizationStrategy.IsAuthorized then
+//  begin
+//    ShowMessage('Login bem-sucedido e autorização concedida.');
+//    // O usuário tem permissão para acessar a funcionalidade restrita, execute-a
+//  end
+//  else
+//  begin
+//    ShowMessage('Login bem-sucedido, mas você não tem permissão para acessar esta funcionalidade.');
+//  end;
+//end;
 
 end.

@@ -3,13 +3,15 @@ unit mvclive.controller.interfaces;
 interface
 
 uses
-  mvclive.model.entity.interfaces,
-  mvclive.model.dao.interfaces;
+  mvclive.dto.interfaces;
 
 type
   iController = interface
-    function entity: iEntity;
-    function dao(Value: IInterface): iDao;
+    function Usuairos: iUsuarios;
+    function Cliente: iCliente;
+    function Produto: iProdutos;
+    function Pedidos: iPedidos;
+    function PedidoItens: iPedidoItens;
   end;
 
 implementation

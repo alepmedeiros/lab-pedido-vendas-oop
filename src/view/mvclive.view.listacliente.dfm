@@ -2,8 +2,8 @@ object FormClienteLista: TFormClienteLista
   Left = 0
   Top = 0
   Caption = 'FormClienteLista'
-  ClientHeight = 393
-  ClientWidth = 631
+  ClientHeight = 384
+  ClientWidth = 625
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,8 +16,8 @@ object FormClienteLista: TFormClienteLista
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 631
-    Height = 393
+    Width = 625
+    Height = 384
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0

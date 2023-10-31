@@ -2,8 +2,8 @@ object FormLogin: TFormLogin
   Left = 0
   Top = 0
   Caption = 'FormLogin'
-  ClientHeight = 370
-  ClientWidth = 452
+  ClientHeight = 361
+  ClientWidth = 446
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,18 +11,19 @@ object FormLogin: TFormLogin
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   TextHeight = 21
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 452
-    Height = 370
+    Width = 446
+    Height = 361
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 448
-    ExplicitHeight = 369
+    ExplicitWidth = 442
+    ExplicitHeight = 360
     object Panel2: TPanel
       Left = 107
       Top = 72

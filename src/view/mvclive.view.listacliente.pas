@@ -76,7 +76,7 @@ end;
 procedure TFormClienteLista.FormCreate(Sender: TObject);
 begin
   FController := TController.New;
-  FController.dao(FController.entity.Cliente).Listar.DataSource(DataSource1);
+//  FController.dao(FController.entity.Cliente).Listar.DataSource(DataSource1);
 end;
 
 end.

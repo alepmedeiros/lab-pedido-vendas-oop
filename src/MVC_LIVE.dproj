@@ -111,7 +111,6 @@
         <DCCReference Include="model\entity\impl\mvclive.model.entity.impl.produtos.pas"/>
         <DCCReference Include="model\entity\impl\mvclive.model.entity.impl.pedidos.pas"/>
         <DCCReference Include="model\entity\impl\mvclive.model.entity.impl.pedidoitens.pas"/>
-        <DCCReference Include="model\entity\impl\mvclive.model.entity.impl.entity.pas"/>
         <DCCReference Include="model\connection\mvclive.model.connection.interfaces.pas"/>
         <DCCReference Include="model\connection\impl\mvclive.model.connection.impl.firedac.pas"/>
         <DCCReference Include="model\connection\impl\mvclive.model.connection.impl.query.pas"/>
@@ -142,6 +141,14 @@
             <Form>FormCadastrarUsuario</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="dto\mvclive.dto.interfaces.pas"/>
+        <DCCReference Include="dto\impl\mvclive.dto.impl.usuarios.pas"/>
+        <DCCReference Include="dto\impl\mvclive.dto.impl.cliente.pas"/>
+        <DCCReference Include="dto\impl\mvclive.dto.impl.produtos.pas"/>
+        <DCCReference Include="dto\impl\mvclive.dto.impl.pedidos.pas"/>
+        <DCCReference Include="dto\impl\mvclive.dto.impl.pedidoitens.pas"/>
+        <DCCReference Include="model\validation\mvclive.model.validation.pas"/>
+        <DCCReference Include="model\validation\mvclive.model.validation.manager.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

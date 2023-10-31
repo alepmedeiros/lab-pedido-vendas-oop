@@ -2,8 +2,8 @@ object FormCadastrarUsuario: TFormCadastrarUsuario
   Left = 0
   Top = 0
   Caption = 'FormCadastrarUsuario'
-  ClientHeight = 335
-  ClientWidth = 468
+  ClientHeight = 317
+  ClientWidth = 456
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,8 +15,8 @@ object FormCadastrarUsuario: TFormCadastrarUsuario
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 468
-    Height = 335
+    Width = 456
+    Height = 317
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
@@ -33,23 +33,21 @@ object FormCadastrarUsuario: TFormCadastrarUsuario
         AlignWithMargins = True
         Left = 3
         Top = 64
-        Width = 234
+        Width = 43
         Height = 21
         Margins.Top = 20
         Align = alTop
         Alignment = taCenter
         Caption = 'Senha'
-        ExplicitWidth = 43
       end
       object Label2: TLabel
         Left = 0
         Top = 0
-        Width = 240
+        Width = 54
         Height = 21
         Align = alTop
         Alignment = taCenter
         Caption = 'Usu'#225'rio'
-        ExplicitWidth = 54
       end
       object Edit1: TEdit
         Left = 0

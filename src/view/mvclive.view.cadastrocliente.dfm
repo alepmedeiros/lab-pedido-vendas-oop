@@ -2,8 +2,8 @@ object FormCliente: TFormCliente
   Left = 0
   Top = 0
   Caption = 'FormCliente'
-  ClientHeight = 193
-  ClientWidth = 492
+  ClientHeight = 184
+  ClientWidth = 486
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,7 +16,7 @@ object FormCliente: TFormCliente
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 492
+    Width = 486
     Height = 125
     Align = alTop
     BevelOuter = bvNone
@@ -70,8 +70,8 @@ object FormCliente: TFormCliente
   object Panel2: TPanel
     Left = 0
     Top = 125
-    Width = 492
-    Height = 68
+    Width = 486
+    Height = 59
     Align = alClient
     BevelOuter = bvNone
     Padding.Left = 10

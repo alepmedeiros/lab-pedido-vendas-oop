@@ -53,7 +53,6 @@ object FormPrincipal: TFormPrincipal
       Align = alLeft
       Caption = 'Finalizar Pedido'
       TabOrder = 1
-      OnClick = Button2Click
     end
   end
   object Panel2: TPanel

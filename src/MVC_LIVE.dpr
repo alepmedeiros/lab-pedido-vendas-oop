@@ -1,5 +1,4 @@
 program MVC_LIVE;
-
 uses
   Vcl.Forms,
   mvclive.view.principal in 'view\mvclive.view.principal.pas' {FormPrincipal},
@@ -8,7 +7,6 @@ uses
   mvclive.model.entity.impl.produtos in 'model\entity\impl\mvclive.model.entity.impl.produtos.pas',
   mvclive.model.entity.impl.pedidos in 'model\entity\impl\mvclive.model.entity.impl.pedidos.pas',
   mvclive.model.entity.impl.pedidoitens in 'model\entity\impl\mvclive.model.entity.impl.pedidoitens.pas',
-  mvclive.model.entity.impl.entity in 'model\entity\impl\mvclive.model.entity.impl.entity.pas',
   mvclive.model.connection.interfaces in 'model\connection\mvclive.model.connection.interfaces.pas',
   mvclive.model.connection.impl.firedac in 'model\connection\impl\mvclive.model.connection.impl.firedac.pas',
   mvclive.model.connection.impl.query in 'model\connection\impl\mvclive.model.connection.impl.query.pas',
@@ -26,10 +24,17 @@ uses
   mvclive.view.listacliente in 'view\mvclive.view.listacliente.pas' {FormClienteLista},
   mvclive.view.login in 'view\mvclive.view.login.pas' {FormLogin},
   mvclive.model.entity.impl.usuarios in 'model\entity\impl\mvclive.model.entity.impl.usuarios.pas',
-  mvclive.view.cadastrarusuario in 'view\mvclive.view.cadastrarusuario.pas' {FormCadastrarUsuario};
+  mvclive.view.cadastrarusuario in 'view\mvclive.view.cadastrarusuario.pas' {FormCadastrarUsuario},
+  mvclive.dto.interfaces in 'dto\mvclive.dto.interfaces.pas',
+  mvclive.dto.impl.usuarios in 'dto\impl\mvclive.dto.impl.usuarios.pas',
+  mvclive.dto.impl.cliente in 'dto\impl\mvclive.dto.impl.cliente.pas',
+  mvclive.dto.impl.produtos in 'dto\impl\mvclive.dto.impl.produtos.pas',
+  mvclive.dto.impl.pedidos in 'dto\impl\mvclive.dto.impl.pedidos.pas',
+  mvclive.dto.impl.pedidoitens in 'dto\impl\mvclive.dto.impl.pedidoitens.pas',
+  mvclive.model.validation in 'model\validation\mvclive.model.validation.pas',
+  mvclive.model.validation.manager in 'model\validation\mvclive.model.validation.manager.pas';
 
 {$R *.res}
-
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
